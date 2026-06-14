@@ -480,5 +480,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // ==========================================
+    // 9. Floating Contact Widget Toggle
+    // ==========================================
+    const floatingContact = document.getElementById('floatingContact');
+    if (floatingContact) {
+        const toggleBtn = floatingContact.querySelector('.widget-toggle-btn');
+        const iconOpen = floatingContact.querySelector('.toggle-icon-open');
+        const iconClose = floatingContact.querySelector('.toggle-icon-close');
+        const menuItems = floatingContact.querySelectorAll('.widget-item');
+
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            floatingContact.classList.toggle('active');
+            
+            if (floatingContact.classList.contains('active')) {
+                iconOpen.classList.add('hidden');
+                iconClose.classList.remove('hidden');
+            } else {
+                iconOpen.classList.remove('hidden');
+                iconClose.classList.add('hidden');
+            }
+        });
+
+        // Close menu when clicking any item
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                floatingContact.classList.remove('active');
+                iconOpen.classList.remove('hidden');
+                iconClose.classList.add('hidden');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!floatingContact.contains(e.target)) {
+                floatingContact.classList.remove('active');
+                iconOpen.classList.remove('hidden');
+                iconClose.classList.add('hidden');
+            }
+        });
+    }
+
     checkCookieConsent();
 });
