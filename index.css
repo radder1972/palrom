@@ -675,6 +675,7 @@ ul {
 }
 
 .product-card {
+    position: relative;
     background-color: var(--color-bg-white);
     border-radius: var(--border-radius-lg);
     overflow: hidden;
@@ -687,8 +688,8 @@ ul {
 }
 
 .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
     border-top: 4px solid var(--color-primary-light);
 }
 
@@ -782,7 +783,8 @@ ul {
     color: var(--color-primary-dark);
 }
 
-.product-link:hover {
+.product-link:hover,
+.product-card:hover .product-link {
     color: var(--color-primary);
 }
 
@@ -791,8 +793,19 @@ ul {
     transition: var(--transition-fast);
 }
 
-.product-link:hover i {
+.product-link:hover i,
+.product-card:hover .product-link i {
     transform: translateX(5px);
+}
+
+.product-card .product-link::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
 }
 
 /* For filtering transition animations */
