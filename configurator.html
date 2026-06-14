@@ -141,15 +141,142 @@
 
                         <!-- Subcategory Selector (Only shown for specials) -->
                         <div class="control-group hidden" id="controlGroupSubCategorySpecials">
-                            <label for="dbSubCategorySpecials">Subcategorie Specials *</label>
-                            <select id="dbSubCategorySpecials" class="dashboard-select">
-                                <option value="special-keeplat-spruce" selected>Keeplat Spruce</option>
-                                <option value="special-keeplat-beech">Keeplat Beech</option>
-                                <option value="special-distancer-mix">Distancers Color Mix</option>
-                                <option value="special-threshold">Wooden Threshold</option>
-                                <option value="special-distancer-ind">Industrial Distancer</option>
-                                <option value="special-wood-iron">Wood with Iron Component</option>
-                            </select>
+                            <label>Subcategorie Specials *</label>
+                            <div class="specials-subcat-grid">
+                                
+                                <!-- Keeplat Spruce -->
+                                <label class="specials-subcat-card">
+                                    <input type="radio" name="subCategorySpecials" value="special-keeplat-spruce" checked>
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Side outer -->
+                                                <path d="M 26,56 L 26,44 L 50,32 L 50,44 Z" fill="#fde047" stroke="#ca8a04" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Groove walls & bottom -->
+                                                <path d="M 15,38.5 L 15,43.5 L 39,31.5 L 39,26.5 Z" fill="#eab308" stroke="#ca8a04" stroke-width="1.5" stroke-linejoin="round" />
+                                                <path d="M 15,43.5 L 21,46.5 L 45,34.5 L 39,31.5 Z" fill="#ca8a04" stroke="#ca8a04" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Top left & right faces -->
+                                                <path d="M 10,36 L 15,38.5 L 39,26.5 L 34,24 Z" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5" stroke-linejoin="round" />
+                                                <path d="M 21,41.5 L 26,44 L 50,32 L 45,29.5 Z" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Front face -->
+                                                <path d="M 10,48 L 26,56 L 26,44 L 21,41.5 L 21,46.5 L 15,43.5 L 15,38.5 L 10,36 Z" fill="#fef08a" stroke="#ca8a04" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Keeplat Spruce</span>
+                                    </div>
+                                </label>
+
+                                <!-- Keeplat Beech -->
+                                <label class="specials-subcat-card">
+                                    <input type="radio" name="subCategorySpecials" value="special-keeplat-beech">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Side outer -->
+                                                <path d="M 26,56 L 26,44 L 50,32 L 50,44 Z" fill="#f97316" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Top face -->
+                                                <path d="M 10,36 L 26,44 L 50,32 L 34,24 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Front face -->
+                                                <path d="M 10,48 L 26,56 L 26,44 L 10,36 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Keeplat Beech</span>
+                                    </div>
+                                </label>
+
+                                <!-- Distancers Color Mix -->
+                                <label class="specials-subcat-card">
+                                    <input type="radio" name="subCategorySpecials" value="special-distancer-mix">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Red Block -->
+                                                <path d="M 44,41 L 54,36 L 54,26 L 44,31 Z" fill="#dc2626" stroke="#991b1b" stroke-width="1.2" stroke-linejoin="round" />
+                                                <path d="M 34,26 L 44,31 L 54,26 L 44,21 Z" fill="#f87171" stroke="#991b1b" stroke-width="1.2" stroke-linejoin="round" />
+                                                <path d="M 34,36 L 44,41 L 44,31 L 34,26 Z" fill="#ef4444" stroke="#991b1b" stroke-width="1.2" stroke-linejoin="round" />
+                                                
+                                                <!-- Blue Block -->
+                                                <path d="M 32,46 L 42,41 L 42,31 L 32,36 Z" fill="#2563eb" stroke="#1e3a8a" stroke-width="1.2" stroke-linejoin="round" />
+                                                <path d="M 22,31 L 32,36 L 42,31 L 32,26 Z" fill="#60a5fa" stroke="#1e3a8a" stroke-width="1.2" stroke-linejoin="round" />
+                                                <path d="M 22,41 L 32,46 L 32,36 L 22,31 Z" fill="#3b82f6" stroke="#1e3a8a" stroke-width="1.2" stroke-linejoin="round" />
+
+                                                <!-- Green Block -->
+                                                <path d="M 20,51 L 30,46 L 30,36 L 20,41 Z" fill="#059669" stroke="#065f46" stroke-width="1.2" stroke-linejoin="round" />
+                                                <path d="M 10,36 L 20,41 L 30,36 L 20,31 Z" fill="#34d399" stroke="#065f46" stroke-width="1.2" stroke-linejoin="round" />
+                                                <path d="M 10,46 L 20,51 L 20,41 L 10,36 Z" fill="#10b981" stroke="#065f46" stroke-width="1.2" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Distancers Color Mix</span>
+                                    </div>
+                                </label>
+
+                                <!-- Wooden Threshold -->
+                                <label class="specials-subcat-card">
+                                    <input type="radio" name="subCategorySpecials" value="special-threshold">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Right outer end -->
+                                                <path d="M 30,60 L 30,55 L 50,45 L 50,50 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Right slope -->
+                                                <path d="M 26,51 L 30,55 L 50,45 L 46,41 Z" fill="#f97316" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Flat top -->
+                                                <path d="M 14,45 L 26,51 L 46,41 L 34,35 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Left slope -->
+                                                <path d="M 10,47 L 14,45 L 34,35 L 30,37 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Front face cross section -->
+                                                <path d="M 10,50 L 30,60 L 30,55 L 26,51 L 14,45 L 10,47 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Wooden Threshold</span>
+                                    </div>
+                                </label>
+
+                                <!-- Industrial Distancer -->
+                                <label class="specials-subcat-card">
+                                    <input type="radio" name="subCategorySpecials" value="special-distancer-ind">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Side outer -->
+                                                <path d="M 26,56 L 26,44 L 50,32 L 50,44 Z" fill="#f97316" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Top face -->
+                                                <path d="M 10,36 L 26,44 L 50,32 L 34,24 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Front face -->
+                                                <path d="M 10,48 L 26,56 L 26,44 L 10,36 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Hole -->
+                                                <ellipse cx="18" cy="46" rx="3.5" ry="4.5" fill="#451a03" stroke="#c2410c" stroke-width="1" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Industrial Distancer</span>
+                                    </div>
+                                </label>
+
+                                <!-- Wood with Iron Component -->
+                                <label class="specials-subcat-card">
+                                    <input type="radio" name="subCategorySpecials" value="special-wood-iron">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Side outer -->
+                                                <path d="M 26,56 L 26,44 L 50,32 L 50,44 Z" fill="#f97316" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Top face -->
+                                                <path d="M 10,36 L 26,44 L 50,32 L 34,24 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Steel plate on top face -->
+                                                <path d="M 20,35 L 28,39 L 40,33 L 32,29 Z" fill="#94a3b8" stroke="#475569" stroke-width="1.2" stroke-linejoin="round" />
+                                                <!-- Bolt cylinder -->
+                                                <path d="M 28,34 L 28,26 L 32,24 L 32,32 Z" fill="#64748b" stroke="#475569" stroke-width="1" stroke-linejoin="round" />
+                                                <!-- Bolt head -->
+                                                <ellipse cx="30" cy="24" rx="2" ry="1.2" fill="#cbd5e1" stroke="#475569" stroke-width="1" />
+                                                <!-- Front face -->
+                                                <path d="M 10,48 L 26,56 L 26,44 L 10,36 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Wood with Iron Component</span>
+                                    </div>
+                                </label>
+
+                            </div>
                         </div>
 
 

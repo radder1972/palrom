@@ -806,7 +806,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const lblDiameter = document.getElementById('lblDiameter');
         const lblThickness = document.getElementById('lblThickness');
         const controlGroupThickness = document.getElementById('controlGroupThickness');
-        const dbSubCategorySpecials = document.getElementById('dbSubCategorySpecials');
+        const subCategorySpecialsRadios = document.getElementsByName('subCategorySpecials');
         const controlGroupSubCategorySpecials = document.getElementById('controlGroupSubCategorySpecials');
         
         const summaryProduct = document.getElementById('summaryProduct');
@@ -868,8 +868,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const cat = dbCategory.value;
             const data = categoryData[cat];
             
-            if (cat === 'specials' && dbSubCategorySpecials) {
-                const subCatText = dbSubCategorySpecials.options[dbSubCategorySpecials.selectedIndex].text;
+            if (cat === 'specials' && subCategorySpecialsRadios.length > 0) {
+                let subCatText = "Keeplat Spruce";
+                for (const radio of subCategorySpecialsRadios) {
+                    if (radio.checked) {
+                        const labelSpan = radio.parentElement.querySelector('.card-label');
+                        if (labelSpan) {
+                            subCatText = labelSpan.textContent;
+                        }
+                        break;
+                    }
+                }
                 summaryProduct.textContent = `${data.name} - ${subCatText}`;
             } else {
                 summaryProduct.textContent = data.name;
@@ -929,8 +938,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         dbCategory.addEventListener('change', handleCategoryChange);
-        if (dbSubCategorySpecials) {
-            dbSubCategorySpecials.addEventListener('change', updateSummary);
+        if (subCategorySpecialsRadios.length > 0) {
+            subCategorySpecialsRadios.forEach(radio => {
+                radio.addEventListener('change', updateSummary);
+            });
         }
         dbOplage.addEventListener('change', updateSummary);
         
