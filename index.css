@@ -2660,6 +2660,82 @@ ul {
     }
 }
 
+/* ==========================================================================
+   18. Contact Form Configurator Notice Box
+   ========================================================================== */
+.configurator-notice-box {
+    display: flex;
+    gap: 1.25rem;
+    background: linear-gradient(135deg, rgba(231, 177, 36, 0.08), rgba(231, 177, 36, 0.03));
+    border: 1px solid rgba(231, 177, 36, 0.25);
+    border-left: 4px solid var(--color-primary);
+    border-radius: var(--border-radius-md);
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-smooth);
+}
+
+.configurator-notice-box:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(231, 177, 36, 0.45);
+}
+
+.notice-icon {
+    font-size: 1.75rem;
+    color: var(--color-primary-dark);
+    display: flex;
+    align-items: flex-start;
+    padding-top: 0.1rem;
+}
+
+.notice-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.notice-content h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-forest-dark);
+    margin: 0;
+}
+
+.notice-content p {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--color-text-dark);
+    margin: 0;
+}
+
+.notice-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    text-decoration: none;
+    transition: var(--transition-fast);
+    width: fit-content;
+    margin-top: 0.25rem;
+}
+
+.notice-link i {
+    transition: var(--transition-fast);
+}
+
+.notice-link:hover {
+    color: var(--color-forest-dark);
+}
+
+.notice-link:hover i {
+    transform: translateX(3px);
+}
+
+
 
 
 
