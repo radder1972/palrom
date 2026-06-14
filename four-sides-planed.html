@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4-Sides Planed Lumber - PALROM Products</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Explore PALROM Products' high-precision 4-sides planed beech wood lumber. Available in square and rectangular sections, with sharp edges or radius 3/6 roundovers.">
+    <meta name="keywords" content="planed wood, planed beech, 4-sides planed, rectangular wood elements, square wood bars, radius wood, wood components, Palrom Brad">
+    <meta name="author" content="PALROM Products SRL">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="index.css">
+    <style>
+        .product-detail-hero {
+            padding: 8rem 0 4rem;
+            background-color: var(--color-forest-dark);
+            color: var(--color-bg-light);
+            text-align: center;
+            position: relative;
+        }
+        .product-detail-hero h1 {
+            color: var(--color-bg-white);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .product-detail-hero p {
+            font-size: 1.15rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 300;
+        }
+        .fsc-notice {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.5rem 1.5rem;
+            background-color: rgba(231, 177, 36, 0.15);
+            border: 1px solid var(--color-primary-light);
+            color: var(--color-primary-light);
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .detail-grid {
+            margin-top: 4rem;
+        }
+        .detail-card {
+            background-color: var(--color-bg-white);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0, 0, 0, 0.02);
+            border-top: 4px solid transparent;
+            transition: var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+        }
+        .detail-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-top: 4px solid var(--color-primary-light);
+        }
+        .detail-img-wrapper {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+            background-color: #f5f5f5;
+        }
+        .detail-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-smooth);
+        }
+        .detail-card:hover .detail-img-wrapper img {
+            transform: scale(1.05);
+        }
+        .detail-info {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .detail-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: var(--color-forest);
+        }
+        .detail-info p {
+            color: var(--color-text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+        .detail-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 0.85rem 1.5rem;
+            background-color: var(--color-forest-dark);
+            color: var(--color-bg-white);
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: var(--border-radius-md);
+            transition: var(--transition-smooth);
+        }
+        .detail-cta:hover {
+            background-color: var(--color-primary-light);
+            color: var(--color-forest-dark);
+        }
+        .breadcrumb {
+            padding: 2rem 0 0;
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--color-text-muted);
+        }
+        .breadcrumb a {
+            color: var(--color-text-muted);
+        }
+        .breadcrumb a:hover {
+            color: var(--color-primary-dark);
+        }
+        .breadcrumb span {
+            color: var(--color-primary-dark);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="main-header scrolled">
+        <div class="header-container">
+            <a href="index.html#home" class="logo">
+                <img src="images/logo.png" alt="PALROM Products Logo" class="header-logo-img">
+            </a>
+            <nav class="nav-menu">
+                <a href="index.html#home" class="nav-link">Home</a>
+                <a href="index.html#about" class="nav-link">Company Profile</a>
+                <a href="index.html#timeline" class="nav-link">History</a>
+                <a href="index.html#products" class="nav-link active">Our Products</a>
+                <a href="index.html#gallery" class="nav-link">Gallery</a>
+                <a href="index.html#contact" class="nav-link">Contact Us</a>
+            </nav>
+            <div class="header-actions">
+                <a href="index.html?product=planed#contact" class="action-btn">Request Quote</a>
+                <button class="mobile-nav-toggle" aria-label="Toggle Navigation">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Product Detail Hero Section -->
+    <section class="product-detail-hero">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html#home">Home</a> / <a href="index.html#products">Our Products</a> / <span>4-Sides Planed Lumber</span>
+            </div>
+            <h1 style="margin-top: 1.5rem;">4-Sides Planed Beech Lumber</h1>
+            <p>Our four-sides planed wood elements are processed to extreme tolerances. Sourced from sustainable forest management in the Carpathian region, they are sawn, kiln-dried to 8-12%, cut to length, and calibrated for furniture manufacturers and DIY distributors.</p>
+            <span class="fsc-notice"><i class="fa-solid fa-tree icon-left"></i> FSC® Certified Available On Request</span>
+        </div>
+    </section>
+
+    <!-- Planed Catalog Section -->
+    <section class="section-padding bg-light" style="padding-top: 4rem;">
+        <div class="container">
+            <div class="grid grid-3 detail-grid">
+                
+                <!-- Card 1: Rectangular 1 -->
+                <div class="detail-card animate-on-scroll">
+                    <div class="detail-img-wrapper">
+                        <img src="images/4sides1.jpg" alt="4-sides planed rectangular beech wood style 1">
+                    </div>
+                    <div class="detail-info">
+                        <h3>Planed Rectangular (Variant 1)</h3>
+                        <p>High-tolerance rectangular beech slats and slats, dried to 8-12% moisture. Ideal for manufacturing bed frames, furniture framing, and premium interior trim boards.</p>
+                        <a href="index.html?product=planed#contact" class="detail-cta">Request Sizing & Quote <i class="fa-solid fa-paper-plane icon-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Card 2: Rectangular 2 -->
+                <div class="detail-card animate-on-scroll">
+                    <div class="detail-img-wrapper">
+                        <img src="images/4sides2.jpg" alt="4-sides planed rectangular beech wood style 2">
+                    </div>
+                    <div class="detail-info">
+                        <h3>Planed Rectangular (Variant 2)</h3>
+                        <p>Calibrated beechwood components with sharp 90-degree corners. Tailored for industrial furniture assembly lines, cabinet rails, and architectural partition components.</p>
+                        <a href="index.html?product=planed#contact" class="detail-cta">Request Sizing & Quote <i class="fa-solid fa-paper-plane icon-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Card 3: Rectangular 3 -->
+                <div class="detail-card animate-on-scroll">
+                    <div class="detail-img-wrapper">
+                        <img src="images/4sides3.jpg" alt="4-sides planed rectangular beech wood style 3">
+                    </div>
+                    <div class="detail-info">
+                        <h3>Planed Rectangular (Variant 3)</h3>
+                        <p>Durable, solid beech planed planks prepared for shelving, furniture panels, and heavy-duty carpentry tasks. Completely smooth finish with no fiber tear-out.</p>
+                        <a href="index.html?product=planed#contact" class="detail-cta">Request Sizing & Quote <i class="fa-solid fa-paper-plane icon-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Card 4: Rectangular 4 -->
+                <div class="detail-card animate-on-scroll">
+                    <div class="detail-img-wrapper">
+                        <img src="images/4sides4.jpg" alt="4-sides planed rectangular beech wood style 4">
+                    </div>
+                    <div class="detail-info">
+                        <h3>Planed Rectangular (Variant 4)</h3>
+                        <p>Precisely thicknessed rectangular sections designed for high-end DIY retail packaging. Packaged in customized bundles with individual labeling options.</p>
+                        <a href="index.html?product=planed#contact" class="detail-cta">Request Sizing & Quote <i class="fa-solid fa-paper-plane icon-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Card 5: Square 1 -->
+                <div class="detail-card animate-on-scroll">
+                    <div class="detail-img-wrapper">
+                        <img src="images/4sides5.jpg" alt="4-sides planed square beech wood style 1">
+                    </div>
+                    <div class="detail-info">
+                        <h3>Planed Square (Variant 1)</h3>
+                        <p>Precision-milled square beech wood bars and rods. Designed as blanks for woodturning, stair balusters, table leg manufacturing, and children's toys.</p>
+                        <a href="index.html?product=planed#contact" class="detail-cta">Request Sizing & Quote <i class="fa-solid fa-paper-plane icon-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Card 6: Square 2 -->
+                <div class="detail-card animate-on-scroll">
+                    <div class="detail-img-wrapper">
+                        <img src="images/4sides6.jpg" alt="4-sides planed square beech wood style 2">
+                    </div>
+                    <div class="detail-info">
+                        <h3>Planed Square (Variant 2)</h3>
+                        <p>Dense, high-quality Carpathian beech square elements. Free of defects, knot-free quality options, engineered to withstand structural woodworking stresses.</p>
+                        <a href="index.html?product=planed#contact" class="detail-cta">Request Sizing & Quote <i class="fa-solid fa-paper-plane icon-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Card 7: Radius 3 -->
+                <div class="detail-card animate-on-scroll">
+                    <div class="detail-img-wrapper">
+                        <img src="images/4sides7.jpg" alt="Planed beech wood elements with Radius 3 edges">
+                    </div>
+                    <div class="detail-info">
+                        <h3>Planed Elements with Radius 3</h3>
+                        <p>Four-sides planed elements featuring a subtle 3 mm rounded edge radius. The soft edges decrease wood splitting risks and improve user handling safety in retail environments.</p>
+                        <a href="index.html?product=planed#contact" class="detail-cta">Request Sizing & Quote <i class="fa-solid fa-paper-plane icon-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Card 8: Radius 6 -->
+                <div class="detail-card animate-on-scroll">
+                    <div class="detail-img-wrapper">
+                        <img src="images/4sides8.jpg" alt="Planed beech wood elements with Radius 6 edges">
+                    </div>
+                    <div class="detail-info">
+                        <h3>Planed Elements with Radius 6</h3>
+                        <p>Planed beech components displaying a distinct 6 mm rounded edge radius. Ideal for structural toys, child-friendly furniture components, and pre-finished carpentry parts.</p>
+                        <a href="index.html?product=planed#contact" class="detail-cta">Request Sizing & Quote <i class="fa-solid fa-paper-plane icon-right"></i></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-top container">
+            <div class="footer-brand">
+                <a href="index.html#home" class="footer-logo-link">
+                    <img src="images/logo_white.png" alt="PALROM Products Logo" class="footer-logo-img">
+                </a>
+                <p>High-quality hardwood lumber sawmill and planing factory delivering customized, FSC® certified beechwood components globally.</p>
+                <div class="footer-socials">
+                    <a href="https://www.facebook.com/profile.php?id=100004110856648" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html#home">Home</a></li>
+                    <li><a href="index.html#about">Company Profile</a></li>
+                    <li><a href="index.html#timeline">History Timeline</a></li>
+                    <li><a href="index.html#products">Our Products</a></li>
+                    <li><a href="index.html#gallery">Gallery</a></li>
+                </ul>
+            </div>
+            <div class="footer-products">
+                <h3>Our Offerings</h3>
+                <ul>
+                    <li><a href="dowels.html">Beechwood Dowels</a></li>
+                    <li><a href="four-sides-planed.html">4-Sides Planed Timber</a></li>
+                    <li><a href="profiles.html">Profiles & Mouldings</a></li>
+                    <li><a href="specials.html">Special Furniture Elements</a></li>
+                    <li><a href="index.html#products">FSC® Sustainable Beech</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="container footer-bottom-flex">
+                <p>&copy; 2026 PALROM Products SRL. All rights reserved. Sourced sustainably from local Romanian forests.</p>
+                <div class="footer-meta-links">
+                    <a href="#" id="openCookieSettings">Cookie Policy</a>
+                    <span class="divider">|</span>
+                    <span>Designed by INTERLOG COM SRL</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cookie Consent Popup (simulated settings reference) -->
+    <div id="cookieModal" class="cookie-modal hidden">
+        <div class="cookie-content">
+            <div class="cookie-header">
+                <i class="fa-solid fa-cookie-bite cookie-icon"></i>
+                <h3>This website uses cookies</h3>
+            </div>
+            <p>We use cookies to personalise content, provide social media features, and analyze our traffic. By clicking "Allow all", you agree to our cookie policy.</p>
+            <div class="cookie-buttons">
+                <button id="denyCookies" class="btn btn-outlined">Deny</button>
+                <button id="allowCookies" class="btn btn-primary">Allow All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Script -->
+    <script src="app.js"></script>
+</body>
+</html>

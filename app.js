@@ -244,5 +244,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ==========================================
+    // 7. Query Parameter Routing & Form Pre-selection
+    // ==========================================
+    const urlParams = new URLSearchParams(window.location.search);
+    const productParam = urlParams.get('product');
+    
+    if (productParam) {
+        const productSelect = document.getElementById('product_type');
+        const contactSection = document.getElementById('contact');
+        
+        if (productSelect) {
+            const validParams = ['dowels', 'planed', 'profiles', 'specials'];
+            if (validParams.includes(productParam)) {
+                productSelect.value = productParam;
+            }
+        }
+        
+        if (contactSection) {
+            setTimeout(() => {
+                contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
+        }
+    }
+
     checkCookieConsent();
 });
