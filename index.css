@@ -5,17 +5,17 @@
 /* 1. Design Tokens & CSS Custom Properties */
 :root {
     /* Color Palette */
-    --color-primary: hsl(24, 55%, 38%);       /* Rich Steamed Beechwood Brown */
-    --color-primary-light: hsl(24, 65%, 48%); /* Lighter Beech Accent */
-    --color-primary-dark: hsl(24, 60%, 25%);  /* Dark Mahogany/Wood Tone */
+    --color-primary: hsl(42, 75%, 38%);       /* Brand Dark Gold (Contrast Optimized) */
+    --color-primary-light: hsl(42, 79%, 51%); /* Brand Golden Yellow */
+    --color-primary-dark: hsl(42, 75%, 25%);  /* Deep Brand Gold */
     
-    --color-forest: hsl(150, 18%, 20%);       /* Deep Romanian Pine/Forest Green */
-    --color-forest-dark: hsl(150, 25%, 12%);  /* Darker Forest background */
-    --color-accent: hsl(38, 95%, 55%);        /* Warm Gold/Amber Grain Accent */
+    --color-forest: hsl(210, 4%, 22%);        /* Brand Dark Charcoal Grey */
+    --color-forest-dark: hsl(210, 4%, 13%);   /* Deep Dark Charcoal for backgrounds */
+    --color-accent: hsl(42, 79%, 51%);        /* Brand Golden Yellow Accent */
     
-    --color-text-dark: hsl(210, 15%, 15%);    /* Soft Charcoal for text */
-    --color-text-muted: hsl(210, 8%, 45%);    /* Gray for subtitles/meta */
-    --color-bg-light: hsl(33, 40%, 97%);      /* Warm Forest Cream background */
+    --color-text-dark: hsl(210, 4%, 15%);     /* Main text color (slate charcoal) */
+    --color-text-muted: hsl(210, 8%, 45%);    /* Secondary text color */
+    --color-bg-light: hsl(210, 6%, 96%);      /* Clean neutral soft-grey background */
     --color-bg-white: hsl(0, 0%, 100%);
     
     --color-border: hsl(210, 10%, 90%);
@@ -280,15 +280,20 @@ ul {
 }
 
 .logo {
-    font-family: var(--font-heading);
-    font-weight: 800;
-    font-size: 1.5rem;
-    color: var(--color-forest);
-    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
 }
 
-.logo-accent {
-    color: var(--color-primary);
+.header-logo-img {
+    height: 38px;
+    width: auto;
+    display: block;
+    transition: var(--transition-fast);
+}
+
+.logo:hover .header-logo-img {
+    transform: scale(1.02);
 }
 
 .nav-menu {
