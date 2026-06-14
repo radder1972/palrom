@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B Productconfigurator - PALROM Products</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Configureer exacte specificaties voor uw B2B beukenhout bestelling bij PALROM Products SRL. Voer millimeter-afmetingen, afwerkingen en volumes in.">
+    <meta name="keywords" content="hout configurator, beukenhout configurator, B2B hout offerte, FSC beukenhout Brad, maatwerk meubelonderdelen">
+    <meta name="author" content="PALROM Products SRL">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+
+    <!-- Google Fonts (Inter, Outfit, Poppins) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="index.css">
+    
+    <style>
+        /* Embedded styling helper specifically for the clean, steel-grey Inter-based configurator interface */
+        .configurator-body-override {
+            font-family: 'Inter', sans-serif !important;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        
+        .configurator-hero {
+            padding: 8rem 0 4rem;
+            background-color: var(--color-forest-dark);
+            color: var(--color-bg-light);
+            text-align: center;
+            position: relative;
+        }
+        .configurator-hero h1 {
+            color: var(--color-bg-white);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-family: var(--font-heading);
+        }
+        .configurator-hero p {
+            font-size: 1.15rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 300;
+        }
+
+        .breadcrumb {
+            padding: 2rem 0 0;
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--color-text-muted);
+        }
+        .breadcrumb a {
+            color: var(--color-text-muted);
+        }
+        .breadcrumb a:hover {
+            color: var(--color-primary-dark);
+        }
+        .breadcrumb span {
+            color: var(--color-primary-dark);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="configurator-body-override">
+
+    <!-- Header Navigation -->
+    <header class="main-header scrolled">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="PALROM Products Logo" class="header-logo-img">
+            </a>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link" id="nav-home">Home</a>
+                <a href="about.html" class="nav-link" id="nav-about">Company Profile</a>
+                <a href="products.html" class="nav-link" id="nav-products">Our Products</a>
+                <a href="configurator.html" class="nav-link active" id="nav-configurator">Configurator</a>
+                <a href="careers.html" class="nav-link" id="nav-careers">Careers</a>
+                <a href="gallery.html" class="nav-link" id="nav-gallery">Gallery</a>
+                <a href="#contact" class="nav-link" id="nav-contact">Contact Us</a>
+            </nav>
+            <div class="header-actions">
+                <button class="cart-toggle-btn" id="globalCartToggle" aria-label="View Inquiry Cart">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <span class="cart-count-badge" id="cartCountBadge">0</span>
+                </button>
+                <a href="#contact" class="action-btn">Request Quote</a>
+                <button class="mobile-nav-toggle" aria-label="Toggle Navigation">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="configurator-hero">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a> / <span>B2B Configurator</span>
+            </div>
+            <h1 style="margin-top: 1.5rem;">B2B Productconfigurator</h1>
+            <p>Stel direct de gewenste specificaties, millimeter-afmetingen en bewerkingen in voor uw zakelijke volume-aanvraag.</p>
+        </div>
+    </section>
+
+    <!-- Configurator Form Wizard Section -->
+    <section class="section-padding configurator-section">
+        <div class="container">
+            <div class="configurator-wizard-container">
+                
+                <!-- Progress Indicators -->
+                <div class="configurator-progress-bar">
+                    <div class="progress-step active" id="progressStep1">
+                        <span class="step-num">1</span>
+                        <span class="step-text">Productgroep</span>
+                    </div>
+                    <div class="progress-step" id="progressStep2">
+                        <span class="step-num">2</span>
+                        <span class="step-text">Maatvoering</span>
+                    </div>
+                    <div class="progress-step" id="progressStep3">
+                        <span class="step-num">3</span>
+                        <span class="step-text">Volume & Contact</span>
+                    </div>
+                </div>
+
+                <!-- Wizard Main Container -->
+                <form id="palromB2bConfiguratorForm" class="configurator-card-form">
+                    
+                    <!-- STEP 1: Product Group Selector -->
+                    <div class="configurator-step active" id="configuratorStep1Content">
+                        <h3 class="step-title">Stap 1: Selecteer een Productgroep</h3>
+                        <p class="step-description">Kies de productcategorie die u wilt configureren voor uw B2B-aanvraag.</p>
+                        
+                        <div class="configurator-grid-selector">
+                            
+                            <!-- Category Dowels -->
+                            <div class="configurator-group-card" data-group="dowels">
+                                <div class="card-icon-circle">
+                                    <i class="fa-solid fa-circle-nodes"></i>
+                                </div>
+                                <div class="card-details">
+                                    <h4>Beukenhouten Dowels & Staven</h4>
+                                    <p>Calibratie van 3 mm tot 60 mm diameter. Glad of gespiraald gegroefd beukenhout.</p>
+                                </div>
+                                <div class="selection-indicator"><i class="fa-solid fa-circle-check"></i></div>
+                            </div>
+
+                            <!-- Category Planed -->
+                            <div class="configurator-group-card" data-group="planed">
+                                <div class="card-icon-circle">
+                                    <i class="fa-solid fa-cubes"></i>
+                                </div>
+                                <div class="card-details">
+                                    <h4>4-Zijdig Geschaafd Beukenhout</h4>
+                                    <p>Hoog-gekalibreerd geschaafd hout in rechthoekige of vierkante secties met scherpe of ronde hoeken.</p>
+                                </div>
+                                <div class="selection-indicator"><i class="fa-solid fa-circle-check"></i></div>
+                            </div>
+
+                            <!-- Category Profiles -->
+                            <div class="configurator-group-card" data-group="profiles">
+                                <div class="card-icon-circle">
+                                    <i class="fa-solid fa-bars-staggered"></i>
+                                </div>
+                                <div class="card-details">
+                                    <h4>Houten Profielen & Lijsten</h4>
+                                    <p>Kwartrond, plinten en halfronde afwerklijsten voor groothandel en interieurbouw.</p>
+                                </div>
+                                <div class="selection-indicator"><i class="fa-solid fa-circle-check"></i></div>
+                            </div>
+
+                            <!-- Category Specials -->
+                            <div class="configurator-group-card" data-group="specials">
+                                <div class="card-icon-circle">
+                                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                                </div>
+                                <div class="card-details">
+                                    <h4>Speciale Houtcomponenten</h4>
+                                    <p>Op maat gedraaide of gefreesde componenten voor meubels, speelgoed en voedselindustrie.</p>
+                                </div>
+                                <div class="selection-indicator"><i class="fa-solid fa-circle-check"></i></div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: Sizing & Finishing Options -->
+                    <div class="configurator-step" id="configuratorStep2Content">
+                        <h3 class="step-title">Stap 2: Maatvoering & Bewerking</h3>
+                        <p class="step-description">Geef de exacte afmetingen in millimeters en gewenste afwerkingen op.</p>
+                        
+                        <!-- Conditional: Beechwood Dowels Fields -->
+                        <div class="conditional-fields-group hidden" id="fieldsDowels">
+                            <div class="configurator-input-grid">
+                                <div class="form-group-b2b">
+                                    <label for="dowelDiameter">Diameter (Ø) <span class="unit-tag">[mm]</span> *</label>
+                                    <input type="number" id="dowelDiameter" min="3" max="60" placeholder="bijv. 10">
+                                    <span class="field-hint">Beschikbaar van 3 mm t/m 60 mm</span>
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="dowelLength">Lengte <span class="unit-tag">[mm]</span> *</label>
+                                    <input type="number" id="dowelLength" min="30" max="3000" placeholder="bijv. 1000">
+                                    <span class="field-hint">Beschikbaar van 30 mm t/m 3000 mm</span>
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="dowelFinish">Oppervlakte-afwerking *</label>
+                                    <select id="dowelFinish">
+                                        <option value="Smooth">Glad (Gekalibreerd)</option>
+                                        <option value="Spiral-Rilled">Gespiraald Gegroefd (Rilled)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="dowelCondition">Houtbehandeling *</label>
+                                    <select id="dowelCondition">
+                                        <option value="Steamed">Gestoomd (Stabieler rood/bruin)</option>
+                                        <option value="Unsteamed">Ongestoomd (Licht crème wit)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Conditional: Planed Lumber Fields -->
+                        <div class="conditional-fields-group hidden" id="fieldsPlaned">
+                            <div class="configurator-input-grid">
+                                <div class="form-group-b2b">
+                                    <label for="planedThickness">Dikte <span class="unit-tag">[mm]</span> *</label>
+                                    <input type="number" id="planedThickness" min="10" max="100" placeholder="bijv. 20">
+                                    <span class="field-hint">Beschikbaar van 10 mm t/m 100 mm</span>
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="planedWidth">Breedte <span class="unit-tag">[mm]</span> *</label>
+                                    <input type="number" id="planedWidth" min="15" max="300" placeholder="bijv. 50">
+                                    <span class="field-hint">Beschikbaar van 15 mm t/m 300 mm</span>
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="planedLength">Lengte <span class="unit-tag">[mm]</span> *</label>
+                                    <input type="number" id="planedLength" min="100" max="4000" placeholder="bijv. 2400">
+                                    <span class="field-hint">Beschikbaar van 100 mm t/m 4000 mm</span>
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="planedEdge">Hoekafwerking *</label>
+                                    <select id="planedEdge">
+                                        <option value="Sharp Edges">Scherpe hoeken (90°)</option>
+                                        <option value="Radius 3">Radius 3 mm (Licht afgerond)</option>
+                                        <option value="Radius 6">Radius 6 mm (Zwaarder afgerond)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="planedGrade">Houtkwaliteit *</label>
+                                    <select id="planedGrade">
+                                        <option value="Class A">Kwaliteitsklasse A (Vrij van noesten)</option>
+                                        <option value="Class B">Kwaliteitsklasse B (Lichte kleurnuances)</option>
+                                        <option value="Class A/B Mixed">Klasse A/B Gemengd</option>
+                                    </select>
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="planedCondition">Droging *</label>
+                                    <select id="planedCondition">
+                                        <option value="KD 8-12%">Ovenschoon gedroogd (KD 8-12% Vocht)</option>
+                                        <option value="Air Dried">Luchtgedroogd (AD)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Conditional: Profiles & Mouldings Fields -->
+                        <div class="conditional-fields-group hidden" id="fieldsProfiles">
+                            <div class="configurator-input-grid">
+                                <div class="form-group-b2b">
+                                    <label for="profileType">Profielvorm *</label>
+                                    <select id="profileType">
+                                        <option value="Quarter Round">Kwartrond</option>
+                                        <option value="Plinth">Plint / Vloerlijst</option>
+                                        <option value="Semiround">Halfrond</option>
+                                        <option value="Corner Moulding">Hoeklijst</option>
+                                    </select>
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="profileSizing">Afmeting (Hoogte/Breedte) <span class="unit-tag">[mm]</span> *</label>
+                                    <input type="number" id="profileSizing" min="10" max="120" placeholder="bijv. 18">
+                                    <span class="field-hint">Beschikbaar van 10 mm t/m 120 mm</span>
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="profileLength">Lengte <span class="unit-tag">[mm]</span> *</label>
+                                    <input type="number" id="profileLength" min="500" max="3000" placeholder="bijv. 2000">
+                                    <span class="field-hint">Standaardlengtes t/m 3000 mm</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Conditional: Custom Specials Fields -->
+                        <div class="conditional-fields-group hidden" id="fieldsSpecials">
+                            <div class="configurator-custom-fields">
+                                <div class="form-group-b2b full-width">
+                                    <label for="specialDescription">Omschrijf het Gewenste Component *</label>
+                                    <textarea id="specialDescription" rows="4" placeholder="Omschrijf de toepassing, vorm of bewerking van het houten component..."></textarea>
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="specialDimensions">Gewenste Maatvoeringen</label>
+                                    <input type="text" id="specialDimensions" placeholder="bijv. 40x40x120mm, geboord aan één zijde">
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="specialFinish">Afwerking / Lakken / Slijpen</label>
+                                    <input type="text" id="specialFinish" placeholder="bijv. Gladgeschuurd, onbehandeld">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- STEP 3: Volume & Request Confirmation -->
+                    <div class="configurator-step" id="configuratorStep3Content">
+                        <h3 class="step-title">Stap 3: Volume & Contactgegevens</h3>
+                        <p class="step-description">Voer het volume van uw bestelling in en vul uw zakelijke contactgegevens in.</p>
+                        
+                        <div class="configurator-volume-section">
+                            <div class="volume-header-flex">
+                                <div class="volume-input-group">
+                                    <label for="b2bVolumeInput">Gewenste Oplage (Aantal stuks / Volume) *</label>
+                                    <div class="volume-counter-wrapper">
+                                        <input type="number" id="b2bVolumeInput" min="500" value="1000">
+                                    </div>
+                                    <div id="volumeB2bWarning" class="b2b-volume-badge">
+                                        <i class="fa-solid fa-circle-info"></i> B2B Focus: Richtafname minimaal 500 stuks.
+                                    </div>
+                                </div>
+                                <div class="fsc-seal-badge">
+                                    <div class="fsc-seal-icon"><i class="fa-solid fa-tree"></i></div>
+                                    <div class="fsc-seal-content">
+                                        <h5>FSC® 100% Gecertificeerd</h5>
+                                        <p>Duurzaam geoogst beukenhout uit de Karpaten.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="configurator-contact-details">
+                            <h4 class="form-subtitle-b2b">Zakelijke Contactgegevens</h4>
+                            <div class="configurator-input-grid">
+                                <div class="form-group-b2b">
+                                    <label for="b2bName">Uw Naam *</label>
+                                    <input type="text" id="b2bName" required placeholder="bijv. Jan de Vries">
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="b2bCompany">Bedrijfsnaam *</label>
+                                    <input type="text" id="b2bCompany" required placeholder="bijv. De Vries Houtbewerking BV">
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="b2bEmail">Zakelijk E-mailadres *</label>
+                                    <input type="email" id="b2bEmail" required placeholder="bijv. j.devries@houtbedrijf.nl">
+                                </div>
+                                <div class="form-group-b2b">
+                                    <label for="b2bPhone">Telefoonnummer *</label>
+                                    <input type="tel" id="b2bPhone" required placeholder="bijv. +31 6 12345678">
+                                </div>
+                                <div class="form-group-b2b full-width">
+                                    <label for="b2bNotes">Eventuele opmerkingen of logistieke eisen</label>
+                                    <textarea id="b2bNotes" rows="3" placeholder="bijv. Sourcing deadlines, specifieke transportbundeling..."></textarea>
+                                </div>
+                                <div class="form-group-b2b full-width checkbox-row">
+                                    <input type="checkbox" id="b2bFscRequired" checked>
+                                    <label for="b2bFscRequired">Ik vereis een FSC® Chain of Custody-verklaring op de factuur.</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wizard Navigation Buttons -->
+                    <div class="configurator-nav-buttons">
+                        <button type="button" class="btn-wizard btn-prev hidden" id="btnWizardPrev"><i class="fa-solid fa-chevron-left icon-left"></i> Vorige stap</button>
+                        <button type="button" class="btn-wizard btn-next" id="btnWizardNext">Volgende stap <i class="fa-solid fa-chevron-right icon-right"></i></button>
+                        <button type="submit" class="btn-wizard btn-submit hidden" id="btnWizardSubmit">Vraag Offerte Aan <i class="fa-solid fa-paper-plane icon-right"></i></button>
+                    </div>
+
+                </form>
+
+                <!-- SUCCESS VIEW OVERLAY -->
+                <div class="configurator-success-overlay hidden" id="configuratorSuccessOverlay">
+                    <div class="success-card">
+                        <div class="success-icon-circle"><i class="fa-solid fa-circle-check"></i></div>
+                        <h2>Aanvraag Succesvol Ontvangen</h2>
+                        <p class="success-lead">Bedankt! Uw specificaties zijn geregistreerd in ons B2B-offertesysteem. We nemen binnen 24 uur contact met u op.</p>
+                        
+                        <div class="ticket-summary-box">
+                            <div class="ticket-header">
+                                <span>OFFERTE TICKETAANVRAAG</span>
+                                <strong id="successTicketNum">PLR-2026-8941</strong>
+                            </div>
+                            <div class="ticket-body">
+                                <ul>
+                                    <li><strong>Productcategorie:</strong> <span id="successProductGroup">Beukenhouten Dowels</span></li>
+                                    <li><strong>Afmetingen:</strong> <span id="successProductSpecs">Diameter: 10mm | Lengte: 1000mm</span></li>
+                                    <li><strong>Aantal stuks:</strong> <span id="successProductQty">1.000 stuks</span></li>
+                                    <li><strong>Organisatie:</strong> <span id="successCompanyName">De Vries Houtbewerking BV</span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="success-actions">
+                            <button class="btn btn-primary" id="successDownloadPdf"><i class="fa-solid fa-file-pdf icon-left"></i> Download Specificatiesheet</button>
+                            <button class="btn btn-secondary" id="successRestartBtn">Configureer Nieuw Product</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Global Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                
+                <!-- Brand Column -->
+                <div class="footer-brand-column">
+                    <a href="index.html" class="footer-logo-link">
+                        <img src="images/logo_white.png" alt="PALROM Products Logo" class="footer-logo-img">
+                    </a>
+                    <p class="footer-desc">
+                        Gecertificeerde beukenhouten dowels, geschaafd hout en speciale halffabrikaten rechtstreeks uit de bossen van Brad, Roemenië.
+                    </p>
+                    <div class="footer-socials">
+                        <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Quick links Column -->
+                <div>
+                    <h4 class="footer-title">Menu</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">Company Profile</a></li>
+                        <li><a href="products.html">Our Products</a></li>
+                        <li><a href="configurator.html" class="active">Configurator</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Products Column -->
+                <div>
+                    <h4 class="footer-title">Producten</h4>
+                    <ul class="footer-links">
+                        <li><a href="dowels.html">Beech Dowels</a></li>
+                        <li><a href="four-sides-planed.html">4-Sides Planed</a></li>
+                        <li><a href="profiles.html">Profiles & Mouldings</a></li>
+                        <li><a href="specials.html">Special Components</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact info Column -->
+                <div>
+                    <h4 class="footer-title">Hoofdkantoor</h4>
+                    <ul class="footer-contact-info">
+                        <li>
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span>Str. Zarandului Nr. 53, Brad, Hunedoara, Romania</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-phone"></i>
+                            <a href="tel:+40254606053">+40 254 606 053</a>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-envelope"></i>
+                            <a href="mailto:office@palrom.ro">office@palrom.ro</a>
+                        </li>
+                        <li class="fsc-license-footer">
+                            <i class="fa-solid fa-tree"></i>
+                            <span>FSC® C104889 Certificaat</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 PALROM Products SRL. Alle rechten voorbehouden. Ontworpen conform premium B2B-standaarden.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms & Conditions</a>
+                    <a href="#">GDPR</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Floating Contact Widget -->
+    <div class="floating-contact-widget" id="floatingContactWidget">
+        <div class="widget-menu">
+            <a href="https://wa.me/40254606053" class="widget-item whatsapp-item" target="_blank" rel="noopener noreferrer" aria-label="Chat via WhatsApp">
+                <span class="widget-tooltip">WhatsApp HR</span>
+                <i class="fa-brands fa-whatsapp"></i>
+            </a>
+            <a href="tel:+40254606053" class="widget-item phone-item" aria-label="Start Direct Phone Call">
+                <span class="widget-tooltip">Call Office</span>
+                <i class="fa-solid fa-phone"></i>
+            </a>
+            <a href="mailto:office@palrom.ro" class="widget-item email-item" aria-label="Send Email Inquiry">
+                <span class="widget-tooltip">Email Us</span>
+                <i class="fa-solid fa-envelope"></i>
+            </a>
+            <a href="#contact" class="widget-item form-item" aria-label="Go to Contact Form">
+                <span class="widget-tooltip">Contact Form</span>
+                <i class="fa-solid fa-file-signature"></i>
+            </a>
+        </div>
+        <button class="widget-toggle-btn" aria-label="Toggle Contact Menu">
+            <i class="fa-solid fa-comments toggle-icon-open"></i>
+            <i class="fa-solid fa-xmark toggle-icon-close hidden"></i>
+        </button>
+    </div>
+
+    <!-- Slide-out Quote Cart Sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="quote-sidebar" id="quoteSidebar">
+        <div class="sidebar-header">
+            <h3>Your Quote Inquiry</h3>
+            <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close Sidebar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-body">
+            <div id="cartItemsContainer" class="cart-items-container">
+                <div class="cart-empty-message">
+                    <p>Your inquiry list is empty. Add products to request a quote.</p>
+                    <a href="products.html" class="cart-empty-action-btn">
+                        Go to Products <i class="fa-solid fa-arrow-right icon-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div id="cartFormSection" class="cart-form-section hidden">
+                <h4>Inquiry Contact Details</h4>
+                <form id="cartSubmitForm" class="cart-modern-form">
+                    <div class="form-group">
+                        <label for="cart_name">Name *</label>
+                        <input type="text" id="cart_name" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="cart_email">Email Address *</label>
+                        <input type="email" id="cart_email" required placeholder="john@company.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="cart_phone">Phone Number *</label>
+                        <input type="tel" id="cart_phone" required placeholder="+40 700 000 000">
+                    </div>
+                    <div class="form-group">
+                        <label for="cart_message">Additional Notes</label>
+                        <textarea id="cart_message" rows="3" placeholder="Sourcing schedules, certification needs..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Submit Quote Request <i class="fa-solid fa-paper-plane icon-right"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
