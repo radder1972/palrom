@@ -117,278 +117,120 @@
         </div>
     </section>
 
-    <!-- Configurator Form Wizard Section -->
-    <section class="section-padding configurator-section">
+    <!-- B2B Product Configurator Dashboard Section (Dark Industrial Mode) -->
+    <section class="configurator-dark-section">
         <div class="container">
-            <div class="configurator-wizard-container">
+            <div class="configurator-dashboard-container">
                 
-                <!-- Progress Indicators -->
-                <div class="configurator-progress-bar">
-                    <div class="progress-step active" id="progressStep1">
-                        <span class="step-num">1</span>
-                        <span class="step-text">Productgroep</span>
+                <form id="palromB2bConfiguratorForm" class="configurator-dashboard-form">
+                    <!-- Title -->
+                    <h2 class="dashboard-title">Palrom Product Configurator</h2>
+
+                    <!-- Summary Table -->
+                    <div class="dashboard-table-wrapper">
+                        <table class="dashboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Configuratie Detail</th>
+                                    <th>Uw Selectie</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Product</td>
+                                    <td id="summaryProduct">Beuken Pluggen</td>
+                                </tr>
+                                <tr>
+                                    <td>Afmetingen</td>
+                                    <td id="summaryDimensions">500mm x 20mm</td>
+                                </tr>
+                                <tr>
+                                    <td>Oplage</td>
+                                    <td id="summaryOplage">10.000 stuks</td>
+                                </tr>
+                                <tr>
+                                    <td>Materiaal</td>
+                                    <td><span class="material-leaf">🌿</span> 100% FSC® Beukenhout</td>
+                                </tr>
+                                <tr>
+                                    <td>Afwerking</td>
+                                    <td id="summaryFinish">Industrieel geschuurd</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="progress-step" id="progressStep2">
-                        <span class="step-num">2</span>
-                        <span class="step-text">Maatvoering</span>
-                    </div>
-                    <div class="progress-step" id="progressStep3">
-                        <span class="step-num">3</span>
-                        <span class="step-text">Volume & Contact</span>
-                    </div>
-                </div>
 
-                <!-- Wizard Main Container -->
-                <form id="palromB2bConfiguratorForm" class="configurator-card-form">
-                    
-                    <!-- STEP 1: Product Group Selector -->
-                    <div class="configurator-step active" id="configuratorStep1Content">
-                        <h3 class="step-title">Stap 1: Selecteer een Productgroep</h3>
-                        <p class="step-description">Kies de productcategorie die u wilt configureren voor uw B2B-aanvraag.</p>
-                        
-                        <div class="configurator-grid-selector">
-                            
-                            <!-- Category Dowels -->
-                            <div class="configurator-group-card" data-group="dowels">
-                                <img src="images/config_dowels.png" alt="Beukenhouten Dowels & Staven" class="card-group-img">
-                                <div class="card-details">
-                                    <h4>Beukenhouten Dowels & Staven</h4>
-                                    <p>Calibratie van 3 mm tot 60 mm diameter. Glad of gespiraald gegroefd beukenhout.</p>
-                                </div>
-                                <div class="selection-indicator"><i class="fa-solid fa-circle-check"></i></div>
-                            </div>
-
-                            <!-- Category Planed -->
-                            <div class="configurator-group-card" data-group="planed">
-                                <img src="images/config_planed.png" alt="4-Zijdig Geschaafd Beukenhout" class="card-group-img">
-                                <div class="card-details">
-                                    <h4>4-Zijdig Geschaafd Beukenhout</h4>
-                                    <p>Hoog-gekalibreerd geschaafd hout in rechthoekige of vierkante secties met scherpe of ronde hoeken.</p>
-                                </div>
-                                <div class="selection-indicator"><i class="fa-solid fa-circle-check"></i></div>
-                            </div>
-
-                            <!-- Category Profiles -->
-                            <div class="configurator-group-card" data-group="profiles">
-                                <img src="images/config_profiles.png" alt="Houten Profielen & Lijsten" class="card-group-img">
-                                <div class="card-details">
-                                    <h4>Houten Profielen & Lijsten</h4>
-                                    <p>Kwartrond, plinten en halfronde afwerklijsten voor groothandel en interieurbouw.</p>
-                                </div>
-                                <div class="selection-indicator"><i class="fa-solid fa-circle-check"></i></div>
-                            </div>
-
-                            <!-- Category Specials -->
-                            <div class="configurator-group-card" data-group="specials">
-                                <img src="images/config_specials.png" alt="Speciale Houtcomponenten" class="card-group-img">
-                                <div class="card-details">
-                                    <h4>Speciale Houtcomponenten</h4>
-                                    <p>Op maat gedraaide of gefreesde componenten voor meubels, speelgoed en voedselindustrie.</p>
-                                </div>
-                                <div class="selection-indicator"><i class="fa-solid fa-circle-check"></i></div>
-                            </div>
-
+                    <!-- Status Bar -->
+                    <div class="dashboard-status-bar">
+                        <div class="status-col">
+                            <span class="status-label">Certificering</span>
+                            <span class="status-value">100% FSC® Beukenhout</span>
+                        </div>
+                        <div class="status-col">
+                            <span class="status-label">Status</span>
+                            <span class="status-value status-ready">Ready</span>
                         </div>
                     </div>
 
-                    <!-- STEP 2: Sizing & Finishing Options -->
-                    <div class="configurator-step" id="configuratorStep2Content">
-                        <h3 class="step-title">Stap 2: Maatvoering & Bewerking</h3>
-                        <p class="step-description">Geef de exacte afmetingen in millimeters en gewenste afwerkingen op.</p>
-                        
-                        <!-- Conditional: Beechwood Dowels Fields -->
-                        <div class="conditional-fields-group hidden" id="fieldsDowels">
-                            <div class="configurator-input-grid">
-                                <div class="form-group-b2b">
-                                    <label for="dowelDiameter">Diameter (Ø) <span class="unit-tag">[mm]</span> *</label>
-                                    <input type="number" id="dowelDiameter" min="3" max="60" placeholder="bijv. 10">
-                                    <span class="field-hint">Beschikbaar van 3 mm t/m 60 mm</span>
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="dowelLength">Lengte <span class="unit-tag">[mm]</span> *</label>
-                                    <input type="number" id="dowelLength" min="30" max="3000" placeholder="bijv. 1000">
-                                    <span class="field-hint">Beschikbaar van 30 mm t/m 3000 mm</span>
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="dowelFinish">Oppervlakte-afwerking *</label>
-                                    <select id="dowelFinish">
-                                        <option value="Smooth">Glad (Gekalibreerd)</option>
-                                        <option value="Spiral-Rilled">Gespiraald Gegroefd (Rilled)</option>
-                                    </select>
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="dowelCondition">Houtbehandeling *</label>
-                                    <select id="dowelCondition">
-                                        <option value="Steamed">Gestoomd (Stabieler rood/bruin)</option>
-                                        <option value="Unsteamed">Ongestoomd (Licht crème wit)</option>
-                                    </select>
-                                </div>
+                    <!-- Controls Grid -->
+                    <div class="dashboard-controls-grid">
+                        <div class="control-group">
+                            <label for="dbCategory">Productcategorie</label>
+                            <select id="dbCategory" class="dashboard-select">
+                                <option value="pluggen" selected>Beuken Pluggen</option>
+                                <option value="dowels">Beukenhouten Dowels & Staven</option>
+                                <option value="planed">4-Zijdig Geschaafd Beukenhout</option>
+                                <option value="profiles">Houten Profielen & Lijsten</option>
+                                <option value="specials">Speciale Houtcomponenten</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="slider-header">
+                                <label for="dbLength" id="lblLength">Lengte (mm)</label>
+                            </div>
+                            <div class="slider-wrapper">
+                                <input type="range" id="dbLength" min="30" max="3000" value="500" class="dashboard-slider">
+                                <span class="slider-value-display" id="dbLengthVal">500</span>
                             </div>
                         </div>
 
-                        <!-- Conditional: Planed Lumber Fields -->
-                        <div class="conditional-fields-group hidden" id="fieldsPlaned">
-                            <div class="configurator-input-grid">
-                                <div class="form-group-b2b">
-                                    <label for="planedThickness">Dikte <span class="unit-tag">[mm]</span> *</label>
-                                    <input type="number" id="planedThickness" min="10" max="100" placeholder="bijv. 20">
-                                    <span class="field-hint">Beschikbaar van 10 mm t/m 100 mm</span>
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="planedWidth">Breedte <span class="unit-tag">[mm]</span> *</label>
-                                    <input type="number" id="planedWidth" min="15" max="300" placeholder="bijv. 50">
-                                    <span class="field-hint">Beschikbaar van 15 mm t/m 300 mm</span>
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="planedLength">Lengte <span class="unit-tag">[mm]</span> *</label>
-                                    <input type="number" id="planedLength" min="100" max="4000" placeholder="bijv. 2400">
-                                    <span class="field-hint">Beschikbaar van 100 mm t/m 4000 mm</span>
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="planedEdge">Hoekafwerking *</label>
-                                    <select id="planedEdge">
-                                        <option value="Sharp Edges">Scherpe hoeken (90°)</option>
-                                        <option value="Radius 3">Radius 3 mm (Licht afgerond)</option>
-                                        <option value="Radius 6">Radius 6 mm (Zwaarder afgerond)</option>
-                                    </select>
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="planedGrade">Houtkwaliteit *</label>
-                                    <select id="planedGrade">
-                                        <option value="Class A">Kwaliteitsklasse A (Vrij van noesten)</option>
-                                        <option value="Class B">Kwaliteitsklasse B (Lichte kleurnuances)</option>
-                                        <option value="Class A/B Mixed">Klasse A/B Gemengd</option>
-                                    </select>
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="planedCondition">Droging *</label>
-                                    <select id="planedCondition">
-                                        <option value="KD 8-12%">Ovenschoon gedroogd (KD 8-12% Vocht)</option>
-                                        <option value="Air Dried">Luchtgedroogd (AD)</option>
-                                    </select>
-                                </div>
+                        <div class="control-group">
+                            <div class="slider-header">
+                                <label for="dbDiameter" id="lblDiameter">Diameter/Breedte (mm)</label>
+                            </div>
+                            <div class="slider-wrapper">
+                                <input type="range" id="dbDiameter" min="3" max="300" value="20" class="dashboard-slider">
+                                <span class="slider-value-display" id="dbDiameterVal">20</span>
                             </div>
                         </div>
 
-                        <!-- Conditional: Profiles & Mouldings Fields -->
-                        <div class="conditional-fields-group hidden" id="fieldsProfiles">
-                            <div class="configurator-input-grid">
-                                <div class="form-group-b2b">
-                                    <label for="profileType">Profielvorm *</label>
-                                    <select id="profileType">
-                                        <option value="Quarter Round">Kwartrond</option>
-                                        <option value="Plinth">Plint / Vloerlijst</option>
-                                        <option value="Semiround">Halfrond</option>
-                                        <option value="Corner Moulding">Hoeklijst</option>
-                                    </select>
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="profileSizing">Afmeting (Hoogte/Breedte) <span class="unit-tag">[mm]</span> *</label>
-                                    <input type="number" id="profileSizing" min="10" max="120" placeholder="bijv. 18">
-                                    <span class="field-hint">Beschikbaar van 10 mm t/m 120 mm</span>
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="profileLength">Lengte <span class="unit-tag">[mm]</span> *</label>
-                                    <input type="number" id="profileLength" min="500" max="3000" placeholder="bijv. 2000">
-                                    <span class="field-hint">Standaardlengtes t/m 3000 mm</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Conditional: Custom Specials Fields -->
-                        <div class="conditional-fields-group hidden" id="fieldsSpecials">
-                            <div class="configurator-custom-fields">
-                                <div class="form-group-b2b full-width">
-                                    <label for="specialDescription">Omschrijf het Gewenste Component *</label>
-                                    <textarea id="specialDescription" rows="4" placeholder="Omschrijf de toepassing, vorm of bewerking van het houten component..."></textarea>
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="specialDimensions">Gewenste Maatvoeringen</label>
-                                    <input type="text" id="specialDimensions" placeholder="bijv. 40x40x120mm, geboord aan één zijde">
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="specialFinish">Afwerking / Lakken / Slijpen</label>
-                                    <input type="text" id="specialFinish" placeholder="bijv. Gladgeschuurd, onbehandeld">
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- STEP 3: Volume & Request Confirmation -->
-                    <div class="configurator-step" id="configuratorStep3Content">
-                        <h3 class="step-title">Stap 3: Volume & Contactgegevens</h3>
-                        <p class="step-description">Voer het volume van uw bestelling in en vul uw zakelijke contactgegevens in.</p>
-                        
-                        <div class="configurator-volume-section">
-                            <div class="volume-header-flex">
-                                <div class="volume-input-group">
-                                    <label for="b2bVolumeInput">Gewenste Oplage (Aantal stuks / Volume) *</label>
-                                    <div class="volume-counter-wrapper">
-                                        <input type="number" id="b2bVolumeInput" min="500" value="1000">
-                                    </div>
-                                    <div id="volumeB2bWarning" class="b2b-volume-badge">
-                                        <i class="fa-solid fa-circle-info"></i> B2B Focus: Richtafname minimaal 500 stuks.
-                                    </div>
-                                </div>
-                                <div class="fsc-seal-badge">
-                                    <div class="fsc-seal-icon"><i class="fa-solid fa-tree"></i></div>
-                                    <div class="fsc-seal-content">
-                                        <h5>FSC® 100% Gecertificeerd</h5>
-                                        <p>Duurzaam geoogst beukenhout uit de Karpaten.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="configurator-contact-details">
-                            <h4 class="form-subtitle-b2b">Zakelijke Contactgegevens</h4>
-                            <div class="configurator-input-grid">
-                                <div class="form-group-b2b">
-                                    <label for="b2bName">Uw Naam *</label>
-                                    <input type="text" id="b2bName" required placeholder="bijv. Jan de Vries">
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="b2bCompany">Bedrijfsnaam *</label>
-                                    <input type="text" id="b2bCompany" required placeholder="bijv. De Vries Houtbewerking BV">
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="b2bEmail">Zakelijk E-mailadres *</label>
-                                    <input type="email" id="b2bEmail" required placeholder="bijv. j.devries@houtbedrijf.nl">
-                                </div>
-                                <div class="form-group-b2b">
-                                    <label for="b2bPhone">Telefoonnummer *</label>
-                                    <input type="tel" id="b2bPhone" required placeholder="bijv. +31 6 12345678">
-                                </div>
-                                <div class="form-group-b2b full-width">
-                                    <label for="b2bNotes">Eventuele opmerkingen of logistieke eisen</label>
-                                    <textarea id="b2bNotes" rows="3" placeholder="bijv. Sourcing deadlines, specifieke transportbundeling..."></textarea>
-                                </div>
-                                <div class="form-group-b2b full-width checkbox-row">
-                                    <input type="checkbox" id="b2bFscRequired" checked>
-                                    <label for="b2bFscRequired">Ik vereis een FSC® Chain of Custody-verklaring op de factuur.</label>
-                                </div>
-                            </div>
+                        <div class="control-group">
+                            <label for="dbOplage">Oplage (stuks)</label>
+                            <select id="dbOplage" class="dashboard-select">
+                                <option value="500">500 stuks</option>
+                                <option value="1000">1.000 stuks</option>
+                                <option value="5000">5.000 stuks</option>
+                                <option value="10000" selected>10.000 stuks</option>
+                                <option value="25000">25.000 stuks</option>
+                                <option value="50000">50.000 stuks</option>
+                                <option value="100000">100.000 stuks</option>
+                            </select>
                         </div>
                     </div>
 
-                    <!-- Wizard Navigation Buttons -->
-                    <div class="configurator-nav-buttons">
-                        <button type="button" class="btn-wizard btn-prev hidden" id="btnWizardPrev"><i class="fa-solid fa-chevron-left icon-left"></i> Vorige stap</button>
-                        <button type="button" class="btn-wizard btn-next" id="btnWizardNext">Volgende stap <i class="fa-solid fa-chevron-right icon-right"></i></button>
-                        <button type="submit" class="btn-wizard btn-submit hidden" id="btnWizardSubmit">Vraag Offerte Aan <i class="fa-solid fa-paper-plane icon-right"></i></button>
-                    </div>
-
+                    <!-- Submit Button -->
+                    <button type="submit" class="dashboard-submit-btn">Vraag Direct Offerte Aan</button>
                 </form>
 
-                <!-- SUCCESS VIEW OVERLAY -->
+                <!-- SUCCESS VIEW OVERLAY (Dark Industrial Theme) -->
                 <div class="configurator-success-overlay hidden" id="configuratorSuccessOverlay">
-                    <div class="success-card">
+                    <div class="success-card dark-success-card">
                         <div class="success-icon-circle"><i class="fa-solid fa-circle-check"></i></div>
                         <h2>Aanvraag Succesvol Ontvangen</h2>
                         <p class="success-lead">Bedankt! Uw specificaties zijn geregistreerd in ons B2B-offertesysteem. We nemen binnen 24 uur contact met u op.</p>
                         
-                        <div class="ticket-summary-box">
+                        <div class="ticket-summary-box dark-ticket-box">
                             <div class="ticket-header">
                                 <span>OFFERTE TICKETAANVRAAG</span>
                                 <strong id="successTicketNum">PLR-2026-8941</strong>
@@ -397,7 +239,7 @@
                                 <ul>
                                     <li><strong>Productcategorie:</strong> <span id="successProductGroup">Beukenhouten Dowels</span></li>
                                     <li><strong>Afmetingen:</strong> <span id="successProductSpecs">Diameter: 10mm | Lengte: 1000mm</span></li>
-                                    <li><strong>Aantal stuks:</strong> <span id="successProductQty">1.000 stuks</span></li>
+                                    <li><strong>Aantal stuks:</strong> <span id="successProductQty">10.000 stuks</span></li>
                                     <li><strong>Organisatie:</strong> <span id="successCompanyName">De Vries Houtbewerking BV</span></li>
                                 </ul>
                             </div>
@@ -407,6 +249,40 @@
                             <button class="btn btn-primary" id="successDownloadPdf"><i class="fa-solid fa-file-pdf icon-left"></i> Download Specificatiesheet</button>
                             <button class="btn btn-secondary" id="successRestartBtn">Configureer Nieuw Product</button>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Sleek Dark Contact Modal -->
+                <div class="dashboard-modal-overlay hidden" id="dashboardContactModal">
+                    <div class="dashboard-modal-card animate-modal">
+                        <button type="button" class="modal-close-btn" id="closeContactModal"><i class="fa-solid fa-xmark"></i></button>
+                        <h3>Contactgegevens B2B Aanvraag</h3>
+                        <p>Voer uw bedrijfsgegevens in om uw offerteaanvraag te voltooien. U ontvangt direct een specificatiedocument.</p>
+                        
+                        <form id="dashboardSubmitForm" class="dashboard-modal-form">
+                            <div class="form-group-db">
+                                <label for="dbName">Uw Naam *</label>
+                                <input type="text" id="dbName" required placeholder="bijv. Jan de Vries">
+                            </div>
+                            <div class="form-group-db">
+                                <label for="dbCompany">Bedrijfsnaam *</label>
+                                <input type="text" id="dbCompany" required placeholder="bijv. Houtbewerking De Vries BV">
+                            </div>
+                            <div class="form-group-db">
+                                <label for="dbEmail">Zakelijk E-mailadres *</label>
+                                <input type="email" id="dbEmail" required placeholder="bijv. j.devries@houtbedrijf.nl">
+                            </div>
+                            <div class="form-group-db">
+                                <label for="dbPhone">Telefoonnummer *</label>
+                                <input type="tel" id="dbPhone" required placeholder="bijv. +31 6 12345678">
+                            </div>
+                            <div class="form-group-db">
+                                <label for="dbNotes">Aanvullende opmerkingen of logistieke eisen</label>
+                                <textarea id="dbNotes" rows="3" placeholder="bijv. Gewenste leverdatum, specifieke transportbundeling..."></textarea>
+                            </div>
+                            
+                            <button type="submit" class="dashboard-modal-submit-btn">Verstuur Aanvraag <i class="fa-solid fa-paper-plane icon-right"></i></button>
+                        </form>
                     </div>
                 </div>
 

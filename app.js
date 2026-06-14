@@ -788,27 +788,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // 10. B2B Product Configurator Wizard Logic
+    // 10. B2B Product Configurator Dashboard Logic
     // ==========================================
     const b2bConfigForm = document.getElementById('palromB2bConfiguratorForm');
-    if (b2bConfigForm) {
-        const groupCards = document.querySelectorAll('.configurator-group-card');
-        const btnPrev = document.getElementById('btnWizardPrev');
-        const btnNext = document.getElementById('btnWizardNext');
-        const btnSubmit = document.getElementById('btnWizardSubmit');
+    if (b2bConfigForm && document.getElementById('dbCategory')) {
+        const dbCategory = document.getElementById('dbCategory');
+        const dbOplage = document.getElementById('dbOplage');
+        const dbLength = document.getElementById('dbLength');
+        const dbDiameter = document.getElementById('dbDiameter');
         
-        const step1Content = document.getElementById('configuratorStep1Content');
-        const step2Content = document.getElementById('configuratorStep2Content');
-        const step3Content = document.getElementById('configuratorStep3Content');
+        const dbLengthVal = document.getElementById('dbLengthVal');
+        const dbDiameterVal = document.getElementById('dbDiameterVal');
+        const lblLength = document.getElementById('lblLength');
+        const lblDiameter = document.getElementById('lblDiameter');
         
-        const progStep1 = document.getElementById('progressStep1');
-        const progStep2 = document.getElementById('progressStep2');
-        const progStep3 = document.getElementById('progressStep3');
+        const summaryProduct = document.getElementById('summaryProduct');
+        const summaryDimensions = document.getElementById('summaryDimensions');
+        const summaryOplage = document.getElementById('summaryOplage');
+        const summaryFinish = document.getElementById('summaryFinish');
         
-        const fieldsDowels = document.getElementById('fieldsDowels');
-        const fieldsPlaned = document.getElementById('fieldsPlaned');
-        const fieldsProfiles = document.getElementById('fieldsProfiles');
-        const fieldsSpecials = document.getElementById('fieldsSpecials');
+        const contactModal = document.getElementById('dashboardContactModal');
+        const closeContactModal = document.getElementById('closeContactModal');
+        const modalForm = document.getElementById('dashboardSubmitForm');
         
         const successOverlay = document.getElementById('configuratorSuccessOverlay');
         const successTicket = document.getElementById('successTicketNum');
@@ -819,258 +820,141 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const restartBtn = document.getElementById('successRestartBtn');
         const downloadPdfBtn = document.getElementById('successDownloadPdf');
+
+        // B2B Configurator Sizing Rules
+        const categoryData = {
+            pluggen: {
+                name: "Beuken Pluggen",
+                length: { min: 30, max: 3000, default: 500, label: "Lengte (mm)" },
+                diameter: { min: 3, max: 60, default: 20, label: "Diameter (mm)" },
+                finish: "Industrieel geschuurd"
+            },
+            dowels: {
+                name: "Beukenhouten Dowels & Staven",
+                length: { min: 30, max: 3000, default: 1000, label: "Lengte (mm)" },
+                diameter: { min: 3, max: 60, default: 10, label: "Diameter (mm)" },
+                finish: "Gladgeschaafd"
+            },
+            planed: {
+                name: "4-Zijdig Geschaafd Beukenhout",
+                length: { min: 100, max: 4000, default: 2400, label: "Lengte (mm)" },
+                diameter: { min: 15, max: 300, default: 50, label: "Breedte (mm)" },
+                finish: "Vierzijdig geschaafd"
+            },
+            profiles: {
+                name: "Houten Profielen & Lijsten",
+                length: { min: 500, max: 3000, default: 2000, label: "Lengte (mm)" },
+                diameter: { min: 10, max: 120, default: 18, label: "Afmeting (mm)" },
+                finish: "Geprofileerd"
+            },
+            specials: {
+                name: "Speciale Houtcomponenten",
+                length: { min: 50, max: 2000, default: 500, label: "Lengte (mm)" },
+                diameter: { min: 5, max: 500, default: 40, label: "Breedte (mm)" },
+                finish: "Op specificatie"
+            }
+        };
+
+        // Update values in summary table
+        function updateSummary() {
+            const cat = dbCategory.value;
+            const data = categoryData[cat];
+            
+            summaryProduct.textContent = data.name;
+            summaryDimensions.textContent = `${dbLength.value}mm x ${dbDiameter.value}mm`;
+            summaryOplage.textContent = dbOplage.options[dbOplage.selectedIndex].text;
+            summaryFinish.textContent = data.finish;
+            
+            dbLengthVal.textContent = dbLength.value;
+            dbDiameterVal.textContent = dbDiameter.value;
+        }
+
+        // Adjust limits when category changes
+        function handleCategoryChange() {
+            const cat = dbCategory.value;
+            const data = categoryData[cat];
+            
+            // Length Slider
+            dbLength.min = data.length.min;
+            dbLength.max = data.length.max;
+            dbLength.value = data.length.default;
+            lblLength.textContent = data.length.label;
+            
+            // Diameter/Width Slider
+            dbDiameter.min = data.diameter.min;
+            dbDiameter.max = data.diameter.max;
+            dbDiameter.value = data.diameter.default;
+            lblDiameter.textContent = data.diameter.label;
+            
+            updateSummary();
+        }
+
+        dbCategory.addEventListener('change', handleCategoryChange);
+        dbOplage.addEventListener('change', updateSummary);
         
-        let currentStep = 1;
-        let selectedGroup = ''; // 'dowels', 'planed', 'profiles', 'specials'
+        dbLength.addEventListener('input', updateSummary);
+        dbDiameter.addEventListener('input', updateSummary);
 
-        // Step 1: Select Product Group
-        groupCards.forEach(card => {
-            card.addEventListener('click', () => {
-                groupCards.forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-                selectedGroup = card.getAttribute('data-group');
-            });
-
-            // Double click to select and immediately proceed to Step 2
-            card.addEventListener('dblclick', () => {
-                groupCards.forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-                selectedGroup = card.getAttribute('data-group');
-                
-                if (currentStep === 1 && validateStep(1)) {
-                    currentStep = 2;
-                    updateWizardUI();
-                    window.scrollTo({ top: b2bConfigForm.offsetTop - 120, behavior: 'smooth' });
-                }
-            });
-        });
-
-        // Step Transitions & Logic
-        function updateWizardUI() {
-            // Hide all steps first
-            step1Content.classList.remove('active');
-            step2Content.classList.remove('active');
-            step3Content.classList.remove('active');
-            
-            progStep1.classList.remove('active', 'completed');
-            progStep2.classList.remove('active', 'completed');
-            progStep3.classList.remove('active', 'completed');
-            
-            if (currentStep === 1) {
-                step1Content.classList.add('active');
-                progStep1.classList.add('active');
-                btnPrev.classList.add('hidden');
-                btnNext.classList.remove('hidden');
-                btnSubmit.classList.add('hidden');
-            } else if (currentStep === 2) {
-                step2Content.classList.add('active');
-                progStep1.classList.add('completed');
-                progStep2.classList.add('active');
-                btnPrev.classList.remove('hidden');
-                btnNext.classList.remove('hidden');
-                btnSubmit.classList.add('hidden');
-                
-                // Show only active fields
-                fieldsDowels.classList.add('hidden');
-                fieldsPlaned.classList.add('hidden');
-                fieldsProfiles.classList.add('hidden');
-                fieldsSpecials.classList.add('hidden');
-                
-                if (selectedGroup === 'dowels') {
-                    fieldsDowels.classList.remove('hidden');
-                } else if (selectedGroup === 'planed') {
-                    fieldsPlaned.classList.remove('hidden');
-                } else if (selectedGroup === 'profiles') {
-                    fieldsProfiles.classList.remove('hidden');
-                } else if (selectedGroup === 'specials') {
-                    fieldsSpecials.classList.remove('hidden');
-                }
-            } else if (currentStep === 3) {
-                step3Content.classList.add('active');
-                progStep1.classList.add('completed');
-                progStep2.classList.add('completed');
-                progStep3.classList.add('active');
-                btnPrev.classList.remove('hidden');
-                btnNext.classList.add('hidden');
-                btnSubmit.classList.remove('hidden');
-            }
-        }
-
-        // Validate current step inputs
-        function validateStep(step) {
-            if (step === 1) {
-                if (!selectedGroup) {
-                    alert('Selecteer a.u.b. eerst een productgroep om verder te gaan.');
-                    return false;
-                }
-                return true;
-            }
-            
-            if (step === 2) {
-                if (selectedGroup === 'dowels') {
-                    const diameter = document.getElementById('dowelDiameter').value;
-                    const length = document.getElementById('dowelLength').value;
-                    if (!diameter || !length) {
-                        alert('Voer a.u.b. de diameter en lengte in.');
-                        return false;
-                    }
-                    if (diameter < 3 || diameter > 60) {
-                        alert('De diameter moet tussen 3 mm en 60 mm liggen.');
-                        return false;
-                    }
-                    if (length < 30 || length > 3000) {
-                        alert('De lengte moet tussen 30 mm en 3000 mm liggen.');
-                        return false;
-                    }
-                } else if (selectedGroup === 'planed') {
-                    const thickness = document.getElementById('planedThickness').value;
-                    const width = document.getElementById('planedWidth').value;
-                    const length = document.getElementById('planedLength').value;
-                    if (!thickness || !width || !length) {
-                        alert('Voer a.u.b. alle afmetingen in (dikte, breedte en lengte).');
-                        return false;
-                    }
-                    if (thickness < 10 || thickness > 100) {
-                        alert('De dikte moet tussen 10 mm en 100 mm liggen.');
-                        return false;
-                    }
-                    if (width < 15 || width > 300) {
-                        alert('De breedte moet tussen 15 mm en 300 mm liggen.');
-                        return false;
-                    }
-                    if (length < 100 || length > 4000) {
-                        alert('De lengte moet tussen 100 mm en 4000 mm liggen.');
-                        return false;
-                    }
-                } else if (selectedGroup === 'profiles') {
-                    const sizing = document.getElementById('profileSizing').value;
-                    const length = document.getElementById('profileLength').value;
-                    if (!sizing || !length) {
-                        alert('Voer a.u.b. de afmeting en lengte in.');
-                        return false;
-                    }
-                    if (sizing < 10 || sizing > 120) {
-                        alert('De afmeting moet tussen 10 mm en 120 mm liggen.');
-                        return false;
-                    }
-                    if (length < 500 || length > 3000) {
-                        alert('De lengte moet tussen 500 mm en 3000 mm liggen.');
-                        return false;
-                    }
-                } else if (selectedGroup === 'specials') {
-                    const desc = document.getElementById('specialDescription').value.trim();
-                    if (!desc) {
-                        alert('Voer a.u.b. een omschrijving in voor uw gewenste houtcomponent.');
-                        return false;
-                    }
-                }
-                return true;
-            }
-            return true;
-        }
-
-        // Navigation Button Listeners
-        btnNext.addEventListener('click', () => {
-            if (validateStep(currentStep)) {
-                currentStep++;
-                updateWizardUI();
-                window.scrollTo({ top: b2bConfigForm.offsetTop - 120, behavior: 'smooth' });
-            }
-        });
-
-        btnPrev.addEventListener('click', () => {
-            currentStep--;
-            updateWizardUI();
-            window.scrollTo({ top: b2bConfigForm.offsetTop - 120, behavior: 'smooth' });
-        });
-
-        // Form Submission
+        // Submit form opens B2B contact modal
         b2bConfigForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
-            // Validate Contact Fields
-            const name = document.getElementById('b2bName').value.trim();
-            const company = document.getElementById('b2bCompany').value.trim();
-            const email = document.getElementById('b2bEmail').value.trim();
-            const phone = document.getElementById('b2bPhone').value.trim();
-            const qty = document.getElementById('b2bVolumeInput').value;
-            const fscRequired = document.getElementById('b2bFscRequired').checked;
+            contactModal.classList.remove('hidden');
+        });
 
-            if (!name || !company || !email || !phone || !qty) {
+        // Close modal
+        closeContactModal.addEventListener('click', () => {
+            contactModal.classList.add('hidden');
+        });
+
+        contactModal.addEventListener('click', (e) => {
+            if (e.target === contactModal) {
+                contactModal.classList.add('hidden');
+            }
+        });
+
+        // Handle B2B Inquiry Submission
+        modalForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('dbName').value.trim();
+            const company = document.getElementById('dbCompany').value.trim();
+            const email = document.getElementById('dbEmail').value.trim();
+            const phone = document.getElementById('dbPhone').value.trim();
+            
+            if (!name || !company || !email || !phone) {
                 alert('Vul a.u.b. alle verplichte contactvelden in.');
                 return;
             }
 
-            // Simulate loader spinner
-            const originalBtnHtml = btnSubmit.innerHTML;
-            btnSubmit.disabled = true;
-            btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin icon-left"></i> Verwerken...';
+            const submitBtn = modalForm.querySelector('.dashboard-modal-submit-btn');
+            const originalBtnHtml = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin icon-left"></i> Verwerken...';
 
             setTimeout(() => {
-                btnSubmit.disabled = false;
-                btnSubmit.innerHTML = originalBtnHtml;
-
-                // Build Specification Details summary
-                let groupLabel = '';
-                let specDetails = '';
-
-                if (selectedGroup === 'dowels') {
-                    groupLabel = 'Beukenhouten Dowels & Staven';
-                    const diameter = document.getElementById('dowelDiameter').value;
-                    const length = document.getElementById('dowelLength').value;
-                    const finish = document.getElementById('dowelFinish').options[document.getElementById('dowelFinish').selectedIndex].text;
-                    const condition = document.getElementById('dowelCondition').options[document.getElementById('dowelCondition').selectedIndex].text;
-                    specDetails = `Diameter: ${diameter}mm | Lengte: ${length}mm | Afwerking: ${finish} | Behandeling: ${condition}`;
-                } else if (selectedGroup === 'planed') {
-                    groupLabel = '4-Zijdig Geschaafd Beukenhout';
-                    const thickness = document.getElementById('planedThickness').value;
-                    const width = document.getElementById('planedWidth').value;
-                    const length = document.getElementById('planedLength').value;
-                    const edge = document.getElementById('planedEdge').options[document.getElementById('planedEdge').selectedIndex].text;
-                    const grade = document.getElementById('planedGrade').options[document.getElementById('planedGrade').selectedIndex].text;
-                    const cond = document.getElementById('planedCondition').options[document.getElementById('planedCondition').selectedIndex].text;
-                    specDetails = `Afmetingen: ${thickness}x${width}x${length}mm | Hoeken: ${edge} | Kwaliteit: ${grade} | Droging: ${cond}`;
-                } else if (selectedGroup === 'profiles') {
-                    groupLabel = 'Houten Profielen & Lijsten';
-                    const shape = document.getElementById('profileType').options[document.getElementById('profileType').selectedIndex].text;
-                    const sizing = document.getElementById('profileSizing').value;
-                    const length = document.getElementById('profileLength').value;
-                    specDetails = `Profielvorm: ${shape} | Afmeting: ${sizing}mm | Lengte: ${length}mm`;
-                } else if (selectedGroup === 'specials') {
-                    groupLabel = 'Speciale Houtcomponenten';
-                    const desc = document.getElementById('specialDescription').value.substring(0, 50) + '...';
-                    const dims = document.getElementById('specialDimensions').value || 'N.v.t.';
-                    const finish = document.getElementById('specialFinish').value || 'N.v.t.';
-                    specDetails = `Type: ${desc} | Afmetingen: ${dims} | Bewerking: ${finish}`;
-                }
-
-                if (fscRequired) {
-                    specDetails += ' [FSC® Vereist]';
-                }
-
-                // Generate random B2B reference
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+                
+                contactModal.classList.add('hidden');
+                
                 const randomTicket = 'PLR-2026-' + Math.floor(10000 + Math.random() * 90000);
-
-                // Update Success UI Elements
+                
                 successTicket.textContent = randomTicket;
-                successGroup.textContent = groupLabel;
-                successSpecs.textContent = specDetails;
-                successQty.textContent = `${Number(qty).toLocaleString('nl-NL')} stuks/volume`;
+                successGroup.textContent = summaryProduct.textContent;
+                successSpecs.textContent = `Afmetingen: ${summaryDimensions.textContent} | Afwerking: ${summaryFinish.textContent}`;
+                successQty.textContent = summaryOplage.textContent;
                 successCompany.textContent = company;
-
-                // Show Success view
+                
                 successOverlay.classList.remove('hidden');
                 window.scrollTo({ top: b2bConfigForm.offsetTop - 120, behavior: 'smooth' });
-            }, 1500);
+            }, 1200);
         });
 
-        // Restart Wizard
+        // Reset Configurator
         restartBtn.addEventListener('click', () => {
             b2bConfigForm.reset();
-            groupCards.forEach(c => c.classList.remove('active'));
-            selectedGroup = '';
-            currentStep = 1;
-            updateWizardUI();
+            modalForm.reset();
+            handleCategoryChange();
             successOverlay.classList.add('hidden');
         });
 
@@ -1078,6 +962,9 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadPdfBtn.addEventListener('click', () => {
             alert('Uw specificatiesheet (PDF) is klaargemaakt voor download en naar uw e-mailadres verzonden!');
         });
+
+        // Initialize values
+        handleCategoryChange();
     }
 
     // Initialize cart state
