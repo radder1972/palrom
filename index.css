@@ -2796,6 +2796,7 @@ ul {
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
     border: 3px solid var(--color-primary);
     background-color: var(--color-bg-white);
+    transform: rotate(15deg); /* Initially rotated 15 degrees to look authentically stamped */
 }
 
 .hiring-stamp-hero img {
@@ -2807,7 +2808,7 @@ ul {
 }
 
 .hiring-stamp-hero:hover {
-    transform: scale(1.15) rotate(15deg);
+    transform: scale(1.15) rotate(30deg); /* Rotates a bit more on hover */
     box-shadow: 0 10px 30px rgba(231, 177, 36, 0.6);
 }
 
