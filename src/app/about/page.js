@@ -93,10 +93,10 @@ export default function About() {
         ro: 'Acum'
       },
       title: {
-        nl: 'Een Multinationale Partner',
-        en: 'A Multinational Partner',
-        de: 'Ein multinationaler Partner',
-        ro: 'Un Partener Multinațional'
+        nl: 'Een Internationale Partner',
+        en: 'An International Partner',
+        de: 'Ein internationaler Partner',
+        ro: 'Un Partener Internațional'
       },
       description: {
         nl: 'Palrom opereert als een belangrijke leverancier voor grote Europese retailers van meubelcomponenten, met centraal logistiek beheer en distributiepunten in Nederland.',
