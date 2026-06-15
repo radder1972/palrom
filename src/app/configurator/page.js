@@ -913,7 +913,7 @@ export default function Configurator() {
                 <div className="control-group" id="controlGroupLengthType">
                   <label>{getTranslation('lengthTypeLabel')}</label>
                   <div style={{ display: 'flex', gap: '1.5rem', marginTop: '0.5rem' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: '#fff' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: 'var(--color-text-dark)' }}>
                       <input
                         type="radio"
                         name="lengthType"
@@ -923,7 +923,7 @@ export default function Configurator() {
                       />
                       <span>{getTranslation('lengthTypeStandard')}</span>
                     </label>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: '#fff' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: 'var(--color-text-dark)' }}>
                       <input
                         type="radio"
                         name="lengthType"
