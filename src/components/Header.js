@@ -24,7 +24,7 @@ export default function Header() {
         <Link href="/" className="logo">
           <img src="/images/logo.png" alt="PALROM Products Logo" className="header-logo-img" />
         </Link>
-        <nav className={`nav-menu ${isMobileMenuOpen ? 'active' : ''}`}>
+        <nav className={`nav-menu ${isMobileMenuOpen ? 'open' : ''}`}>
           <Link href="/" className={`nav-link ${pathname === '/' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
             Home
           </Link>
@@ -53,7 +53,7 @@ export default function Header() {
             Request Quote
           </Link>
           <button 
-            className={`mobile-nav-toggle ${isMobileMenuOpen ? 'active' : ''}`} 
+            className={`mobile-nav-toggle ${isMobileMenuOpen ? 'open' : ''}`} 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle Navigation"
           >
