@@ -6,7 +6,7 @@ import { useInquiry } from '@/components/InquiryContext';
 import ContactSection from '@/components/ContactSection';
 
 export default function Dowels() {
-  const { lang, addToCart, setIsCartOpen } = useInquiry();
+  const { lang } = useInquiry();
 
   const dowelProducts = [
     {
@@ -146,30 +146,16 @@ export default function Dowels() {
       de: 'FSC®-zertifiziert auf Anfrage erhältlich',
       ro: 'Certificat FSC® disponibil la cerere'
     },
-    addToInquiry: {
-      nl: 'Toevoegen aan offerteaanvraag',
-      en: 'Add to Inquiry',
-      de: 'Zur Anfrage hinzufügen',
-      ro: 'Adaugă la Solicitare'
+    requestQuoteBtn: {
+      nl: 'Offerte aanvragen',
+      en: 'Request Quote',
+      de: 'Angebot anfordern',
+      ro: 'Solicită Ofertă'
     }
   };
 
   const getTranslation = (key) => {
     return t[key]?.[lang] || t[key]?.nl || '';
-  };
-
-  const handleAdd = (product) => {
-    const resolvedName = product.name[lang] || product.name.nl;
-    const resolvedCategory = product.category[lang] || product.category.nl;
-    addToCart({
-      id: product.id,
-      name: resolvedName,
-      category: resolvedCategory,
-      qty: 1,
-      grade: 'grade_a',
-      dims: '',
-    });
-    setIsCartOpen(true);
   };
 
   return (
@@ -200,12 +186,12 @@ export default function Dowels() {
                 <div className="detail-info">
                   <h3>{p.name[lang] || p.name.nl}</h3>
                   <p>{p.description[lang] || p.description.nl}</p>
-                  <button
+                  <Link
+                    href="#contact"
                     className="detail-cta add-to-inquiry-btn"
-                    onClick={() => handleAdd(p)}
                   >
-                    {getTranslation('addToInquiry')} <i className="fa-solid fa-plus icon-right"></i>
-                  </button>
+                    {getTranslation('requestQuoteBtn')} <i className="fa-solid fa-chevron-right icon-right"></i>
+                  </Link>
                 </div>
               </div>
             ))}
