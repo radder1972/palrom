@@ -237,10 +237,10 @@ export default function Careers() {
 
   const t = {
     breadcrumb: {
-      nl: 'Home / Vacatures',
-      en: 'Home / Careers',
-      de: 'Home / Karriere',
-      ro: 'Home / Cariere'
+      nl: 'Vacatures',
+      en: 'Careers',
+      de: 'Karriere',
+      ro: 'Cariere'
     },
     title: {
       nl: 'Werken bij PALROM',

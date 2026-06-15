@@ -198,10 +198,10 @@ export default function About() {
       ro: "Experimentați precizia transformării lemnului. Unitatea noastră de frezare de ultimă generație îmbină generații de meșteșug românesc cu tehnologii europene avansate de tăiere, calibrând fiecare tăietură la perfecțiune la nivel de microni pentru componente premium și durabile din lemn de fag."
     },
     breadcrumb: {
-      nl: 'Home / Bedrijfsprofiel',
-      en: 'Home / Company Profile',
-      de: 'Home / Unternehmensprofil',
-      ro: 'Home / Profilul Companiei'
+      nl: 'Bedrijfsprofiel',
+      en: 'Company Profile',
+      de: 'Unternehmensprofil',
+      ro: 'Profilul Companiei'
     },
     title: {
       nl: 'Bedrijfsidentiteit & Waarden',

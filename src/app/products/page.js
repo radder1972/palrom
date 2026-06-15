@@ -166,10 +166,10 @@ export default function Products() {
 
   const t = {
     breadcrumb: {
-      nl: 'Home / Producten',
-      en: 'Home / Products',
-      de: 'Home / Produkte',
-      ro: 'Home / Produsele'
+      nl: 'Producten',
+      en: 'Products',
+      de: 'Produkte',
+      ro: 'Produsele'
     },
     title: {
       nl: 'Precisie Houtcatalogus',
