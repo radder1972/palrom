@@ -176,21 +176,254 @@
 
                         <!-- Subcategory Selector (Only shown for profiles) -->
                         <div class="control-group hidden" id="controlGroupSubCategoryProfiles">
-                            <label for="dbSubCategoryProfiles">Subcategorie Profiel *</label>
-                            <select id="dbSubCategoryProfiles" class="dashboard-select">
-                                <option value="Semiround Profile" selected>Semiround Profile (Halfrond)</option>
-                                <option value="Profile Strip">Profile Strip (Platte strip)</option>
-                                <option value="Profile Finishing (Variant 1)">Profile Finishing (Variant 1)</option>
-                                <option value="Profile Quarter Round (Variant 1)">Profile Quarter Round (Variant 1)</option>
-                                <option value="Profile Finishing (Variant 2)">Profile Finishing (Variant 2)</option>
-                                <option value="Profile Plinth (Variant 1)">Profile Plinth (Variant 1)</option>
-                                <option value="Profile Corner (Variant 1)">Profile Corner (Variant 1)</option>
-                                <option value="Profile Corner (Variant 2)">Profile Corner (Variant 2)</option>
-                                <option value="Profile Triangular">Profile Triangular (Driehoekig)</option>
-                                <option value="Profile Quarter Round (Variant 2)">Profile Quarter Round (Variant 2)</option>
-                                <option value="Profile Thread">Profile Thread (Traptree)</option>
-                                <option value="Profile Calbat">Profile Calbat (Calbat lijst)</option>
-                            </select>
+                            <label>Subcategorie Profiel *</label>
+                            <div class="profiles-subcat-grid">
+                                
+                                <!-- Semiround Profile -->
+                                <label class="profiles-subcat-card">
+                                    <input type="radio" name="subCategoryProfiles" value="profile-semiround" checked>
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Extruded dome face -->
+                                                <path d="M 10,48 C 10,38 26,46 26,56 L 50,32 C 50,22 34,14 34,24 Z" fill="#f97316" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Front cross-section (dome) -->
+                                                <path d="M 10,48 L 26,56 C 26,46 10,38 10,48 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Semiround Profile</span>
+                                    </div>
+                                </label>
+
+                                <!-- Profile Strip -->
+                                <label class="profiles-subcat-card">
+                                    <input type="radio" name="subCategoryProfiles" value="profile-strip">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Top Face -->
+                                                <path d="M 10,49 L 26,52 L 50,40 L 34,37 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Side Face -->
+                                                <path d="M 26,56 L 26,52 L 50,40 L 50,44 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Front Face -->
+                                                <path d="M 10,53 L 26,56 L 26,52 L 10,49 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Profile Strip</span>
+                                    </div>
+                                </label>
+
+                                <!-- Profile Finishing (Variant 1) -->
+                                <label class="profiles-subcat-card">
+                                    <input type="radio" name="subCategoryProfiles" value="profile-finish-v1">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Top shelf -->
+                                                <path d="M 10,36 L 14,38 L 38,26 L 34,24 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Bottom shelf -->
+                                                <path d="M 22,54 L 26,56 L 50,44 L 46,42 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Concave cove face -->
+                                                <path d="M 14,38 C 16,44 18,50 22,54 L 46,42 C 42,38 40,32 38,26 Z" fill="#f97316" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Front cross section -->
+                                                <path d="M 10,48 L 10,36 L 14,38 C 16,44 18,50 22,54 L 26,56 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Profile Finishing (Variant 1)</span>
+                                    </div>
+                                </label>
+
+                                <!-- Profile Quarter Round (Variant 1) -->
+                                <label class="profiles-subcat-card">
+                                    <input type="radio" name="subCategoryProfiles" value="profile-quarter-v1">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Curved front face -->
+                                                <path d="M 10,36 C 22,38 26,46 26,56 L 50,44 C 50,34 46,26 34,24 Z" fill="#f97316" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Front cross-section -->
+                                                <path d="M 10,48 L 10,36 C 22,38 26,46 26,56 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Profile Quarter Round (Variant 1)</span>
+                                    </div>
+                                </label>
+
+                                <!-- Profile Finishing (Variant 2) -->
+                                <label class="profiles-subcat-card">
+                                    <input type="radio" name="subCategoryProfiles" value="profile-finish-v2">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Step 1 top -->
+                                                <path d="M 10,36 L 14,38 L 38,26 L 34,24 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Step 2 top -->
+                                                <path d="M 14,41 L 18,43 L 42,31 L 38,29 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Step 3 top -->
+                                                <path d="M 18,46 L 22,48 L 46,36 L 42,34 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Step 4 top -->
+                                                <path d="M 22,51 L 26,53 L 50,41 L 46,39 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                
+                                                <!-- Wall 1 -->
+                                                <path d="M 14,38 L 14,41 L 38,29 L 38,26 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Wall 2 -->
+                                                <path d="M 18,43 L 18,46 L 42,34 L 42,31 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Wall 3 -->
+                                                <path d="M 22,48 L 22,51 L 46,39 L 46,36 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Wall 4 (end) -->
+                                                <path d="M 26,53 L 26,56 L 50,44 L 50,41 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                
+                                                <!-- Front cross section -->
+                                                <path d="M 10,48 L 10,36 L 14,38 L 14,41 L 18,43 L 18,46 L 22,48 L 22,51 L 26,53 L 26,56 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Profile Finishing (Variant 2)</span>
+                                    </div>
+                                </label>
+
+                                <!-- Profile Plinth (Variant 1) -->
+                                <label class="profiles-subcat-card">
+                                    <input type="radio" name="subCategoryProfiles" value="profile-plinth-v1">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Tall flat side -->
+                                                <path d="M 16,57 L 16,39 L 46,24 L 46,42 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Decorative top face -->
+                                                <path d="M 16,39 C 16,36 13,36 13,38 L 10,39.5 L 40,24.5 L 43,23 C 43,21 46,21 46,24 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Front face cross section -->
+                                                <path d="M 10,54 L 16,57 L 16,39 C 16,36 13,36 13,38 L 10,39.5 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Profile Plinth (Variant 1)</span>
+                                    </div>
+                                </label>
+
+                                <!-- Profile Corner (Variant 1) -->
+                                <label class="profiles-subcat-card">
+                                    <input type="radio" name="subCategoryProfiles" value="profile-corner-v1">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Top face of vertical leg -->
+                                                <path d="M 10,36 L 14,38 L 38,26 L 34,24 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Outer vertical face -->
+                                                <path d="M 10,48 L 10,36 L 34,24 L 34,36 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Inner vertical face -->
+                                                <path d="M 14,38 L 14,46 L 38,34 L 38,26 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Inner horizontal face -->
+                                                <path d="M 14,46 L 26,52 L 50,40 L 38,34 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Outer horizontal face (right end) -->
+                                                <path d="M 26,52 L 26,56 L 50,44 L 50,40 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Front cross section -->
+                                                <path d="M 10,48 L 10,36 L 14,38 L 14,46 L 26,52 L 26,56 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Profile Corner (Variant 1)</span>
+                                    </div>
+                                </label>
+
+                                <!-- Profile Corner (Variant 2) -->
+                                <label class="profiles-subcat-card">
+                                    <input type="radio" name="subCategoryProfiles" value="profile-corner-v2">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Extruded rounded corner face -->
+                                                <path d="M 12,36 C 10,38 10,44 12,48 L 36,36 C 34,32 34,26 36,24 Z" fill="#f97316" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Inner vertical face -->
+                                                <path d="M 14,38 L 14,46 L 38,34 L 38,26 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Inner horizontal face -->
+                                                <path d="M 14,46 L 26,52 L 50,40 L 38,34 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Outer horizontal face (right end) -->
+                                                <path d="M 26,52 L 26,56 L 50,44 L 50,40 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Front cross section (rounded outer corner) -->
+                                                <path d="M 12,48 C 10,44 10,38 12,36 L 15,38 L 14,44 L 26,50 L 26,54 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Profile Corner (Variant 2)</span>
+                                    </div>
+                                </label>
+
+                                <!-- Profile Triangular -->
+                                <label class="profiles-subcat-card">
+                                    <input type="radio" name="subCategoryProfiles" value="profile-triangular">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Back-left vertical face -->
+                                                <path d="M 10,48 L 10,36 L 34,24 L 34,36 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Slanted face -->
+                                                <path d="M 10,36 L 26,56 L 50,44 L 34,24 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Front triangle face -->
+                                                <path d="M 10,48 L 26,56 L 10,36 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Profile Triangular</span>
+                                    </div>
+                                </label>
+
+                                <!-- Profile Quarter Round (Variant 2) -->
+                                <label class="profiles-subcat-card">
+                                    <input type="radio" name="subCategoryProfiles" value="profile-quarter-v2">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Curved face -->
+                                                <path d="M 13,37.5 C 21,41.5 24,49.5 24,53 L 48,41 C 48,37.5 45,29.5 37,25.5 Z" fill="#f97316" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Top step face -->
+                                                <path d="M 10,36 L 13,37.5 L 37,25.5 L 34,24 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Side face (right end) -->
+                                                <path d="M 24,53 L 26,56 L 50,44 L 48,41 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Front cross section -->
+                                                <path d="M 10,48 L 10,36 L 13,37.5 C 21,41.5 24,49.5 24,53 L 26,56 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Profile Quarter Round (Variant 2)</span>
+                                    </div>
+                                </label>
+
+                                <!-- Profile Thread -->
+                                <label class="profiles-subcat-card">
+                                    <input type="radio" name="subCategoryProfiles" value="profile-thread">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Side Face -->
+                                                <path d="M 26,56 L 26,44 L 50,32 L 50,44 Z" fill="#ea580c" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Top Face -->
+                                                <path d="M 10,36 L 26,44 L 50,32 L 34,24 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Parallel diagonal grooves on top face -->
+                                                <path d="M 14,38 L 38,26" stroke="#c2410c" stroke-width="1.2" />
+                                                <path d="M 18,40 L 42,28" stroke="#c2410c" stroke-width="1.2" />
+                                                <path d="M 22,42 L 46,30" stroke="#c2410c" stroke-width="1.2" />
+                                                <!-- Front Face -->
+                                                <path d="M 10,48 L 26,56 L 26,44 L 10,36 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Profile Thread</span>
+                                    </div>
+                                </label>
+
+                                <!-- Profile Calbat -->
+                                <label class="profiles-subcat-card">
+                                    <input type="radio" name="subCategoryProfiles" value="profile-calbat">
+                                    <div class="card-content">
+                                        <div class="card-icon">
+                                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <!-- Top shelf -->
+                                                <path d="M 10,36 L 14,38 L 38,26 L 34,24 Z" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Slanted cove face -->
+                                                <path d="M 14,38 C 18,46 22,52 26,56 L 50,44 C 46,40 42,34 38,26 Z" fill="#f97316" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                                <!-- Front cross section -->
+                                                <path d="M 10,48 L 10,36 L 14,38 C 18,46 22,52 26,56 Z" fill="#f8a170" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <span class="card-label">Profile Calbat</span>
+                                    </div>
+                                </label>
+
+                            </div>
                         </div>
 
                         <!-- Subcategory Selector (Only shown for specials) -->

@@ -834,7 +834,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const controlGroupThickness = document.getElementById('controlGroupThickness');
         const subCategorySpecialsRadios = document.getElementsByName('subCategorySpecials');
         const controlGroupSubCategorySpecials = document.getElementById('controlGroupSubCategorySpecials');
-        const dbSubCategoryProfiles = document.getElementById('dbSubCategoryProfiles');
+        const subCategoryProfilesRadios = document.getElementsByName('subCategoryProfiles');
         const controlGroupSubCategoryProfiles = document.getElementById('controlGroupSubCategoryProfiles');
         
         const summaryProduct = document.getElementById('summaryProduct');
@@ -1002,8 +1002,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 summaryProduct.textContent = `${data.name} - ${subCatText}`;
                 specialsSubcat = subCatText;
-            } else if (cat === 'profiles' && dbSubCategoryProfiles) {
-                const subCatText = dbSubCategoryProfiles.value;
+            } else if (cat === 'profiles' && subCategoryProfilesRadios.length > 0) {
+                let subCatText = "Semiround Profile";
+                for (const radio of subCategoryProfilesRadios) {
+                    if (radio.checked) {
+                        const labelSpan = radio.parentElement.querySelector('.card-label');
+                        if (labelSpan) {
+                            subCatText = labelSpan.textContent;
+                        }
+                        break;
+                    }
+                }
                 summaryProduct.textContent = `${data.name} - ${subCatText}`;
                 specialsSubcat = subCatText;
             } else {
@@ -1094,8 +1103,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 radio.addEventListener('change', updateSummary);
             });
         }
-        if (dbSubCategoryProfiles) {
-            dbSubCategoryProfiles.addEventListener('change', updateSummary);
+        if (subCategoryProfilesRadios.length > 0) {
+            subCategoryProfilesRadios.forEach(radio => {
+                radio.addEventListener('change', updateSummary);
+            });
         }
         dbOplage.addEventListener('change', updateSummary);
         
@@ -1121,8 +1132,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
                 finalName = `${data.name} - ${subCatText}`;
-            } else if (cat === 'profiles' && dbSubCategoryProfiles) {
-                finalName = `${data.name} - ${dbSubCategoryProfiles.value}`;
+            } else if (cat === 'profiles' && subCategoryProfilesRadios.length > 0) {
+                let subCatText = "Semiround Profile";
+                for (const radio of subCategoryProfilesRadios) {
+                    if (radio.checked) {
+                        const labelSpan = radio.parentElement.querySelector('.card-label');
+                        if (labelSpan) {
+                            subCatText = labelSpan.textContent;
+                        }
+                        break;
+                    }
+                }
+                finalName = `${data.name} - ${subCatText}`;
             }
             
             let dimensions = '';
