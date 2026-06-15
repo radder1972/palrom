@@ -234,7 +234,7 @@ function formatEuro(val, decimals = 2) {
 const SHOW_PRICING = false;
 
 export default function Configurator() {
-  const { lang, addToCart, setIsCartOpen } = useInquiry();
+  const { lang, addToCart, setIsCartOpen, shouldResetConfigurator, setShouldResetConfigurator } = useInquiry();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [password, setPassword] = useState('');
@@ -261,6 +261,30 @@ export default function Configurator() {
   const [length, setLength] = useState(1000);
   const [additionalInfo, setAdditionalInfo] = useState('');
   const [quantity, setQuantity] = useState(10000);
+
+  useEffect(() => {
+    if (shouldResetConfigurator) {
+      setCategory('sawn');
+      setSubCategoryDowels('dowel-small');
+      setSubCategoryProfiles('profile-semiround');
+      setSubCategorySpecials('special-keeplat-spruce');
+      setSubCategoryPlaned('planed-rect-v1');
+      setWoodType('beech');
+      setSteamed('no');
+      setDrying('kd');
+      setFsc(true);
+      setGrade('A');
+      setThicknessType('custom');
+      setThickness(25);
+      setWidthType('custom');
+      setDiameter(50);
+      setLengthType('custom');
+      setLength(1000);
+      setAdditionalInfo('');
+      setQuantity(10000);
+      setShouldResetConfigurator(false);
+    }
+  }, [shouldResetConfigurator, setShouldResetConfigurator]);
 
   const getValidationError = () => {
     if (category === 'planed' && grade === 'A') {

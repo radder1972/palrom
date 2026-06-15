@@ -10,6 +10,7 @@ export function InquiryProvider({ children }) {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCookieModalOpen, setIsCookieModalOpen] = useState(false);
+  const [shouldResetConfigurator, setShouldResetConfigurator] = useState(false);
 
   // Load cart and language on mount
   useEffect(() => {
@@ -93,6 +94,8 @@ export function InquiryProvider({ children }) {
         setIsCookieModalOpen,
         lang,
         setLang,
+        shouldResetConfigurator,
+        setShouldResetConfigurator,
       }}
     >
       {children}

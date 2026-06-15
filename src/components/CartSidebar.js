@@ -23,6 +23,7 @@ export default function CartSidebar() {
     setIsCartOpen,
     isInitialized,
     lang,
+    setShouldResetConfigurator,
   } = useInquiry();
 
   const [name, setName] = useState('');
@@ -281,6 +282,9 @@ export default function CartSidebar() {
 
       // Clean up
       clearCart();
+      if (setShouldResetConfigurator) {
+        setShouldResetConfigurator(true);
+      }
       setName('');
       setEmail('');
       setPhone('');
