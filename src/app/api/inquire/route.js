@@ -125,51 +125,59 @@ export async function POST(request) {
           }).filter(Boolean).join(', ');
 
           return `
-            <tr>
-              <td style="padding: 10px; border-bottom: 1px solid #e2e8f0; font-family: sans-serif;">
-                <strong style="color: #1e3a2b;">${item.name}</strong><br/>
-                <span style="font-size: 0.85rem; color: #4a5568;">Categorie: ${item.category} ${specsList ? `| ${specsList}` : ''}</span>
+            <tr style="border-bottom: 1px solid #edf2f7;">
+              <td style="padding: 16px 0; vertical-align: top; font-family: sans-serif;">
+                <span style="font-weight: 600; color: #1a202c; display: block; margin-bottom: 4px;">${item.name}</span>
+                <span style="font-size: 0.85rem; color: #718096; display: block; line-height: 1.4;">
+                  Categorie: ${item.category} ${specsList ? ` | ${specsList}` : ''}
+                </span>
               </td>
-              <td style="padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center; font-family: sans-serif; font-weight: bold;">${item.qty}</td>
+              <td style="padding: 16px 0; text-align: right; vertical-align: top; font-family: sans-serif; font-weight: 600; color: #1a202c;">
+                ${item.qty}
+              </td>
             </tr>
           `;
         }).join('');
 
         const htmlContent = `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff;">
-            <div style="background-color: #1e3a2b; color: #ffffff; padding: 25px; border-top-left-radius: 8px; border-top-right-radius: 8px; text-align: center;">
-              <h1 style="margin: 0; font-size: 1.6rem; letter-spacing: 0.5px;">Nieuwe B2B Offerteaanvraag</h1>
-              <p style="margin: 5px 0 0; opacity: 0.85; font-size: 0.9rem;">Palrom Products B2B Configurator</p>
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 40px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff; color: #1a202c; line-height: 1.6;">
+            <!-- Top brand bar -->
+            <div style="margin-bottom: 32px; border-bottom: 1px solid #edf2f7; padding-bottom: 20px;">
+              <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #1e3a2b;">PALROM PRODUCTS</span>
+              <h2 style="margin: 6px 0 0; font-size: 1.5rem; font-weight: 600; color: #1a202c;">B2B Offerteaanvraag</h2>
             </div>
-            <div style="padding: 25px;">
-              <h3 style="color: #1e3a2b; border-bottom: 2px solid #f1c437; padding-bottom: 6px; margin-top: 0; font-size: 1.1rem;">Klantgegevens</h3>
-              <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 0.95rem;">
+
+            <div style="margin-bottom: 32px;">
+              <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #718096; margin-bottom: 16px; margin-top: 0;">Klantgegevens</h3>
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
                 <tr>
-                  <td style="padding: 8px 0; font-weight: bold; width: 140px; color: #4a5568;">Naam:</td>
-                  <td style="padding: 8px 0; color: #2d3748;">${clientName}</td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #f7fafc; color: #4a5568; font-weight: 500; width: 140px;">Naam</td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #f7fafc; color: #1a202c;">${clientName}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 8px 0; font-weight: bold; color: #4a5568;">E-mailadres:</td>
-                  <td style="padding: 8px 0;"><a href="mailto:${clientEmail}" style="color: #1e3a2b; text-decoration: underline;">${clientEmail}</a></td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #f7fafc; color: #4a5568; font-weight: 500;">E-mailadres</td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #f7fafc;"><a href="mailto:${clientEmail}" style="color: #1e3a2b; text-decoration: none; border-bottom: 1px dotted #1e3a2b;">${clientEmail}</a></td>
                 </tr>
                 <tr>
-                  <td style="padding: 8px 0; font-weight: bold; color: #4a5568;">Telefoonnummer:</td>
-                  <td style="padding: 8px 0; color: #2d3748;">${clientPhone}</td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #f7fafc; color: #4a5568; font-weight: 500;">Telefoonnummer</td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #f7fafc; color: #1a202c;">${clientPhone}</td>
                 </tr>
                 ${clientNotes ? `
                 <tr>
-                  <td style="padding: 8px 0; font-weight: bold; vertical-align: top; color: #4a5568;">Extra opmerkingen:</td>
-                  <td style="padding: 8px 0; white-space: pre-line; color: #2d3748;">${clientNotes}</td>
+                  <td style="padding: 8px 0; vertical-align: top; color: #4a5568; font-weight: 500;">Opmerkingen</td>
+                  <td style="padding: 8px 0; color: #2d3748; white-space: pre-line;">${clientNotes}</td>
                 </tr>
                 ` : ''}
               </table>
+            </div>
 
-              <h3 style="color: #1e3a2b; border-bottom: 2px solid #f1c437; padding-bottom: 6px; font-size: 1.1rem; margin-top: 0;">Geconfigureerde Materialen</h3>
+            <div style="margin-bottom: 40px;">
+              <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #718096; margin-bottom: 16px; margin-top: 0;">Aangevraagde materialen</h3>
               <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
                 <thead>
-                  <tr style="background-color: #f7fafc;">
-                    <th style="padding: 10px; border-bottom: 2px solid #e2e8f0; text-align: left; color: #4a5568;">Productomschrijving</th>
-                    <th style="padding: 10px; border-bottom: 2px solid #e2e8f0; text-align: center; width: 80px; color: #4a5568;">Aantal</th>
+                  <tr style="border-bottom: 2px solid #edf2f7;">
+                    <th style="padding: 12px 0; text-align: left; font-weight: 600; color: #4a5568;">Productomschrijving</th>
+                    <th style="padding: 12px 0; text-align: right; font-weight: 600; color: #4a5568; width: 80px;">Aantal</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -177,8 +185,10 @@ export async function POST(request) {
                 </tbody>
               </table>
             </div>
-            <div style="background-color: #f7fafc; color: #718096; padding: 15px; text-align: center; font-size: 0.8rem; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; border-top: 1px solid #e2e8f0;">
-              Dit is een geautomatiseerde aanvraag verzonden vanaf de B2B Offerte Configurator.
+
+            <div style="border-top: 1px solid #edf2f7; padding-top: 24px; text-align: center; font-size: 0.8rem; color: #a0aec0;">
+              <p style="margin: 0 0 4px;">Dit is een geautomatiseerd bericht van de B2B Offerte Configurator.</p>
+              <p style="margin: 0;">PALROM Products SRL • 8 Poienita St, Brad City, Hunedoara, Romania</p>
             </div>
           </div>
         `;
