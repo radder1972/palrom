@@ -112,22 +112,22 @@ export default function News() {
         <>
           {lang === 'nl' && (
             <p>
-              Om te voldoen aan de stijgende internationale vraag naar hoogwaardig FSC-gecertificeerd beukenhout, hebben we twee nieuwe volautomatische droogkamers in gebruik genomen. Deze uitbreiding verhoogt onze totale droogcapaciteit met 15%.
+              Om te voldoen aan de stijgende internationale vraag naar hoogwaardig FSC®-gecertificeerd beukenhout, hebben we twee nieuwe volautomatische droogkamers in gebruik genomen. Deze uitbreiding verhoogt onze totale droogcapaciteit met 15%.
             </p>
           )}
           {lang === 'de' && (
             <p>
-              Um die steigende internationale Nachfrage nach hochwertigem FSC-zertifiziertem Buchenholz zu befriedigen, haben wir zwei neue vollautomatische Trockenkammern in Betrieb genommen. Diese Erweiterung erhöht unsere gesamte Trocknungskapazität um 15 %.
+              Um die steigende internationale Nachfrage nach hochwertigem FSC®-zertifiziertem Buchenholz zu befriedigen, haben wir zwei neue vollautomatische Trockenkammern in Betrieb genommen. Diese Erweiterung erhöht unsere gesamte Trocknungskapazität um 15 %.
             </p>
           )}
           {lang === 'ro' && (
             <p>
-              Pentru a satisface cererea internațională în creștere de lemn de fag de înaltă calitate certificat FSC, am pus în funcțiune două noi camere de uscare complet automatizate. Această extindere mărește capacitatea noastră totală de uscare cu 15%.
+              Pentru a satisface cererea internațională în creștere de lemn de fag de înaltă calitate certificat FSC®, am pus în funcțiune două noi camere de uscare complet automatizate. Această extindere mărește capacitatea noastră totală de uscare cu 15%.
             </p>
           )}
           {lang !== 'nl' && lang !== 'de' && lang !== 'ro' && (
             <p>
-              To meet rising international demand for high-quality FSC-certified beechwood, we have commissioned two new fully-automated drying chambers. This expansion increases our total kiln drying capacity by 15%.
+              To meet rising international demand for high-quality FSC®-certified beechwood, we have commissioned two new fully-automated drying chambers. This expansion increases our total kiln drying capacity by 15%.
             </p>
           )}
           <Link href="/about#timeline-details" className="news-link">

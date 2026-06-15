@@ -147,7 +147,7 @@ export default function Products() {
           value: { nl: 'Timmerwerk / Voeding / Doe-het-zelf', en: 'Carpentry / Food / DIY', de: 'Zimmerei / Lebensmittel / DIY', ro: 'Tâmplărie / Alimentație / DIY' }
         },
         {
-          label: { nl: 'FSC® Gecertificeerd', en: 'FSC Certified', de: 'FSC-zertifiziert', ro: 'Certificat FSC' },
+          label: { nl: 'FSC® Gecertificeerd', en: 'FSC® Certified', de: 'FSC®-zertifiziert', ro: 'Certificat FSC®' },
           value: { nl: 'Op aanvraag beschikbaar', en: 'Available on request', de: 'Auf Anfrage erhältlich', ro: 'Disponibil la cerere' }
         },
         {

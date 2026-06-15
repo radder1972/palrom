@@ -69,7 +69,7 @@ export default function Home() {
       link: '/specials',
       specs: [
         { label: lang === 'nl' ? 'Toepassingen' : (lang === 'de' ? 'Anwendungen' : (lang === 'ro' ? 'Aplicații' : 'Applications')), value: lang === 'nl' ? 'Meubelindustrie / Keukengerei / DIY' : (lang === 'de' ? 'Möbelindustrie / Küchenutensilien / Heimwerker' : (lang === 'ro' ? 'Industria mobilei / Ustensile bucătărie / DIY' : 'Furniture industry / Kitchen utensils / DIY')) },
-        { label: lang === 'nl' ? 'FSC Gecertificeerd' : (lang === 'de' ? 'FSC-zertifiziert' : (lang === 'ro' ? 'Certificat FSC' : 'FSC Certified')), value: lang === 'nl' ? 'Beschikbaar op aanvraag' : (lang === 'de' ? 'Auf Anfrage erhältlich' : (lang === 'ro' ? 'Disponibil la cerere' : 'Available upon request')) },
+        { label: lang === 'nl' ? 'FSC® Gecertificeerd' : (lang === 'de' ? 'FSC®-zertifiziert' : (lang === 'ro' ? 'Certificat FSC®' : 'FSC® Certified')), value: lang === 'nl' ? 'Beschikbaar op aanvraag' : (lang === 'de' ? 'Auf Anfrage erhältlich' : (lang === 'ro' ? 'Disponibil la cerere' : 'Available upon request')) },
         { label: lang === 'nl' ? 'Verpakking' : (lang === 'de' ? 'Verpackung' : (lang === 'ro' ? 'Ambalare' : 'Packaging')), value: lang === 'nl' ? 'Bulk of op maat verpakt' : (lang === 'de' ? 'Bulk oder kundenspezifisch verpackt' : (lang === 'ro' ? 'Vrac sau ambalat la comandă' : 'Bulk or custom packaged')) },
       ],
       tag: lang === 'nl' ? 'Specials' : (lang === 'de' ? 'Specials' : (lang === 'ro' ? 'Speciale' : 'Specials')),
