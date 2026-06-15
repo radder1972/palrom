@@ -3916,6 +3916,14 @@ ul {
     border-color: #94a3b8;
 }
 
+.dashboard-input:disabled {
+    background-color: #fef9c3; /* Light brand yellow background */
+    border-color: #f3d8a2; /* Soft warm border */
+    color: var(--color-text-muted); /* Muted gray text */
+    cursor: not-allowed;
+    opacity: 0.85;
+}
+
 /* Dropdowns (Light Background) */
 .dashboard-select {
     background-color: #ffffff;
@@ -3937,6 +3945,15 @@ ul {
 
 .dashboard-select:focus {
     border-color: #94a3b8;
+}
+
+.dashboard-select:disabled {
+    background-color: #fef9c3; /* Light brand yellow background */
+    border-color: #f3d8a2; /* Soft warm border */
+    color: var(--color-text-muted); /* Muted gray text */
+    cursor: not-allowed;
+    opacity: 0.85;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%238c8c8c' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
 }
 
 /* Specials Subcategory Grid & Cards */
