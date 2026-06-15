@@ -77,6 +77,34 @@
 </head>
 <body class="configurator-body-override">
 
+    <!-- Password Gate Overlay -->
+    <div id="configuratorAuthGate" class="auth-gate-container">
+        <div class="auth-gate-card">
+            <div class="auth-lock-icon">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2>B2B Partner Portal</h2>
+            <p>Voer het wachtwoord in om toegang te krijgen tot de <strong>Palrom Offerte Configurator</strong>.</p>
+            <form id="authGateForm">
+                <div class="form-group" style="text-align: left; margin-bottom: 1.5rem;">
+                    <label for="authPassword" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem; color: var(--color-text-dark);">Wachtwoord *</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="authPassword" required placeholder="••••••••">
+                        <button type="button" id="togglePasswordBtn" class="toggle-password-btn" aria-label="Wachtwoord tonen">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                    <div id="authErrorMessage" class="error-message hidden">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Ongeldig wachtwoord. Probeer het opnieuw.
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" style="width: 100%; padding: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                    Toegang Ontgrendelen <i class="fa-solid fa-key icon-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Header Navigation -->
     <header class="main-header scrolled">
         <div class="header-container">

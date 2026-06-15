@@ -1269,4 +1269,81 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // ==========================================
+    // 12. Password Gate Logic for configurator.html
+    // ==========================================
+    const authGate = document.getElementById('configuratorAuthGate');
+    if (authGate) {
+        const authForm = document.getElementById('authGateForm');
+        const authPass = document.getElementById('authPassword');
+        const authError = document.getElementById('authErrorMessage');
+        const togglePassBtn = document.getElementById('togglePasswordBtn');
+        const mainHeader = document.querySelector('.main-header');
+        
+        // Hide configurator wrapper initially if not authenticated
+        const isAuthenticated = sessionStorage.getItem('palrom_configurator_auth') === 'true';
+        
+        if (isAuthenticated) {
+            authGate.classList.add('hidden');
+        } else {
+            // Hide main header and configurator content to make it a clean lock screen
+            if (mainHeader) mainHeader.style.display = 'none';
+            // We can hide all section elements
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            document.querySelector('.main-footer').classList.add('hidden');
+            if (document.getElementById('floatingContact')) {
+                document.getElementById('floatingContact').classList.add('hidden');
+            }
+        }
+        
+        // Toggle Password visibility
+        if (togglePassBtn) {
+            togglePassBtn.addEventListener('click', () => {
+                const type = authPass.getAttribute('type') === 'password' ? 'text' : 'password';
+                authPass.setAttribute('type', type);
+                const icon = togglePassBtn.querySelector('i');
+                if (type === 'text') {
+                    icon.className = 'fa-regular fa-eye-slash';
+                } else {
+                    icon.className = 'fa-regular fa-eye';
+                }
+            });
+        }
+        
+        // Handle login submit
+        authForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const password = authPass.value;
+            
+            // Hardcoded password: palrom2026
+            if (password === 'palrom2026') {
+                sessionStorage.setItem('palrom_configurator_auth', 'true');
+                
+                // Transition effect: fade out gate and show page
+                authGate.style.transition = 'opacity 0.4s ease, visibility 0.4s ease';
+                authGate.style.opacity = '0';
+                authGate.style.visibility = 'hidden';
+                
+                setTimeout(() => {
+                    authGate.classList.add('hidden');
+                    if (mainHeader) mainHeader.style.display = '';
+                    document.querySelectorAll('section').forEach(s => s.classList.remove('hidden'));
+                    document.querySelector('.main-footer').classList.remove('hidden');
+                    if (document.getElementById('floatingContact')) {
+                        document.getElementById('floatingContact').classList.remove('hidden');
+                    }
+                }, 400);
+            } else {
+                authError.classList.remove('hidden');
+                authError.classList.add('shake');
+                authPass.value = '';
+                authPass.focus();
+                
+                setTimeout(() => {
+                    authError.classList.remove('shake');
+                }, 400);
+            }
+        });
+    }
 });

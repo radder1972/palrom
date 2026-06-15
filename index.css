@@ -4279,3 +4279,121 @@ ul {
         font-size: 1.4rem;
     }
 }
+
+/* Password Gate Styles */
+.auth-gate-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-bg-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    padding: 1.5rem;
+}
+
+.auth-gate-card {
+    background: var(--color-bg-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 450px;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    border: 1px solid rgba(231, 177, 36, 0.2);
+    animation: fadeInB2b 0.5s ease-out;
+}
+
+.auth-lock-icon {
+    width: 4.5rem;
+    height: 4.5rem;
+    background: rgba(231, 177, 36, 0.1);
+    color: var(--color-primary-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1.5rem;
+}
+
+.auth-gate-card h2 {
+    font-size: 1.6rem;
+    color: var(--color-text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.auth-gate-card p {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.password-input-wrapper input {
+    width: 100%;
+    padding: 0.85rem 3rem 0.85rem 1.2rem;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: var(--border-radius-md);
+    background: var(--color-bg-light);
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--color-text-dark);
+    transition: var(--transition-fast);
+}
+
+.password-input-wrapper input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: var(--color-bg-white);
+    box-shadow: 0 0 0 4px rgba(231, 177, 36, 0.12);
+}
+
+.toggle-password-btn {
+    position: absolute;
+    right: 0.85rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.toggle-password-btn:hover {
+    color: var(--color-primary-dark);
+}
+
+.error-message {
+    color: #d93025;
+    font-size: 0.85rem;
+    text-align: left;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.error-message.shake {
+    animation: authShake 0.4s ease;
+}
+
+@keyframes authShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+}
