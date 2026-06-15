@@ -1511,6 +1511,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     authError.classList.remove('shake');
                 }, 400);
+            }
         });
     }
 
