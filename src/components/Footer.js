@@ -70,6 +70,17 @@ export default function Footer() {
             <img src="/images/logo_white.png" alt="PALROM Products Logo" className="footer-logo-img" />
           </Link>
           <p>{getTranslation('brandDesc')}</p>
+          <div className="footer-socials">
+            <a href="https://www.facebook.com/profile.php?id=100004110856648" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <i className="fa-brands fa-facebook"></i>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+              <i className="fa-brands fa-linkedin"></i>
+            </a>
+            <a href="#" aria-label="Instagram">
+              <i className="fa-brands fa-instagram"></i>
+            </a>
+          </div>
         </div>
         <div className="footer-links">
           <h3>{getTranslation('quickLinks')}</h3>
