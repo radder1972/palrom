@@ -605,7 +605,7 @@ ul {
 }
 
 .card h3 {
-    font-size: 1.3rem;
+    font-size: 1.15rem;
     margin-bottom: 1rem;
     color: var(--color-forest);
 }
@@ -755,7 +755,7 @@ ul {
 }
 
 .product-info h3 {
-    font-size: 1.3rem;
+    font-size: 1.15rem;
     margin-bottom: 0.8rem;
     color: var(--color-forest);
 }
@@ -3461,14 +3461,14 @@ ul {
 }
 
 .news-content h3 {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     margin-bottom: 1rem;
     color: var(--color-text-dark);
     line-height: 1.3;
 }
 
 .news-card.highlight .news-content h3 {
-    font-size: 1.6rem;
+    font-size: 1.35rem;
 }
 
 .news-content p {
@@ -4919,7 +4919,7 @@ ul {
     flex-grow: 1;
 }
 .detail-info h3 {
-    font-size: 1.4rem;
+    font-size: 1.15rem;
     margin-bottom: 0.8rem;
     color: var(--color-forest);
 }
