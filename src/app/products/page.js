@@ -64,7 +64,7 @@ export default function Products() {
         ro: 'Disponibile în dimensiuni mici începând de la 3 mm până la dimensiuni mari de 60 mm. Opțiunile includ tije netede și finisaje cu caneluri elicoidale pentru o aderență optimă a lipiciului.',
       },
       image: '/images/dowels.png',
-      link: '/dowels',
+      link: '/rods',
       specs: [
         {
           label: { nl: 'Diameter', en: 'Diameter', de: 'Durchmesser', ro: 'Diametru' },

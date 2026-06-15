@@ -10,7 +10,7 @@ export default function Header() {
   const { cartCount, setIsCartOpen, lang, setLang } = useInquiry();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const isProductsActive = ['/products', '/dowels', '/four-sides-planed', '/profiles', '/specials'].some(
+  const isProductsActive = ['/products', '/rods', '/four-sides-planed', '/profiles', '/specials'].some(
     (path) => pathname === path
   );
   

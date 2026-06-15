@@ -34,7 +34,7 @@ export default function Home() {
         ? 'Verkrijgbaar in diameters van 3 mm tot 60 mm. Kies tussen gladde houten pennen of spiraalvormig gegroefde deuvels voor een optimale lijmhechting.'
         : (lang === 'de' ? 'Erhältlich in Durchmessern von 3 mm bis 60 mm. Wählen Sie zwischen glatten Holzstiften oder spiralförmig geriffelten Dübeln für eine optimale Leimhaftung.' : (lang === 'ro' ? 'Disponibile în diametre de la 3 mm până la 60 mm. Alegeți între știfturi din lemn netede sau dibluri cu caneluri spirale pentru o aderență optimă a lipiciului.' : 'Available in diameters from 3 mm to 60 mm. Choose between smooth wooden pins or spiral grooved dowels for optimal glue adhesion.')),
       image: '/images/dowels.png',
-      link: '/dowels',
+      link: '/rods',
       specs: [
         { label: lang === 'nl' ? 'Diameter' : (lang === 'de' ? 'Durchmesser' : (lang === 'ro' ? 'Diametru' : 'Diameter')), value: lang === 'nl' ? '3mm tot 60mm' : (lang === 'de' ? '3mm bis 60mm' : (lang === 'ro' ? '3mm până la 60mm' : '3mm to 60mm')) },
         { label: lang === 'nl' ? 'Afwerking' : (lang === 'de' ? 'Ausführung' : (lang === 'ro' ? 'Finisaj' : 'Finish')), value: lang === 'nl' ? 'Glad / Gegroefd (6mm tot 20mm)' : (lang === 'de' ? 'Glatt / Geriffelt (6mm bis 20mm)' : (lang === 'ro' ? 'Neted / Canelat (6mm până la 20mm)' : 'Smooth / Grooved (6mm to 20mm)')) },
