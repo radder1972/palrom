@@ -211,24 +211,6 @@ export default function ContactSection() {
       de: 'Wir antworten innerhalb von 24 Stunden. Kontaktieren Sie unsere Zentrale in Brad direkt oder füllen Sie das Kontaktformular aus für ein schnelles, unverbindliches Angebot.',
       ro: 'Răspundem în termen de 24 de ore. Contactați sediul nostru din Brad direct sau completați formularul de contact pentru o ofertă rapidă, fără obligații.'
     },
-    configTitle: {
-      nl: 'Palrom Offerte Configurator',
-      en: 'Palrom Quote Configurator',
-      de: 'Palrom Angebotskonfigurator',
-      ro: 'Configurator de Oferte Palrom'
-    },
-    configDesc: {
-      nl: 'Bereken snel de benodigde volumes en specificaties voor uw beukenhouten bestekken, stokken, latten of profielen en ontvang direct een offerte op maat.',
-      en: 'Quickly calculate required volumes and specifications for your beechwood blanks, sticks, slats, or profiles and request a tailored quote.',
-      de: 'Berechnen Sie schnell die benötigten Mengen und Spezifikationen für Ihre Buchenholz-Zuschnitte, Stäbe, Leisten oder Profile und fordern Sie ein B2B-Angebot an.',
-      ro: 'Calculați rapid volumele și specificațiile necesare pentru piesele brute, tije, șipci sau profile din lemn de fag și solicitați o ofertă personalizată.'
-    },
-    configLink: {
-      nl: 'Start de Offerte Configurator',
-      en: 'Start the Quote Configurator',
-      de: 'Angebotskonfigurator starten',
-      ro: 'Start Configurator de Oferte'
-    },
     hqSawmill: {
       nl: 'Hoofdkantoor & Zagerij',
       en: 'Headquarters & Sawmill',
@@ -499,25 +481,6 @@ export default function ContactSection() {
               <p className="section-description">
                 {getTranslation('contactDesc')}
               </p>
-
-              {/* B2B Configurator Box */}
-              <div className="configurator-notice-box">
-                <div className="notice-icon">
-                  <i className="fa-solid fa-clipboard-list"></i>
-                </div>
-                <div className="notice-content">
-                  <h4>
-                    {getTranslation('configTitle')}
-                  </h4>
-                  <p>
-                    {getTranslation('configDesc')}
-                  </p>
-                  <Link href="/configurator" className="notice-link">
-                    {getTranslation('configLink')}{' '}
-                    <i className="fa-solid fa-arrow-right"></i>
-                  </Link>
-                </div>
-              </div>
 
               {/* Contact details */}
               <div className="contact-details-list">

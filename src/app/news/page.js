@@ -29,75 +29,6 @@ export default function News() {
 
   const newsItems = [
     {
-      id: 'configurator',
-      tag: lang === 'nl' ? 'Digitale Bèta' : (lang === 'de' ? 'Digitale Beta' : (lang === 'ro' ? 'Beta Digitală' : 'Digital Beta')),
-      tagClass: 'highlight-tag',
-      date: lang === 'nl' ? '15 juni 2026' : (lang === 'de' ? '15. Juni 2026' : (lang === 'ro' ? '15 iunie 2026' : 'June 15, 2026')),
-      author: 'IT & Sales Team',
-      title: lang === 'nl' 
-        ? 'Help Ons Testen: De Palrom Offerte Configurator is Live!' 
-        : (lang === 'de' ? 'Helfen Sie uns beim Testen: Der Palrom Angebotskonfigurator ist live!' : (lang === 'ro' ? 'Ajută-ne să testăm: Configuratorul de Oferte Palrom este Live!' : 'Help Us Test: The Palrom Quote Configurator is Live!')),
-      content: (
-        <>
-          {lang === 'nl' && (
-            <p>
-              We introduceren met trots de eerste bèta-versie van onze nieuwe B2B-productconfigurator: de{' '}
-              <strong>Palrom Offerte Configurator</strong>. Met deze online tool kunnen inkopers en houtspecialisten direct de exacte millimeter-afmetingen, productgroepen (zoals houten staven, geschaafd hout en profielen) en gewenste afwerkingen invoeren voor grote volumebestellingen.
-            </p>
-          )}
-          {lang === 'de' && (
-            <p>
-              Wir freuen uns, die erste Beta-Version unseres neuen B2B-Produktkonfigurators vorzustellen: den{' '}
-              <strong>Palrom Angebotskonfigurator</strong>. Mit diesem Online-Tool können Einkäufer und Holzspezialisten die genauen Millimeter-Maße, Produktgruppen (wie Dübel, gehobeltes Holz und Profile) und gewünschte Oberflächen für Großbestellungen direkt eingeben.
-            </p>
-          )}
-          {lang === 'ro' && (
-            <p>
-              Suntem mândri să vă prezentăm prima versiune beta a noului nostru configurator de produse B2B:{' '}
-              <strong>Configurator de Oferte Palrom</strong>. Acest instrument online permite cumpărătorilor și specialiștilor în lemn să introducă direct dimensiunile exacte în milimetri, grupele de produse (cum ar fi dibluri, cherestea rinduită și profile) și finisajele dorite pentru comenzi de volum.
-            </p>
-          )}
-          {lang !== 'nl' && lang !== 'de' && lang !== 'ro' && (
-            <p>
-              We are proud to introduce the first beta version of our new B2B product configurator: the{' '}
-              <strong>Palrom Quote Configurator</strong>. This online tool allows buyers and timber specialists to directly enter exact millimeter specifications, product groups (such as dowels, planed timber, and profiles), and desired finishes for volume orders.
-            </p>
-          )}
-          
-          {lang === 'nl' && (
-            <p className="highlight-text">
-              We zijn op zoek naar partners en B2B-klanten die deze configurator willen testen en hun feedback willen delen. Helpt u ons de flow te optimaliseren?
-            </p>
-          )}
-          {lang === 'de' && (
-            <p className="highlight-text">
-              Wir suchen nach Partnern und B2B-Kunden, die diesen Konfigurator testen und ihr Feedback teilen möchten. Helfen Sie uns, den Ablauf zu optimieren?
-            </p>
-          )}
-          {lang === 'ro' && (
-            <p className="highlight-text">
-              Căutăm parteneri și clienți B2B care doresc să testeze acest configurator și să își împărtășească feedback-ul. Ne ajutați să optimizăm fluxul?
-            </p>
-          )}
-          {lang !== 'nl' && lang !== 'de' && lang !== 'ro' && (
-            <p className="highlight-text">
-              We are looking for partners and B2B customers to test this configurator and share their feedback. Will you help us optimize the flow?
-            </p>
-          )}
-          
-          <div className="news-actions">
-            <Link href="/configurator" className="btn btn-primary" style={{ padding: '0.8rem 1.5rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-              {lang === 'nl' ? 'Start de Palrom Offerte Configurator' : (lang === 'de' ? 'Palrom Angebotskonfigurator starten' : (lang === 'ro' ? 'Start Configurator de Oferte Palrom' : 'Start the Palrom Quote Configurator'))}{' '}
-              <i className="fa-solid fa-arrow-right icon-right"></i>
-            </Link>
-            <span className="badge badge-yellow" style={{ marginLeft: '1rem' }}>
-              {lang === 'nl' ? 'Bèta Test' : (lang === 'de' ? 'Beta-Test' : (lang === 'ro' ? 'Testare Beta' : 'Beta Test'))}
-            </span>
-          </div>
-        </>
-      ),
-    },
-    {
       id: 'drying',
       tag: lang === 'nl' ? 'Productie' : (lang === 'de' ? 'Produktion' : (lang === 'ro' ? 'Producție' : 'Production')),
       date: lang === 'nl' ? '24 mei 2026' : (lang === 'de' ? '24. Mai 2026' : (lang === 'ro' ? '24 mai 2026' : 'May 24, 2026')),
@@ -181,18 +112,18 @@ export default function News() {
     newsBreadcrumb: { nl: 'Nieuws', en: 'News', de: 'Neuigkeiten', ro: 'Știri' },
     newsTitle: { nl: 'Nieuws & Updates', en: 'News & Updates', de: 'Neuigkeiten & Updates', ro: 'Știri & Noutăți' },
     newsSubtitle: {
-      nl: 'Blijf op de hoogte van onze nieuwste investeringen, duurzaamheidsprestaties en digitale tools zoals onze nieuwe B2B-configurator.',
-      en: 'Stay informed about our latest investments, sustainability achievements, and digital tools like our new B2B configurator.',
-      de: 'Bleiben Sie auf dem Laufenden über unsere neuesten Investitionen, Nachhaltigkeitserfolge und digitalen Tools wie unseren neuen B2B-Konfigurator.',
-      ro: 'Fii la curent cu ultimele noastre investiții, realizări în materie de sustenabilitate și instrumente digitale, cum ar fi noul nostru configurator B2B.'
+      nl: 'Blijf op de hoogte van onze nieuwste investeringen, duurzaamheidsprestaties en fabrieksupgrades.',
+      en: 'Stay informed about our latest investments, sustainability achievements, and factory upgrades.',
+      de: 'Bleiben Sie auf dem Laufenden über unsere neuesten Investitionen, Nachhaltigkeitserfolge und Werksmodernisierungen.',
+      ro: 'Fii la curent cu ultimele noastre investiții, realizări în materie de sustenabilitate și modernizări ale fabricii.'
     },
     latestUpdatesBadge: { nl: 'Nieuws & Updates', en: 'News & Updates', de: 'Neuigkeiten & Updates', ro: 'Știri & Noutăți' },
     latestUpdatesTitle: { nl: 'Laatste Updates', en: 'Latest Updates', de: 'Neueste Updates', ro: 'Ultimele Noutăți' },
     latestUpdatesSub: {
-      nl: 'Blijf op de hoogte van onze nieuwste innovaties, fabrieksupgrades en digitale hulpmiddelen.',
-      en: 'Stay up to date with our latest innovations, factory upgrades, and digital tools.',
-      de: 'Bleiben Sie auf dem Laufenden mit unseren neuesten Innovationen, Fabrik-Upgrades und digitalen Tools.',
-      ro: 'Fii la curent cu cele mai recente inovații, modernizări ale fabricii și instrumente digitale.'
+      nl: 'Blijf op de hoogte van onze nieuwste innovaties, fabrieksupgrades en duurzaamheidsmijlpalen.',
+      en: 'Stay up to date with our latest innovations, factory upgrades, and sustainability milestones.',
+      de: 'Bleiben Sie auf dem Laufenden mit unseren neuesten Innovationen, Fabrik-Upgrades und Nachhaltigkeitsmeilensteinen.',
+      ro: 'Fii la curent cu cele mai recente inovații, modernizări ale fabricii și etape de sustenabilitate.'
     }
   };
 
@@ -233,13 +164,9 @@ export default function News() {
           <div className="news-grid">
             {newsItems.map((item) => (
               <div
-                className={`news-card animate-on-scroll ${item.id === 'configurator' ? 'configurator-featured' : ''}`}
+                className="news-card animate-on-scroll"
                 key={item.id}
-                style={
-                  item.id === 'configurator'
-                    ? { gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', cursor: 'pointer' }
-                    : { cursor: 'pointer' }
-                }
+                style={{ cursor: 'pointer' }}
                 onClick={(e) => {
                   if (e.target.closest('a') || e.target.closest('button')) {
                     return;
@@ -247,7 +174,7 @@ export default function News() {
                   setSelectedArticle(item);
                 }}
               >
-                <div className="news-image" style={item.id === 'configurator' ? { height: '340px' } : {}}>
+                <div className="news-image">
                   <img src={item.image || '/images/config_dowels.png'} alt={item.title} />
                   <span className={`news-tag ${item.tagClass || ''}`}>{item.tag}</span>
                 </div>
@@ -296,47 +223,10 @@ export default function News() {
               </div>
               <h2>{selectedArticle.title}</h2>
               <div className="news-modal-text">
-                {selectedArticle.id === 'configurator' ? (
-                  <>
-                    {lang === 'nl' && (
-                      <>
-                        <p>We introduceren met trots de eerste bèta-versie van onze nieuwe B2B-productconfigurator: de <strong>Palrom Offerte Configurator</strong>. Met deze online tool kunnen inkopers en houtspecialisten direct de exacte millimeter-afmetingen, productgroepen (zoals houten staven, geschaafd hout en profielen) en gewenste afwerkingen invoeren voor grote volumebestellingen.</p>
-                        <p>Met de introductie van deze digitale tool zetten we een grote stap in het optimaliseren van onze B2B-dienstverlening. In plaats van handmatige e-mailuitwisselingen over afmetingen en toleranties, kunnen onze partners nu in drie eenvoudige stappen hun gewenste productgroepen configureren. De tool berekent live volumes, toont live sliders voor dikte, breedte en lengte, en biedt een interactieve selectie van speciale houtproducten.</p>
-                        <p>We nodigen al onze partners en B2B-klanten uit om deze configurator te testen en hun feedback te delen. Dit helpt ons de workflows te optimaliseren en de definitieve release perfect af te stemmen op uw inkoopbehoeften.</p>
-                      </>
-                    )}
-                    {lang === 'de' && (
-                      <>
-                        <p>Wir freuen uns, die erste Beta-Version unseres neuen B2B-Produktkonfigurators vorzustellen: den <strong>Palrom Angebotskonfigurator</strong>. Mit diesem Online-Tool können Einkäufer und Holzspezialisten die genauen Millimeter-Maße, Produktgruppen (wie Dübel, gehobeltes Holz und Profile) und gewünschte Oberflächen für Großbestellungen direkt eingeben.</p>
-                        <p>Mit der Einführung dieses digitalen Tools machen wir einen großen Schritt zur Optimierung unseres B2B-Service. Anstatt manueller E-Mail-Austausche über Abmessungen und Toleranzen können unsere Partner nun in drei einfachen Schritten ihre gewünschten Produktgruppen konfigurieren. Das Tool berechnet Live-Volumina, zeigt Live-Schieberegler für Dicke, Breite und Länge und bietet eine interaktive Auswahl spezieller Holzprodukte.</p>
-                        <p>Wir laden alle unsere Partner und B2B-Kunden ein, diesen Konfigurator zu testen und ihr Feedback zu teilen. Dies hilft uns, die Abläufe zu optimieren und die endgültige Version perfekt auf Ihre Einkaufsbedürfnisse abzustimmen.</p>
-                      </>
-                    )}
-                    {lang === 'ro' && (
-                      <>
-                        <p>Suntem mândri să vă prezentăm prima versiune beta a noului nostru configurator de produse B2B: <strong>Configurator de Oferte Palrom</strong>. Acest instrument online permite cumpărătorilor și specialiștilor în lemn să introducă direct dimensiunile exacte în milimetri, grupele de produse (cum ar fi dibluri, cherestea rinduită și profile) și finisajele dorite pentru comenzi de volum.</p>
-                        <p>Odată cu introducerea acestui instrument digital, facem un pas mare în optimizarea serviciilor noastre B2B. În loc de schimburi manuale de e-mailuri despre dimensiuni și toleranțe, partenerii noștri își pot configura acum grupurile de produse dorite în trei pași simpli. Instrumentul calculează volume live, afișează glisoare live pentru grosime, lățime și lungime și oferă o selecție interactivă de produse din lemn speciale.</p>
-                        <p>Invităm toți partenerii și clienții noștri B2B să testeze acest configurator și să își împărtășească feedback-ul. Acest lucru ne ajută să optimizăm fluxurile de lucru și să adaptăm perfect versiunea finală la nevoile dumneavoastră de achiziție.</p>
-                      </>
-                    )}
-                    {lang !== 'nl' && lang !== 'de' && lang !== 'ro' && (
-                      <>
-                        <p>We are proud to introduce the first beta version of our new B2B product configurator: the <strong>Palrom Quote Configurator</strong>. This online tool allows buyers and timber specialists to directly enter exact millimeter specifications, product groups (such as dowels, planed timber, and profiles), and desired finishes for volume orders.</p>
-                        <p>With the introduction of this digital tool, we are taking a big step in optimizing our B2B services. Instead of manual email exchanges about dimensions and tolerances, our partners can now configure their desired product groups in three simple steps. The tool calculates live volumes, displays live sliders for thickness, width, and length, and offers an interactive selection of special wood products.</p>
-                        <p>We invite all our partners and B2B customers to test this configurator and share their feedback. This helps us optimize the workflows and align the final release perfectly with your purchasing needs.</p>
-                      </>
-                    )}
-                  </>
-                ) : (
-                  selectedArticle.content
-                )}
+                {selectedArticle.content}
               </div>
               <div className="news-modal-actions" style={{ marginTop: '1.5rem' }}>
-                {selectedArticle.id === 'configurator' ? (
-                  <Link href="/configurator" onClick={() => setSelectedArticle(null)} className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-                    {lang === 'nl' ? 'Start de Palrom Offerte Configurator' : (lang === 'de' ? 'Palrom Angebotskonfigurator starten' : (lang === 'ro' ? 'Start Configurator de Oferte Palrom' : 'Start the Palrom Quote Configurator'))} <i className="fa-solid fa-arrow-right icon-right"></i>
-                  </Link>
-                ) : selectedArticle.id === 'drying' ? (
+                {selectedArticle.id === 'drying' ? (
                   <Link href="/about#timeline-details" onClick={() => setSelectedArticle(null)} className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                     {lang === 'nl' ? 'Lees onze geschiedenis' : (lang === 'de' ? 'Unsere Geschichte lesen' : (lang === 'ro' ? 'Citiți istoricul nostru' : 'Read our history'))} <i className="fa-solid fa-arrow-right icon-right"></i>
                   </Link>
