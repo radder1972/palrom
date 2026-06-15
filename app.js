@@ -868,6 +868,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let configuredItems = [];
 
+        // Helper: Format numbers as Euros with thousands separators
+        function formatEuro(val, decimals = 2) {
+            return new Intl.NumberFormat('nl-NL', {
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals
+            }).format(val);
+        }
+
         // B2B Configurator Sizing Rules
         const categoryData = {
             pluggen: {
@@ -1018,7 +1026,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const priceDetails = calculatePriceDetails(cat, length, width_or_diameter, thickness, qty_num, specialsSubcat);
 
-            if (summaryUnitPrice) summaryUnitPrice.textContent = `€ ${priceDetails.unitPrice.toFixed(4).replace('.', ',')}`;
+            if (summaryUnitPrice) summaryUnitPrice.textContent = `€ ${formatEuro(priceDetails.unitPrice, 4)}`;
             if (summaryDiscount) {
                 if (priceDetails.discountPercent > 0) {
                     summaryDiscount.innerHTML = `<span class="discount-badge" style="background: rgba(231,177,36,0.15); color: var(--color-primary-dark); padding: 0.15rem 0.45rem; border-radius: var(--border-radius-sm); font-weight: 600;">${priceDetails.discountPercent}% B2B Staffelkorting</span>`;
@@ -1026,7 +1034,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     summaryDiscount.textContent = `Geen (min. 10.000 voor 5%)`;
                 }
             }
-            if (summaryTotalPrice) summaryTotalPrice.textContent = `€ ${priceDetails.totalPrice.toFixed(2).replace('.', ',')}`;
+            if (summaryTotalPrice) summaryTotalPrice.textContent = `€ ${formatEuro(priceDetails.totalPrice)}`;
         }
 
         // Adjust limits when category changes
@@ -1138,7 +1146,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             controlGroupAddedItems.classList.remove('hidden');
             configuredItemsList.innerHTML = configuredItems.map((item, index) => {
-                const formattedPrice = item.price.toFixed(2).replace('.', ',');
+                const formattedPrice = formatEuro(item.price);
                 return `
                 <div class="configured-item-row">
                     <div>
@@ -1158,7 +1166,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cumulativeTotal += item.price;
             });
             if (configuredCumulativeTotal) {
-                configuredCumulativeTotal.textContent = `€ ${cumulativeTotal.toFixed(2).replace('.', ',')}`;
+                configuredCumulativeTotal.textContent = `€ ${formatEuro(cumulativeTotal)}`;
             }
             
             // Add click handlers for delete buttons
@@ -1261,7 +1269,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Render consolidated list of items
                 if (successFinalInquiryList) {
                     successFinalInquiryList.innerHTML = configuredItems.map(item => {
-                        const formattedPrice = item.price.toFixed(2).replace('.', ',');
+                        const formattedPrice = formatEuro(item.price);
                         return `
                         <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center;">
                             <div>
@@ -1280,7 +1288,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     finalTotal += item.price;
                 });
                 if (successTotalPrice) {
-                    successTotalPrice.textContent = `€ ${finalTotal.toFixed(2).replace('.', ',')}`;
+                    successTotalPrice.textContent = `€ ${formatEuro(finalTotal)}`;
                 }
                 
                 successOverlay.classList.remove('hidden');
