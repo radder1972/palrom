@@ -62,7 +62,6 @@ export default function Header() {
           {pathname === '/configurator' && (
             <button className="cart-toggle-btn" onClick={() => setIsCartOpen(true)} aria-label="View Inquiry Cart">
               <i className="fa-solid fa-clipboard-list"></i>
-              <span className="cart-count-badge">{cartCount}</span>
             </button>
           )}
           <Link href="#contact" className="action-btn">
