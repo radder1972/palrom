@@ -3,8 +3,7 @@ import math
 import shutil
 from PIL import Image, ImageDraw, ImageFont
 
-def draw_curved_text(draw, img, text, center, radius, font, spacing_factor=1.1, text_color=(0, 0, 0, 255)):
-    # Measure character widths
+def draw_curved_text(draw, img, text, center, radius, font, spacing_factor, text_color=(0, 0, 0, 255)):
     chars = list(text)
     char_widths = []
     for char in chars:
@@ -16,10 +15,9 @@ def draw_curved_text(draw, img, text, center, radius, font, spacing_factor=1.1, 
         char_widths.append(w)
     
     total_w = sum(char_widths)
-    # Convert total width to an angular span in radians
     angle_span_rad = (total_w * spacing_factor) / radius
     
-    # We want the text centered around the top of the circle (-90 degrees / -pi/2 radians)
+    # Center the text around the top of the circle (-90 degrees / -pi/2 radians)
     center_angle_rad = -math.pi / 2
     start_angle_rad = center_angle_rad - (angle_span_rad / 2)
     
@@ -39,7 +37,7 @@ def draw_curved_text(draw, img, text, center, radius, font, spacing_factor=1.1, 
         rot_deg = -theta_deg - 90
         
         # Create a small image for the character to rotate it
-        char_sz = 160
+        char_sz = 200  # Increased size for 72pt characters
         char_img = Image.new("RGBA", (char_sz, char_sz), (0, 0, 0, 0))
         char_draw = ImageDraw.Draw(char_img)
         
@@ -48,7 +46,6 @@ def draw_curved_text(draw, img, text, center, radius, font, spacing_factor=1.1, 
         w = bbox[2] - bbox[0]
         h = bbox[3] - bbox[1]
         
-        # Center of character drawn in the center of char_img
         draw_x = (char_sz - w) / 2 - bbox[0]
         draw_y = (char_sz - h) / 2 - bbox[1]
         char_draw.text((draw_x, draw_y), char, font=font, fill=text_color)
@@ -78,17 +75,63 @@ def generate_stamp(lang, outer_text, center_text, font_path, output_path):
     # 3. Draw black inner border (r=320) separating curved text and center text
     draw.ellipse([512 - 320, 512 - 320, 512 + 320, 512 + 320], outline=(0, 0, 0, 255), width=7)
     
-    # Load fonts
-    font_outer = ImageFont.truetype(font_path, 48)
-    font_center = ImageFont.truetype(font_path, 88)
+    # 4. Calculate outer text font size and spacing dynamically
+    # Start at 72pt and auto-adjust if the text is too long (spans > 165 degrees)
+    fs_outer = 72
+    spacing_factor = 1.05
+    radius_outer = 398  # centered in the 156px band
+    chars = list(outer_text)
     
-    # 4. Draw curved text along radius R=398
-    # We use R=398 so that it is centered in the band between r=320 and r=476 (band width is 156px, center is at 398)
-    draw_curved_text(draw, img, outer_text, (512, 512), 398, font_outer, spacing_factor=1.1, text_color=(0, 0, 0, 255))
+    while fs_outer > 36:
+        font_outer = ImageFont.truetype(font_path, fs_outer)
+        char_widths = []
+        for char in chars:
+            try:
+                w = font_outer.getlength(char)
+            except AttributeError:
+                bbox = font_outer.getbbox(char)
+                w = bbox[2] - bbox[0]
+            char_widths.append(w)
+        total_w = sum(char_widths)
+        
+        # Test spacing factor 1.05
+        angle_span_rad = (total_w * 1.05) / radius_outer
+        if angle_span_rad <= math.radians(165):
+            spacing_factor = 1.05
+            break
+        else:
+            # Squeeze it a bit, down to spacing_factor = 0.95
+            angle_span_rad_min = (total_w * 0.95) / radius_outer
+            if angle_span_rad_min <= math.radians(165):
+                # Calculate exact spacing to fit 165 degrees
+                spacing_factor = (math.radians(165) * radius_outer) / total_w
+                break
+        
+        # Decrease font size if it doesn't fit even when squeezed
+        fs_outer -= 2
+        
+    print(f"[{lang}] Outer text: font size {fs_outer}, spacing factor {spacing_factor:.3f}")
+    draw_curved_text(draw, img, outer_text, (512, 512), radius_outer, font_outer, spacing_factor, text_color=(0, 0, 0, 255))
     
-    # 5. Draw center text
-    # Determine vertical offset and line spacing.
-    # Adjust spacing for multiline center text.
+    # 5. Calculate center text font size dynamically to prevent overflow
+    # Bounding box limits inside the 320px radius circle
+    max_width = 460
+    max_height = 360
+    
+    fs_center = 80
+    while fs_center > 30:
+        font_center = ImageFont.truetype(font_path, fs_center)
+        # Measure multiline text bbox
+        bbox = draw.multiline_textbbox((0, 0), center_text, font=font_center, spacing=16)
+        w = bbox[2] - bbox[0]
+        h = bbox[3] - bbox[1]
+        if w <= max_width and h <= max_height:
+            break
+        fs_center -= 2
+        
+    print(f"[{lang}] Center text: font size {fs_center} (width={w}, height={h})")
+    
+    # Draw center text
     draw.text((512, 512), center_text, font=font_center, fill=(0, 0, 0, 255), anchor="mm", align="center", spacing=16)
     
     # Save the output image
@@ -99,7 +142,7 @@ def main():
     font_path = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
     if not os.path.exists(font_path):
         print(f"Font not found at {font_path}! Falling back to default.")
-        font_path = "Arial Bold.ttf"  # Hopefully system font lookup works or error is handled
+        font_path = "Arial Bold.ttf"
         
     stamps = {
         "en": {
