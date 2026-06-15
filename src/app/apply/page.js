@@ -594,8 +594,8 @@ export default function Apply() {
         </div>
 
         {/* Hiring Stamp on Hero */}
-        <a href="#apply-form" className="hiring-stamp-hero" title={lang === 'nl' ? 'Solliciteer direct!' : 'Apply directly!'}>
-          <img src="/images/hiring_stamp.png" alt="We are Hiring Stamp" />
+        <a href="#apply-form" className="hiring-stamp-hero" title={lang === 'nl' ? 'Solliciteer direct!' : (lang === 'de' ? 'Jetzt direkt bewerben!' : (lang === 'ro' ? 'Aplică direct!' : 'Apply directly!'))}>
+          <img src={`/images/hiring_stamp_${lang}.png`} alt="We are Hiring Stamp" />
         </a>
       </section>
 

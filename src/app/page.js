@@ -325,7 +325,7 @@ export default function Home() {
 
         {/* Hiring Stamp on Hero Photo */}
         <Link href="/careers" className="hiring-stamp-hero" title={getTranslation('hiringTitle')}>
-          <img src="/images/hiring_stamp.png" alt={getTranslation('hiringAlt')} />
+          <img src={`/images/hiring_stamp_${lang}.png`} alt={getTranslation('hiringAlt')} />
         </Link>
 
         <div className="scroll-indicator">

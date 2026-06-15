@@ -375,8 +375,8 @@ export default function Careers() {
         </div>
 
         {/* Hiring Stamp on Hero */}
-        <a href="#positions" className="hiring-stamp-hero" title={lang === 'nl' ? 'Bekijk onze openstaande posities!' : 'View our open positions!'}>
-          <img src="/images/hiring_stamp.png" alt="We are Hiring Stamp" />
+        <a href="#positions" className="hiring-stamp-hero" title={lang === 'nl' ? 'Bekijk onze openstaande posities!' : (lang === 'de' ? 'Sehen Sie sich unsere offenen Stellen an!' : (lang === 'ro' ? 'Vezi pozițiile noastre deschise!' : 'View our open positions!'))}>
+          <img src={`/images/hiring_stamp_${lang}.png`} alt="We are Hiring Stamp" />
         </a>
       </section>
 
