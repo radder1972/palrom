@@ -569,6 +569,28 @@ export default function About() {
                   {activeSlide + 1} / {galleryItems.length}
                 </span>
 
+                <button 
+                  className="slideshow-arrow slideshow-arrow-left" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveSlide((prev) => (prev - 1 + galleryItems.length) % galleryItems.length);
+                  }}
+                  aria-label="Previous slide"
+                >
+                  <i className="fa-solid fa-chevron-left"></i>
+                </button>
+
+                <button 
+                  className="slideshow-arrow slideshow-arrow-right" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveSlide((prev) => (prev + 1) % galleryItems.length);
+                  }}
+                  aria-label="Next slide"
+                >
+                  <i className="fa-solid fa-chevron-right"></i>
+                </button>
+
                 <div className="slideshow-slides">
                   {galleryItems.map((item, idx) => (
                     <div 
