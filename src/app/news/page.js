@@ -5,10 +5,7 @@ import Link from 'next/link';
 import ContactSection from '@/components/ContactSection';
 import { useInquiry } from '@/components/InquiryContext';
 
-// STAP 1: Upload de video naar YouTube (bijvoorbeeld als verborgen/unlisted of openbaar).
-// STAP 2: Kopieer de video ID uit de YouTube link (bijv. 'y9vH9cM0J_4' uit 'https://www.youtube.com/watch?v=y9vH9cM0J_4').
-// STAP 3: Vervang de onderstaande placeholder-ID 'dQw4w9WgXcQ' door uw eigen YouTube video ID.
-const YOUTUBE_VIDEO_ID = '9c08nP2sCS8'; // Standaard placeholder video
+
 
 export default function News() {
   const { lang } = useInquiry();
@@ -178,62 +175,7 @@ export default function News() {
     },
   ];
 
-  const galleryItems = [
-    {
-      id: 1,
-      image: '/images/7.png',
-      title: lang === 'nl' ? 'Sortering Grondstoffen' : (lang === 'de' ? 'Rohstoffsortierung' : (lang === 'ro' ? 'Sortare Materii Prime' : 'Raw Materials Sorting')),
-      desc: lang === 'nl' ? 'Lokaal ingekochte duurzame beukenhouten stammen.' : (lang === 'de' ? 'Nachhaltige Buchenholzstämme aus lokaler Beschaffung.' : (lang === 'ro' ? 'Bușteni din lemn de fag sustenabili din surse locale.' : 'Locally sourced sustainable beech wood logs.')),
-    },
-    {
-      id: 2,
-      image: '/images/6.png',
-      title: lang === 'nl' ? 'Eerste Zaagbewerkingen' : (lang === 'de' ? 'Primäre Sägearbeiten' : (lang === 'ro' ? 'Operațiuni de Tăiere Primară' : 'Primary Sawing Operations')),
-      desc: lang === 'nl' ? 'Geavanceerde zaaglijnen en het zagen van planken.' : (lang === 'de' ? 'High-Tech-Stammzerlegung und Zuschnitt von Schnittholz.' : (lang === 'ro' ? 'Debitarea buștenilor și tăierea cherestelei cu tehnologie avansată.' : 'High-tech log breakdown and sawn timber cutting.')),
-    },
-    {
-      id: 3,
-      image: '/images/1.png',
-      title: lang === 'nl' ? 'Stomen & Conditioneren' : (lang === 'de' ? 'Dämpfen & Bewittern' : (lang === 'ro' ? 'Aburire & Tratare' : 'Steaming & Weathering')),
-      desc: lang === 'nl' ? 'Gecontroleerd stomen van het hout voor kleur en stabiliteit.' : (lang === 'de' ? 'Kontrolliertes Holzdämpfen für Farbe und Stabilität.' : (lang === 'ro' ? 'Aburirea controlată a lemnului pentru culoare și stabilitate.' : 'Controlled wood steaming for color and stability.')),
-    },
-    {
-      id: 4,
-      image: '/images/kilns.jpg',
-      title: lang === 'nl' ? 'Geautomatiseerde Droogkamers' : (lang === 'de' ? 'Automatische Trockenkammern' : (lang === 'ro' ? 'Camere de Uscare Automatizate' : 'Automated Drying Chambers')),
-      desc: lang === 'nl' ? 'Nauwkeurig drogen van hout tot 8-12% vochtigheid.' : (lang === 'de' ? 'Präzise Holztrocknung auf 8-12 % Feuchtigkeit.' : (lang === 'ro' ? 'Uscarea precisă a cherestelei la o umiditate de 8-12%.' : 'Drying timber precisely to 8-12% moisture.')),
-    },
-    {
-      id: 5,
-      image: '/images/5.png',
-      title: lang === 'nl' ? 'Houtschaverij Werkplaats' : (lang === 'de' ? 'Hobelwerkstatt' : (lang === 'ro' ? 'Atelier de Rinduit Lemn' : 'Wood Planing Workshop')),
-      desc: lang === 'nl' ? 'Kalibreren van houtprofielen tot de exacte toleranties van de klant.' : (lang === 'de' ? 'Kalibrierung von Holzprofilen nach exakten Kundentoleranzen.' : (lang === 'ro' ? 'Calibrarea profilelor din lemn conform toleranțelor exacte ale clienților.' : 'Calibrating timber profiles to exact customer tolerances.')),
-    },
-    {
-      id: 6,
-      image: '/images/2.png',
-      title: lang === 'nl' ? 'Beukenhouten Stokkenproductie' : (lang === 'de' ? 'Buchenholzstäbe-Produktion' : (lang === 'ro' ? 'Producție Tije din Lemn de Fag' : 'Beech Stick Production')),
-      desc: lang === 'nl' ? 'Hoge capaciteit gegroefde en gladde stokkenproductielijnen.' : (lang === 'de' ? 'Hochleistungslinien für geriffelte und glatte Stäbe.' : (lang === 'ro' ? 'Linii de mare capacitate pentru tije canelate și netede.' : 'High capacity rilled and smooth stick production lines.')),
-    },
-    {
-      id: 7,
-      image: '/images/3.png',
-      title: lang === 'nl' ? 'Kwaliteitsinspectie & Sortering' : (lang === 'de' ? 'Qualitätsprüfung & Sortierung' : (lang === 'ro' ? 'Inspecție de Calitate & Sortare' : 'Quality Inspection & Sorting')),
-      desc: lang === 'nl' ? 'Strenge visuele controle om premium houtklassen te garanderen.' : (lang === 'de' ? 'Strenge visuelle Prüfung zur Gewährleistung erstklassiger Holzqualitäten.' : (lang === 'ro' ? 'Control vizual riguros pentru a garanta clase de lemn premium.' : 'Rigorous visual check to guarantee premium wood grades.')),
-    },
-    {
-      id: 8,
-      image: '/images/8.png',
-      title: lang === 'nl' ? 'Logistieke Ondersteuning' : (lang === 'de' ? 'Globale Logistik-Unterstützung' : (lang === 'ro' ? 'Suport Logistic Global' : 'Global Logistics Support')),
-      desc: lang === 'nl' ? 'Exportklare verpakking en bundeling voor doe-het-zelf-bouwmarkten.' : (lang === 'de' ? 'Exportfertige Verpackung und Bündelung für Baumärkte.' : (lang === 'ro' ? 'Ambalare pregătită pentru export și ambalare în pachete pentru hypermarketuri DIY.' : 'Export-ready packaging and DIY hypermarket bundling.')),
-    },
-    {
-      id: 9,
-      image: '/images/specials_gallery.jpg',
-      title: lang === 'nl' ? 'Speciale Componenten Portfolio' : (lang === 'de' ? 'Spezialkomponenten-Portfolio' : (lang === 'ro' ? 'Portofoliu Componente Speciale' : 'Special Components Portfolio')),
-      desc: lang === 'nl' ? 'Diverse op maat gemaakte draai- en freesonderdelen uit onze productie.' : (lang === 'de' ? 'Verschiedene kundenspezifische Dreh- und Frästeile aus unserer Produktion.' : (lang === 'ro' ? 'Diverse componente strunjite și frezate la comandă din producția noastră.' : 'Various custom-turned and milled beechwood components from our production.')),
-    },
-  ];
+
 
   const t = {
     newsBreadcrumb: { nl: 'Nieuws', en: 'News', de: 'Neuigkeiten', ro: 'Știri' },
@@ -251,21 +193,6 @@ export default function News() {
       en: 'Stay up to date with our latest innovations, factory upgrades, and digital tools.',
       de: 'Bleiben Sie auf dem Laufenden mit unseren neuesten Innovationen, Fabrik-Upgrades und digitalen Tools.',
       ro: 'Fii la curent cu cele mai recente inovații, modernizări ale fabricii și instrumente digitale.'
-    },
-    galleryBadge: { nl: 'Media Galerij', en: 'Media Gallery', de: 'Mediengalerie', ro: 'Galerie Media' },
-    galleryTitle: { nl: 'Fabrieks- & Productiemedia', en: 'Factory & Production Media', de: 'Fabrik- & Produktionsmedien', ro: 'Media Fabrică & Producție' },
-    gallerySub: {
-      nl: "Bekijk de foto's en video's van onze zagerij en op maat gemaakte productieprocessen in Brad, Roemenië.",
-      en: "Explore the photos and videos of our sawmill operations and custom manufacturing processes in Brad, Romania.",
-      de: "Entdecken Sie die Fotos und Videos unserer Sägewerksbetriebe und kundenspezifischen Fertigungsprozesse in Brad, Rumänien.",
-      ro: "Explorați fotografiile și videoclipurile cu operațiunile gaterului și procesele de producție personalizate din Brad, România."
-    },
-    videoTitle: { nl: 'Ons Verwerkingsproces', en: 'Our Milling Process', de: 'Unser Fräsprozess', ro: 'Procesul Nostru de Frezare' },
-    videoDesc: {
-      nl: "Ervaar de precisie van houtbewerking. Onze ultramoderne zagerij combineert generaties Roemeens vakmanschap met geavanceerde Europese zaagtechnologieën, waarbij elke snede tot op de micrometer nauwkeurig wordt gekalibreerd voor hoogwaardige, duurzame beukenhouten componenten.",
-      en: "Experience the precision of wood transformation. Our state-of-the-art milling facility combines generations of Romanian craftsmanship with advanced European sawing technologies, calibrating every cut to micron-level perfection for premium, sustainable beechwood components.",
-      de: "Erleben Sie die Präzision der Holzverwandlung. Unsere hochmoderne Fräsanlage verbindet Generationen rumänischer Handwerkskunst mit fortschrittlichen europäischen Sägetechnologien und kalibriert jeden Schnitt bis zur Perfektion auf Mikrometer-Ebene für erstklassige, nachhaltige Buchenholzkomponenten.",
-      ro: "Experimentați precizia transformării lemnului. Unitatea noastră de frezare de ultimă generație îmbină generații de meșteșug românesc cu tehnologii europene avansate de tăiere, calibrând fiecare tăietură la perfecțiune la nivel de microni pentru componente premium și durabile din lemn de fag."
     }
   };
 
@@ -344,50 +271,7 @@ export default function News() {
         </div>
       </section>
 
-      {/* Photo Gallery Section */}
-      <section id="gallery-details" className="gallery-section section-padding bg-white">
-        <div className="container">
-          <div className="text-center max-w-xl mx-auto mb-5 animate-on-scroll">
-            <span className="section-badge">
-              {getTranslation('galleryBadge')}
-            </span>
-            <h2 className="section-title">
-              {getTranslation('galleryTitle')}
-            </h2>
-            <p className="section-subtitle">
-              {getTranslation('gallerySub')}
-            </p>
-          </div>
 
-          <div className="gallery-grid">
-            {galleryItems.map((item) => (
-              <div className="gallery-item animate-on-scroll" key={item.id}>
-                <img src={item.image} alt={item.title} />
-                <div className="gallery-overlay">
-                  <h3>{item.title}</h3>
-                  <p>{item.desc}</p>
-                </div>
-              </div>
-            ))}
-
-            {/* Video Item */}
-            <div className="gallery-item video-item animate-on-scroll">
-              <iframe
-                className="gallery-video"
-                src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&mute=1&loop=1&playlist=${YOUTUBE_VIDEO_ID}`}
-                title={getTranslation('videoTitle')}
-                style={{ border: 'none' }}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              ></iframe>
-              <div className="gallery-overlay">
-                <h3>{getTranslation('videoTitle')}</h3>
-                <p>{getTranslation('videoDesc')}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Contact Section */}
       <ContactSection />
