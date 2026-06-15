@@ -85,16 +85,16 @@ export default function CartSidebar() {
       ro: 'Solicitarea Dvs. de Ofertă'
     },
     emptyMessage: {
-      nl: 'Uw offertelijst is leeg. Voeg producten toe om een offerte aan te vragen.',
-      en: 'Your inquiry list is empty. Add products to request a quote.',
-      de: 'Ihre Anfrageliste ist leer. Fügen Sie Produkte hinzu, um ein Angebot anzufordern.',
-      ro: 'Lista dvs. de solicitare este goală. Adăugați produse pentru a solicita o ofertă.'
+      nl: 'Uw offertelijst is leeg. Gebruik de configurator om klantspecifieke beukenhouten producten en richtprijzen aan uw aanvraag toe te voegen.',
+      en: 'Your inquiry list is empty. Use the configurator to add custom-spec beechwood products and target prices to your request.',
+      de: 'Ihre Anfrageliste ist leer. Nutzen Sie den Konfigurator, um Buchenholzprodukte mit kundenspezifischen Spezifikationen und Richtpreise zu Ihrer Anfrage hinzuzufügen.',
+      ro: 'Lista dvs. de solicitare este goală. Utilizați configuratorul pentru a adăuga produse din fag cu specificații personalizate și prețuri țintă la solicitarea dvs.'
     },
     goToProducts: {
-      nl: 'Naar Producten',
-      en: 'Go to Products',
-      de: 'Zu den Produkten',
-      ro: 'Mergi la Produse'
+      nl: 'Naar Configurator',
+      en: 'Go to Configurator',
+      de: 'Zum Konfigurator',
+      ro: 'Mergi la Configurator'
     },
     quantityLabel: {
       nl: 'Aantal',
@@ -305,7 +305,7 @@ export default function CartSidebar() {
             {cartItems.length === 0 ? (
               <div className="cart-empty-message">
                 <p>{getTranslation('emptyMessage')}</p>
-                <Link href="/products" className="cart-empty-action-btn" onClick={handleClose}>
+                <Link href="/configurator" className="cart-empty-action-btn" onClick={handleClose}>
                   {getTranslation('goToProducts')} <i className="fa-solid fa-arrow-right icon-right"></i>
                 </Link>
               </div>
