@@ -244,16 +244,12 @@ export default function Configurator() {
   const [drying, setDrying] = useState('kd');
   const [fsc, setFsc] = useState(true);
   const [grade, setGrade] = useState('A');
-  
-  const [thicknessType, setThicknessType] = useState('standard');
+  const [thicknessType, setThicknessType] = useState('custom');
   const [thickness, setThickness] = useState(25);
-  
-  const [widthType, setWidthType] = useState('standard');
+  const [widthType, setWidthType] = useState('custom');
   const [diameter, setDiameter] = useState(50);
-  
-  const [lengthType, setLengthType] = useState('standard');
-  const [length, setLength] = useState('1000-1400');
-  
+  const [lengthType, setLengthType] = useState('custom');
+  const [length, setLength] = useState(1000);
   const [additionalInfo, setAdditionalInfo] = useState('');
   const [quantity, setQuantity] = useState(10000);
 
@@ -305,60 +301,46 @@ export default function Configurator() {
     }
     setIsLoading(false);
   }, []);
-
   // Sync state defaults when category changes
   useEffect(() => {
     if (categoryData[category]) {
+      setThicknessType('custom');
+      setWidthType('custom');
+      setLengthType('custom');
       if (category === 'sawn') {
         setDrying('kd');
         setGrade('A');
-        setThicknessType('standard');
         setThickness(25);
-        setWidthType('standard');
         setDiameter(50);
-        setLengthType('standard');
-        setLength('1000-1400');
+        setLength(1000);
       } else if (category === 'planed') {
         setDrying('kd');
         setGrade('A');
-        setThicknessType('custom');
         setThickness(20);
-        setWidthType('custom');
         setDiameter(50);
-        setLengthType('standard');
-        setLength('1000-1400');
+        setLength(1000);
       } else if (category === 'dowels') {
         setDrying('kd');
         setGrade('A');
-        setThicknessType('standard');
         setThickness(10);
-        setWidthType('standard');
         setDiameter(10);
-        setLengthType('standard');
-        setLength('1000-1400');
+        setLength(1000);
       } else if (category === 'profiles') {
         setDrying('kd');
         setGrade('A');
-        setThicknessType('custom');
         setThickness(20);
-        setWidthType('custom');
         setDiameter(40);
-        setLengthType('standard');
-        setLength('1000-1400');
+        setLength(1000);
       } else if (category === 'specials') {
         setDrying('kd');
         setGrade('A');
-        setThicknessType('custom');
         setThickness(20);
-        setWidthType('custom');
         setDiameter(40);
-        setLengthType('custom');
         setLength(500);
       }
       setAdditionalInfo('');
     }
   }, [category]);
-
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
     if (password === 'palrom2026') {
@@ -757,60 +739,46 @@ export default function Configurator() {
       baseUnitPrice: calculatedBase.unitPrice, // Store the base unit price (before qty discounts) for cart calculations
       discountPercent: resolvedDetails.discountPercent, // Save the calculated volume discount
     });
-
     // Reset configurator fields
     const data = categoryData[category];
     if (data) {
+      setThicknessType('custom');
+      setWidthType('custom');
+      setLengthType('custom');
       if (category === 'sawn') {
         setDrying('kd');
         setGrade('A');
-        setThicknessType('standard');
         setThickness(25);
-        setWidthType('standard');
         setDiameter(50);
-        setLengthType('standard');
-        setLength('1000-1400');
+        setLength(1000);
       } else if (category === 'planed') {
         setDrying('kd');
         setGrade('A');
-        setThicknessType('custom');
         setThickness(20);
-        setWidthType('custom');
         setDiameter(50);
-        setLengthType('standard');
-        setLength('1000-1400');
+        setLength(1000);
       } else if (category === 'dowels') {
         setDrying('kd');
         setGrade('A');
-        setThicknessType('standard');
         setThickness(10);
-        setWidthType('standard');
         setDiameter(10);
-        setLengthType('standard');
-        setLength('1000-1400');
+        setLength(1000);
       } else if (category === 'profiles') {
         setDrying('kd');
         setGrade('A');
-        setThicknessType('custom');
         setThickness(20);
-        setWidthType('custom');
         setDiameter(40);
-        setLengthType('standard');
-        setLength('1000-1400');
+        setLength(1000);
       } else if (category === 'specials') {
         setDrying('kd');
         setGrade('A');
-        setThicknessType('custom');
         setThickness(20);
-        setWidthType('custom');
         setDiameter(40);
-        setLengthType('custom');
         setLength(500);
       }
       setAdditionalInfo('');
       setFsc(true);
     }
-
     // Open the sidebar cart
     setIsCartOpen(true);
   };
@@ -1109,235 +1077,130 @@ export default function Configurator() {
                 </div>
 
                 {/* Dikte / Diameter */}
+                {categoryData[category]?.thickness && (
+                  <div className="control-group">
+                    <label htmlFor="dbThickness">
+                      {lang === 'nl' ? 'Dikte (mm)' : 'Thickness (mm)'}
+                    </label>
+                    <div className="slider-wrapper">
+                      <input
+                        type="range"
+                        className="dashboard-slider"
+                        min={categoryData[category]?.thickness?.min || 5}
+                        max={categoryData[category]?.thickness?.max || 200}
+                        value={thickness || (categoryData[category]?.thickness?.min || 5)}
+                        onChange={(e) => setThickness(parseInt(e.target.value) || (categoryData[category]?.thickness?.min || 5))}
+                      />
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <input
+                          type="number"
+                          id="dbThickness"
+                          className="slider-value-display"
+                          min={categoryData[category]?.thickness?.min || 5}
+                          max={categoryData[category]?.thickness?.max || 200}
+                          value={thickness}
+                          onChange={(e) => {
+                            const val = parseInt(e.target.value);
+                            setThickness(isNaN(val) ? '' : val);
+                          }}
+                          onBlur={() => {
+                            const minVal = categoryData[category]?.thickness?.min || 5;
+                            const maxVal = categoryData[category]?.thickness?.max || 200;
+                            if (thickness === '' || thickness < minVal) {
+                              setThickness(minVal);
+                            } else if (thickness > maxVal) {
+                              setThickness(maxVal);
+                            }
+                          }}
+                        />
+                        <span style={{ color: 'var(--color-text-dark)', fontSize: '0.95rem' }}>mm</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Breedte / Diameter */}
                 <div className="control-group">
-                  <label htmlFor="dbThickness">
+                  <label htmlFor="dbDiameter">
                     {category === 'dowels'
                       ? (lang === 'nl' ? 'Diameter (mm)' : 'Diameter (mm)')
-                      : (lang === 'nl' ? 'Dikte (mm)' : 'Thickness (mm)')}
+                      : (lang === 'nl' ? 'Breedte (mm)' : 'Width (mm)')}
                   </label>
-                  {category === 'sawn' ? (
-                    <>
-                      {thicknessType === 'standard' ? (
-                        <select
-                          id="dbThickness"
-                          className="dashboard-select"
-                          value={thickness}
-                          onChange={(e) => {
-                            if (e.target.value === 'custom') {
-                              setThicknessType('custom');
-                              setThickness(25);
-                            } else {
-                              setThickness(parseInt(e.target.value));
-                            }
-                          }}
-                        >
-                          {standardSawnThickness.map((tVal) => (
-                            <option key={tVal} value={tVal}>
-                              {tVal} mm
-                            </option>
-                          ))}
-                          <option value="custom">{lang === 'nl' ? 'Maatwerk...' : 'Custom...'}</option>
-                        </select>
-                      ) : (
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                          <input
-                            type="number"
-                            className="dashboard-input"
-                            value={thickness}
-                            onChange={(e) => setThickness(parseInt(e.target.value) || '')}
-                            placeholder="Custom thickness"
-                          />
-                          <button
-                            type="button"
-                            className="btn btn-secondary"
-                            onClick={() => {
-                              setThicknessType('standard');
-                              setThickness(25);
-                            }}
-                            style={{ padding: '0.25rem 0.75rem', fontSize: '0.85rem' }}
-                          >
-                            Reset
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  ) : category === 'dowels' ? (
-                    <>
-                      {thicknessType === 'standard' ? (
-                        <select
-                          id="dbThickness"
-                          className="dashboard-select"
-                          value={thickness}
-                          onChange={(e) => {
-                            if (e.target.value === 'custom') {
-                              setThicknessType('custom');
-                              setThickness(10);
-                            } else {
-                              setThickness(parseInt(e.target.value));
-                            }
-                          }}
-                        >
-                          {standardRodDiameters.map((dVal) => (
-                            <option key={dVal} value={dVal}>
-                              Ø {dVal} mm
-                            </option>
-                          ))}
-                          <option value="custom">{lang === 'nl' ? 'Maatwerk...' : 'Custom...'}</option>
-                        </select>
-                      ) : (
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                          <input
-                            type="number"
-                            className="dashboard-input"
-                            value={thickness}
-                            onChange={(e) => setThickness(parseInt(e.target.value) || '')}
-                            placeholder="Custom diameter"
-                          />
-                          <button
-                            type="button"
-                            className="btn btn-secondary"
-                            onClick={() => {
-                              setThicknessType('standard');
-                              setThickness(10);
-                            }}
-                            style={{ padding: '0.25rem 0.75rem', fontSize: '0.85rem' }}
-                          >
-                            Reset
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  ) : (
+                  <div className="slider-wrapper">
                     <input
-                      type="number"
-                      className="dashboard-input"
-                      value={thickness}
-                      onChange={(e) => setThickness(parseInt(e.target.value) || '')}
-                      placeholder={lang === 'nl' ? 'Voer dikte in' : 'Enter thickness'}
+                      type="range"
+                      className="dashboard-slider"
+                      min={categoryData[category]?.diameter?.min || 5}
+                      max={category === 'dowels' ? 60 : currentMaxWidth}
+                      value={diameter || (categoryData[category]?.diameter?.min || 5)}
+                      onChange={(e) => setDiameter(parseInt(e.target.value) || (categoryData[category]?.diameter?.min || 5))}
                     />
-                  )}
-                </div>
-
-                {/* Breedte */}
-                <div className="control-group">
-                  <label htmlFor="dbDiameter">{lang === 'nl' ? 'Breedte (mm)' : 'Width (mm)'}</label>
-                  {category === 'dowels' ? (
-                    <input type="text" className="dashboard-input" value="n.v.t. (stokken)" disabled={true} />
-                  ) : category === 'sawn' ? (
-                    <>
-                      {widthType === 'standard' ? (
-                        <select
-                          id="dbDiameter"
-                          className="dashboard-select"
-                          value={diameter}
-                          onChange={(e) => {
-                            if (e.target.value === 'custom') {
-                              setWidthType('custom');
-                              setDiameter(50);
-                            } else {
-                              setDiameter(parseInt(e.target.value));
-                            }
-                          }}
-                        >
-                          {standardSawnWidth.map((wVal) => (
-                            <option key={wVal} value={wVal}>
-                              {wVal} mm
-                            </option>
-                          ))}
-                          <option value="custom">{lang === 'nl' ? 'Maatwerk...' : 'Custom...'}</option>
-                        </select>
-                      ) : (
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                          <input
-                            type="number"
-                            className="dashboard-input"
-                            value={diameter}
-                            onChange={(e) => setDiameter(parseInt(e.target.value) || '')}
-                            placeholder="Custom width"
-                          />
-                          <button
-                            type="button"
-                            className="btn btn-secondary"
-                            onClick={() => {
-                              setWidthType('standard');
-                              setDiameter(50);
-                            }}
-                            style={{ padding: '0.25rem 0.75rem', fontSize: '0.85rem' }}
-                          >
-                            Reset
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <input
-                      type="number"
-                      className="dashboard-input"
-                      value={diameter}
-                      onChange={(e) => setDiameter(parseInt(e.target.value) || '')}
-                      placeholder={lang === 'nl' ? 'Voer breedte in' : 'Enter width'}
-                    />
-                  )}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <input
+                        type="number"
+                        id="dbDiameter"
+                        className="slider-value-display"
+                        min={categoryData[category]?.diameter?.min || 5}
+                        max={category === 'dowels' ? 60 : currentMaxWidth}
+                        value={diameter}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value);
+                          setDiameter(isNaN(val) ? '' : val);
+                        }}
+                        onBlur={() => {
+                          const minVal = categoryData[category]?.diameter?.min || 5;
+                          const maxVal = category === 'dowels' ? 60 : currentMaxWidth;
+                          if (diameter === '' || diameter < minVal) {
+                            setDiameter(minVal);
+                          } else if (diameter > maxVal) {
+                            setDiameter(maxVal);
+                          }
+                        }}
+                      />
+                      <span style={{ color: 'var(--color-text-dark)', fontSize: '0.95rem' }}>mm</span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Lengte */}
                 <div className="control-group">
-                  <label htmlFor="dbLength">{lang === 'nl' ? 'Lengte (mm)' : 'Length (mm)'}</label>
-                  {category !== 'specials' ? (
-                    <>
-                      {lengthType === 'standard' ? (
-                        <select
-                          id="dbLength"
-                          className="dashboard-select"
-                          value={length}
-                          onChange={(e) => {
-                            if (e.target.value === 'custom') {
-                              setLengthType('custom');
-                              setLength(1000);
-                            } else {
-                              setLength(e.target.value);
-                            }
-                          }}
-                        >
-                          {standardLengthRanges.map((rVal) => (
-                            <option key={rVal} value={rVal}>
-                              {rVal} mm
-                            </option>
-                          ))}
-                          <option value="custom">{lang === 'nl' ? 'Maatwerk...' : 'Custom...'}</option>
-                        </select>
-                      ) : (
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                          <input
-                            type="number"
-                            className="dashboard-input"
-                            value={length}
-                            onChange={(e) => setLength(parseInt(e.target.value) || '')}
-                            placeholder="Custom length"
-                          />
-                          <button
-                            type="button"
-                            className="btn btn-secondary"
-                            onClick={() => {
-                              setLengthType('standard');
-                              setLength('1000-1400');
-                            }}
-                            style={{ padding: '0.25rem 0.75rem', fontSize: '0.85rem' }}
-                          >
-                            Reset
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  ) : (
+                  <label htmlFor="dbLength">
+                    {lang === 'nl' ? 'Lengte (mm)' : 'Length (mm)'}
+                  </label>
+                  <div className="slider-wrapper">
                     <input
-                      type="number"
-                      className="dashboard-input"
-                      value={length}
-                      onChange={(e) => setLength(parseInt(e.target.value) || '')}
-                      placeholder={lang === 'nl' ? 'Voer lengte in' : 'Enter length'}
+                      type="range"
+                      className="dashboard-slider"
+                      min={categoryData[category]?.length?.min || 200}
+                      max={categoryData[category]?.length?.max || 3000}
+                      value={length || (categoryData[category]?.length?.min || 200)}
+                      onChange={(e) => setLength(parseInt(e.target.value) || (categoryData[category]?.length?.min || 200))}
                     />
-                  )}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <input
+                        type="number"
+                        id="dbLength"
+                        className="slider-value-display"
+                        min={categoryData[category]?.length?.min || 200}
+                        max={categoryData[category]?.length?.max || 3000}
+                        value={length}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value);
+                          setLength(isNaN(val) ? '' : val);
+                        }}
+                        onBlur={() => {
+                          const minVal = categoryData[category]?.length?.min || 200;
+                          const maxVal = categoryData[category]?.length?.max || 3000;
+                          if (length === '' || length < minVal) {
+                            setLength(minVal);
+                          } else if (length > maxVal) {
+                            setLength(maxVal);
+                          }
+                        }}
+                      />
+                      <span style={{ color: 'var(--color-text-dark)', fontSize: '0.95rem' }}>mm</span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Aanvullende informatie */}
