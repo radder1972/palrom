@@ -63,23 +63,24 @@ def generate_stamp(lang, outer_text, center_text, font_path, output_path):
     img = Image.new("RGBA", (1024, 1024), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     
-    # Radius specifications to maximize circular area and match container perfectly
-    r_outer = 504
-    r_outer_inner = 490
-    r_inner = 330
-    radius_text = 410
+    # Radius and thickness specifications (borders are now significantly thicker)
+    r_outer = 502
+    r_outer_inner = 468
+    r_inner = 320
+    radius_text = 394
+    border_w = 18
     
     # 1. Draw solid yellow circle
     draw.ellipse([512 - r_outer, 512 - r_outer, 512 + r_outer, 512 + r_outer], fill=(241, 196, 55, 255))
     
-    # 2. Draw black outer double border
-    # Outermost border (r=504)
-    draw.ellipse([512 - r_outer, 512 - r_outer, 512 + r_outer, 512 + r_outer], outline=(0, 0, 0, 255), width=7)
-    # Inner outer border (r=490)
-    draw.ellipse([512 - r_outer_inner, 512 - r_outer_inner, 512 + r_outer_inner, 512 + r_outer_inner], outline=(0, 0, 0, 255), width=7)
+    # 2. Draw black outer double border (width 18px for "vet veel dikker zwart")
+    # Outermost border (r=502)
+    draw.ellipse([512 - r_outer, 512 - r_outer, 512 + r_outer, 512 + r_outer], outline=(0, 0, 0, 255), width=border_w)
+    # Inner outer border (r=468)
+    draw.ellipse([512 - r_outer_inner, 512 - r_outer_inner, 512 + r_outer_inner, 512 + r_outer_inner], outline=(0, 0, 0, 255), width=border_w)
     
-    # 3. Draw black inner border (r=330) separating curved text and center text
-    draw.ellipse([512 - r_inner, 512 - r_inner, 512 + r_inner, 512 + r_inner], outline=(0, 0, 0, 255), width=7)
+    # 3. Draw black inner border (r=320, width 18px) separating curved text and center text
+    draw.ellipse([512 - r_inner, 512 - r_inner, 512 + r_inner, 512 + r_inner], outline=(0, 0, 0, 255), width=border_w)
     
     # 4. Calculate outer text font size and spacing dynamically
     # Start at 72pt and auto-adjust if the text is too long (spans > 165 degrees)
@@ -119,9 +120,9 @@ def generate_stamp(lang, outer_text, center_text, font_path, output_path):
     draw_curved_text(draw, img, outer_text, (512, 512), radius_text, font_outer, spacing_factor, text_color=(0, 0, 0, 255))
     
     # 5. Calculate center text font size dynamically to prevent overflow
-    # Bounding box limits inside the 330px radius circle
-    max_width = 480
-    max_height = 370
+    # Bounding box limits inside the 320px radius circle
+    max_width = 460
+    max_height = 360
     
     fs_center = 80
     while fs_center > 30:
@@ -160,7 +161,7 @@ def main():
         },
         "de": {
             "outer": "KOMM INS TEAM PALROM",
-            "center": "WIR STELLEN\nEIN"
+            "center": "WIR\nSTELLEN\nEIN"
         },
         "ro": {
             "outer": "ALĂTURĂ-TE ECHIPEI PALROM",
