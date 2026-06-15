@@ -96,8 +96,8 @@ export default function Footer() {
         <div className="footer-products">
           <h3>{getTranslation('offerings')}</h3>
           <ul>
-            <li><Link href="/dowels">{getTranslation('dowels')}</Link></li>
             <li><Link href="/four-sides-planed">{getTranslation('planed')}</Link></li>
+            <li><Link href="/dowels">{getTranslation('dowels')}</Link></li>
             <li><Link href="/profiles">{getTranslation('profiles')}</Link></li>
             <li><Link href="/specials">{getTranslation('specials')}</Link></li>
             <li><Link href="/products">{getTranslation('fscBeech')}</Link></li>

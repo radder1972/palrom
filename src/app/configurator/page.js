@@ -178,7 +178,7 @@ export default function Configurator() {
   const [authError, setAuthError] = useState(false);
 
   // Configurator states
-  const [category, setCategory] = useState('dowels');
+  const [category, setCategory] = useState('planed');
   const [subCategoryDowels, setSubCategoryDowels] = useState('dowel-small');
   const [subCategoryProfiles, setSubCategoryProfiles] = useState('profile-semiround');
   const [subCategorySpecials, setSubCategorySpecials] = useState('special-keeplat-spruce');
@@ -564,7 +564,7 @@ export default function Configurator() {
   const handleRestart = () => {
     setConfiguredItems([]);
     setSuccessItems([]);
-    setCategory('dowels');
+    setCategory('planed');
     setClientName('');
     setClientCompany('');
     setClientEmail('');
@@ -694,8 +694,8 @@ export default function Configurator() {
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                   >
-                    <option value="dowels">{categoryData.dowels.name[lang] || categoryData.dowels.name.nl}</option>
                     <option value="planed">{categoryData.planed.name[lang] || categoryData.planed.name.nl}</option>
+                    <option value="dowels">{categoryData.dowels.name[lang] || categoryData.dowels.name.nl}</option>
                     <option value="profiles">{categoryData.profiles.name[lang] || categoryData.profiles.name.nl}</option>
                     <option value="specials">{categoryData.specials.name[lang] || categoryData.specials.name.nl}</option>
                   </select>

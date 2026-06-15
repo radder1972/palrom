@@ -11,44 +11,6 @@ export default function Products() {
 
   const productsList = [
     {
-      id: 'dowels',
-      category: 'dowels',
-      name: {
-        nl: 'Beukenhouten stokken',
-        en: 'Beechwood sticks',
-        de: 'Buchenholzstäbe',
-        ro: 'Tije din lemn de fag',
-      },
-      description: {
-        nl: 'Verkrijgbaar in kleine maten vanaf 3 mm tot grote afmetingen van 60 mm. Opties zijn onder andere gladde pennen en spiraalvormig gegroefde afwerkingen voor optimale lijmhechting.',
-        en: 'Available in small sizes starting at 3 mm up to large dimensions of 60 mm. Options include smooth sticks and spiral-rilled finishes for optimal glue adhesion.',
-        de: 'Erhältlich in kleinen Größen ab 3 mm bis hin zu großen Dimensionen von 60 mm. Zu den Optionen gehören glatte Stäbe und spiralförmig geriffelte Ausführungen für optimale Leimhaftung.',
-        ro: 'Disponibile în dimensiuni mici începând de la 3 mm până la dimensiuni mari de 60 mm. Opțiunile includ tije netede și finisaje cu caneluri elicoidale pentru o aderență optimă a lipiciului.',
-      },
-      image: '/images/dowels.png',
-      link: '/dowels',
-      specs: [
-        {
-          label: { nl: 'Diameter', en: 'Diameter', de: 'Durchmesser', ro: 'Diametru' },
-          value: { nl: '3mm tot 60mm', en: '3mm to 60mm', de: '3mm bis 60mm', ro: '3mm până la 60mm' }
-        },
-        {
-          label: { nl: 'Afwerkingen', en: 'Finishes', de: 'Ausführungen', ro: 'Finisaje' },
-          value: { nl: 'Glad / Gegroefd (6mm tot 20mm)', en: 'Smooth / Rilled (6mm to 20mm)', de: 'Glatt / Geriffelt (6mm bis 20mm)', ro: 'Netede / Canelate (6mm până la 20mm)' }
-        },
-        {
-          label: { nl: 'Houtsoort', en: 'Wood Type', de: 'Holzart', ro: 'Tip Lemn' },
-          value: { nl: 'Gestoomd of ongestoomd beukenhout', en: 'Steamed or unsteamed beech', de: 'Gedämpfte oder ungedämpfte Buche', ro: 'Fag aburit sau neaburit' }
-        },
-      ],
-      tag: {
-        nl: 'Deuvels',
-        en: 'Dowels',
-        de: 'Dübel',
-        ro: 'Dibluri'
-      },
-    },
-    {
       id: 'planed',
       category: 'planed',
       name: {
@@ -84,6 +46,44 @@ export default function Products() {
         en: 'Planed',
         de: 'Gehobelt',
         ro: 'Rinduit'
+      },
+    },
+    {
+      id: 'dowels',
+      category: 'dowels',
+      name: {
+        nl: 'Beukenhouten stokken',
+        en: 'Beechwood sticks',
+        de: 'Buchenholzstäbe',
+        ro: 'Tije din lemn de fag',
+      },
+      description: {
+        nl: 'Verkrijgbaar in kleine maten vanaf 3 mm tot grote afmetingen van 60 mm. Opties zijn onder andere gladde pennen en spiraalvormig gegroefde afwerkingen voor optimale lijmhechting.',
+        en: 'Available in small sizes starting at 3 mm up to large dimensions of 60 mm. Options include smooth sticks and spiral-rilled finishes for optimal glue adhesion.',
+        de: 'Erhältlich in kleinen Größen ab 3 mm bis hin zu großen Dimensionen von 60 mm. Zu den Optionen gehören glatte Stäbe und spiralförmig geriffelte Ausführungen für optimale Leimhaftung.',
+        ro: 'Disponibile în dimensiuni mici începând de la 3 mm până la dimensiuni mari de 60 mm. Opțiunile includ tije netede și finisaje cu caneluri elicoidale pentru o aderență optimă a lipiciului.',
+      },
+      image: '/images/dowels.png',
+      link: '/dowels',
+      specs: [
+        {
+          label: { nl: 'Diameter', en: 'Diameter', de: 'Durchmesser', ro: 'Diametru' },
+          value: { nl: '3mm tot 60mm', en: '3mm to 60mm', de: '3mm bis 60mm', ro: '3mm până la 60mm' }
+        },
+        {
+          label: { nl: 'Afwerkingen', en: 'Finishes', de: 'Ausführungen', ro: 'Finisaje' },
+          value: { nl: 'Glad / Gegroefd (6mm tot 20mm)', en: 'Smooth / Rilled (6mm to 20mm)', de: 'Glatt / Geriffelt (6mm bis 20mm)', ro: 'Netede / Canelate (6mm până la 20mm)' }
+        },
+        {
+          label: { nl: 'Houtsoort', en: 'Wood Type', de: 'Holzart', ro: 'Tip Lemn' },
+          value: { nl: 'Gestoomd of ongestoomd beukenhout', en: 'Steamed or unsteamed beech', de: 'Gedämpfte oder ungedämpfte Buche', ro: 'Fag aburit sau neaburit' }
+        },
+      ],
+      tag: {
+        nl: 'Deuvels',
+        en: 'Dowels',
+        de: 'Dübel',
+        ro: 'Dibluri'
       },
     },
     {
