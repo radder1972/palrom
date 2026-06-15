@@ -210,6 +210,12 @@ export default function News() {
       title: lang === 'nl' ? 'Logistieke Ondersteuning' : (lang === 'de' ? 'Globale Logistik-Unterstützung' : (lang === 'ro' ? 'Suport Logistic Global' : 'Global Logistics Support')),
       desc: lang === 'nl' ? 'Exportklare verpakking en bundeling voor doe-het-zelf-bouwmarkten.' : (lang === 'de' ? 'Exportfertige Verpackung und Bündelung für Baumärkte.' : (lang === 'ro' ? 'Ambalare pregătită pentru export și ambalare în pachete pentru hypermarketuri DIY.' : 'Export-ready packaging and DIY hypermarket bundling.')),
     },
+    {
+      id: 9,
+      image: '/images/specials_gallery.jpg',
+      title: lang === 'nl' ? 'Speciale Componenten Portfolio' : (lang === 'de' ? 'Spezialkomponenten-Portfolio' : (lang === 'ro' ? 'Portofoliu Componente Speciale' : 'Special Components Portfolio')),
+      desc: lang === 'nl' ? 'Diverse op maat gemaakte draai- en freesonderdelen uit onze productie.' : (lang === 'de' ? 'Verschiedene kundenspezifische Dreh- und Frästeile aus unserer Produktion.' : (lang === 'ro' ? 'Diverse componente strunjite și frezate la comandă din producția noastră.' : 'Various custom-turned and milled beechwood components from our production.')),
+    },
   ];
 
   const t = {
