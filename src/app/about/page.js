@@ -86,7 +86,12 @@ export default function About() {
       align: 'right',
     },
     {
-      year: 'Nu',
+      year: {
+        nl: 'Nu',
+        en: 'Now',
+        de: 'Jetzt',
+        ro: 'Acum'
+      },
       title: {
         nl: 'Een Multinationale Partner',
         en: 'A Multinational Partner',
@@ -615,7 +620,9 @@ export default function About() {
                       />
                     </div>
                   )}
-                  <span className="timeline-year">{evt.year}</span>
+                  <span className="timeline-year">
+                    {typeof evt.year === 'object' ? evt.year[lang] || evt.year.nl : evt.year}
+                  </span>
                   <h3>{evt.title[lang] || evt.title.nl}</h3>
                   <p>{evt.description[lang] || evt.description.nl}</p>
                   {evt.year === '2010' && (
