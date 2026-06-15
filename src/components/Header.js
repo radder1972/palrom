@@ -59,10 +59,12 @@ export default function Header() {
           </Link>
         </nav>
         <div className="header-actions">
-          <button className="cart-toggle-btn" onClick={() => setIsCartOpen(true)} aria-label="View Inquiry Cart">
-            <i className="fa-solid fa-clipboard-list"></i>
-            <span className={`cart-count-badge ${cartCount > 0 ? 'visible' : ''}`}>{cartCount}</span>
-          </button>
+          {pathname === '/configurator' && (
+            <button className="cart-toggle-btn" onClick={() => setIsCartOpen(true)} aria-label="View Inquiry Cart">
+              <i className="fa-solid fa-clipboard-list"></i>
+              <span className={`cart-count-badge ${cartCount > 0 ? 'visible' : ''}`}>{cartCount}</span>
+            </button>
+          )}
           <Link href="#contact" className="action-btn">
             {getTranslation('requestQuote')}
           </Link>
