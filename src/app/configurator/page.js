@@ -79,6 +79,17 @@ const profileSubcategories = [
   { id: 'profile-calbat', name: { nl: 'Calbat profiel', en: 'Profile Calbat', de: 'Calbat-Profil', ro: 'Profil Calbat' }, img: '/images/profile12.jpg' },
 ];
 
+const planedSubcategories = [
+  { id: 'planed-rect-v1', name: { nl: 'Geschaafd rechthoekig (V1)', en: 'Planed Rectangular (V1)', de: 'Gehobelt Rechteckig (V1)', ro: 'Rinduit Rectangular (V1)' }, img: '/images/4sides1.jpg' },
+  { id: 'planed-rect-v2', name: { nl: 'Geschaafd rechthoekig (V2)', en: 'Planed Rectangular (V2)', de: 'Gehobelt Rechteckig (V2)', ro: 'Rinduit Rectangular (V2)' }, img: '/images/4sides2.jpg' },
+  { id: 'planed-rect-v3', name: { nl: 'Geschaafd rechthoekig (V3)', en: 'Planed Rectangular (V3)', de: 'Gehobelt Rechteckig (V3)', ro: 'Rinduit Rectangular (V3)' }, img: '/images/4sides3.jpg' },
+  { id: 'planed-rect-v4', name: { nl: 'Geschaafd rechthoekig (V4)', en: 'Planed Rectangular (V4)', de: 'Gehobelt Rechteckig (V4)', ro: 'Rinduit Rectangular (V4)' }, img: '/images/4sides4.jpg' },
+  { id: 'planed-sq-v1', name: { nl: 'Geschaafd vierkant (V1)', en: 'Planed Square (V1)', de: 'Gehobelt Quadratisch (V1)', ro: 'Rinduit Pătrat (V1)' }, img: '/images/4sides5.jpg' },
+  { id: 'planed-sq-v2', name: { nl: 'Geschaafd vierkant (V2)', en: 'Planed Square (V2)', de: 'Gehobelt Quadratisch (V2)', ro: 'Rinduit Pătrat (V2)' }, img: '/images/4sides6.jpg' },
+  { id: 'planed-rad3', name: { nl: 'Geschaafd Radius 3', en: 'Planed Radius 3', de: 'Gehobelt Radius 3', ro: 'Rinduit Rază 3' }, img: '/images/4sides7.jpg' },
+  { id: 'planed-rad6', name: { nl: 'Geschaafd Radius 6', en: 'Planed Radius 6', de: 'Gehobelt Radius 6', ro: 'Rinduit Rază 6' }, img: '/images/4sides8.jpg' },
+];
+
 const specialsSubcategories = [
   { id: 'special-keeplat-spruce', name: { nl: 'Vuren keeplat (spie)', en: 'Keeplat Spruce', de: 'Keilleiste Fichte', ro: 'Pană din Lemn de Molid' } },
   { id: 'special-keeplat-beech', name: { nl: 'Beuken keeplat (spie)', en: 'Keeplat Beech', de: 'Keilleiste Buche', ro: 'Pană din Lemn de Fag' } },
@@ -101,6 +112,7 @@ const t = {
   categoryLabel: { nl: 'Productcategorie', en: 'Product Category', de: 'Produktkategorie', ro: 'Categorie Produs' },
   dowelSubcatLabel: { nl: 'Subcategorie Dowels *', en: 'Dowels Subcategory *', de: 'Dübel Unterkategorie *', ro: 'Subcategorie Dibluri *' },
   profileSubcatLabel: { nl: 'Subcategorie Profiel *', en: 'Profile Subcategory *', de: 'Profil Unterkategorie *', ro: 'Subcategorie Profil *' },
+  planedSubcatLabel: { nl: 'Subcategorie Geschaafd *', en: 'Planed Subcategory *', de: 'Gehobelt Unterkategorie *', ro: 'Subcategorie Rinduit *' },
   specialSubcatLabel: { nl: 'Subcategorie Specials *', en: 'Specials Subcategory *', de: 'Spezialkomponenten Unterkategorie *', ro: 'Subcategorie Speciale *' },
   quantityLabel: { nl: 'Oplage (stuks)', en: 'Quantity (pieces)', de: 'Auflage (Stück)', ro: 'Cantitate (bucăți)' },
   pieces: { nl: 'stuks', en: 'pieces', de: 'Stück', ro: 'bucăți' },
@@ -177,6 +189,7 @@ export default function Configurator() {
   const [subCategoryDowels, setSubCategoryDowels] = useState('dowel-small');
   const [subCategoryProfiles, setSubCategoryProfiles] = useState('profile-semiround');
   const [subCategorySpecials, setSubCategorySpecials] = useState('special-keeplat-spruce');
+  const [subCategoryPlaned, setSubCategoryPlaned] = useState('planed-rect-v1');
   
   const [length, setLength] = useState(500);
   const [diameter, setDiameter] = useState(20);
@@ -276,6 +289,18 @@ export default function Configurator() {
         'dowel-rilled': 'Spiral Rilled Pins (6 to 20 mm)',
       };
       subcatName = names[specificSubcat || subCategoryDowels] || 'Small Size (3 mm and up)';
+    } else if (cat === 'planed') {
+      const names = {
+        'planed-rect-v1': 'Planed Rectangular (Variant 1)',
+        'planed-rect-v2': 'Planed Rectangular (Variant 2)',
+        'planed-rect-v3': 'Planed Rectangular (Variant 3)',
+        'planed-rect-v4': 'Planed Rectangular (Variant 4)',
+        'planed-sq-v1': 'Planed Square (Variant 1)',
+        'planed-sq-v2': 'Planed Square (Variant 2)',
+        'planed-rad3': 'Planed Elements with Radius 3',
+        'planed-rad6': 'Planed Elements with Radius 6',
+      };
+      subcatName = names[specificSubcat || subCategoryPlaned] || 'Planed Rectangular (Variant 1)';
     }
 
     if (cat === 'pluggen' || cat === 'dowels') {
@@ -340,7 +365,7 @@ export default function Configurator() {
       ? Math.max(data.thickness.min, Math.min(data.thickness.max, parseInt(thickness) || data.thickness.default))
       : thickness;
 
-    const currentSubcat = category === 'dowels' ? subCategoryDowels : category === 'profiles' ? subCategoryProfiles : category === 'specials' ? subCategorySpecials : '';
+    const currentSubcat = category === 'dowels' ? subCategoryDowels : category === 'profiles' ? subCategoryProfiles : category === 'specials' ? subCategorySpecials : category === 'planed' ? subCategoryPlaned : '';
     const details = calculatePriceDetails(category, finalLength, finalDiameter, finalThickness, quantity, currentSubcat);
     
     let subName = data.name[lang] || data.name.nl;
@@ -354,6 +379,9 @@ export default function Configurator() {
         if (item) locSubName = item.name[lang] || item.name.nl;
       } else if (category === 'specials') {
         const item = specialsSubcategories.find(s => s.id === currentSubcat);
+        if (item) locSubName = item.name[lang] || item.name.nl;
+      } else if (category === 'planed') {
+        const item = planedSubcategories.find(p => p.id === currentSubcat);
         if (item) locSubName = item.name[lang] || item.name.nl;
       }
       subName = `${data.name[lang] || data.name.nl} - ${locSubName}`;
@@ -402,6 +430,9 @@ export default function Configurator() {
       } else if (item.category === 'specials') {
         const subObj = specialsSubcategories.find(s => s.id === item.subCategory);
         if (subObj) locSubName = subObj.name[l] || subObj.name.nl;
+      } else if (item.category === 'planed') {
+        const subObj = planedSubcategories.find(p => p.id === item.subCategory);
+        if (subObj) locSubName = subObj.name[l] || subObj.name.nl;
       }
       if (locSubName) {
         subName = `${data.name[l] || data.name.nl} - ${locSubName}`;
@@ -431,7 +462,7 @@ export default function Configurator() {
   const handleAddConfiguration = () => {
     const rawItem = {
       category,
-      subCategory: category === 'dowels' ? subCategoryDowels : category === 'profiles' ? subCategoryProfiles : category === 'specials' ? subCategorySpecials : '',
+      subCategory: category === 'dowels' ? subCategoryDowels : category === 'profiles' ? subCategoryProfiles : category === 'specials' ? subCategorySpecials : category === 'planed' ? subCategoryPlaned : '',
       length: Math.max(categoryData[category].length.min, Math.min(categoryData[category].length.max, parseInt(length) || categoryData[category].length.default)),
       diameter: Math.max(categoryData[category].diameter.min, Math.min(categoryData[category].diameter.max, parseInt(diameter) || categoryData[category].diameter.default)),
       thickness: categoryData[category].thickness
@@ -700,6 +731,95 @@ export default function Configurator() {
                           </div>
                         </label>
                       ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Subcategory: Planed */}
+                {category === 'planed' && (
+                  <div className="control-group" id="controlGroupSubCategoryPlaned">
+                    <label>{getTranslation('planedSubcatLabel')}</label>
+                    <div className="planed-subcat-grid">
+                      {planedSubcategories.map((p) => {
+                        const svgMap = {
+                          'planed-rect-v1': (
+                            <svg viewBox="0 0 64 64" fill="none">
+                              <path d="M 10,46 L 30,50 L 54,38 L 34,34 Z" fill="#ffedd5" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                              <path d="M 30,56 L 30,50 L 54,38 L 54,44 Z" fill="#ea580c" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                              <path d="M 10,52 L 30,56 L 30,50 L 10,46 Z" fill="#f8a170" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                            </svg>
+                          ),
+                          'planed-rect-v2': (
+                            <svg viewBox="0 0 64 64" fill="none">
+                              <path d="M 10,46 L 30,50 L 54,38 L 34,34 Z" fill="#ffedd5" stroke="#b45309" strokeWidth="2.0" strokeLinejoin="round" />
+                              <path d="M 30,56 L 30,50 L 54,38 L 54,44 Z" fill="#d97706" stroke="#b45309" strokeWidth="2.0" strokeLinejoin="round" />
+                              <path d="M 10,52 L 30,56 L 30,50 L 10,46 Z" fill="#fbbf24" stroke="#b45309" strokeWidth="2.0" strokeLinejoin="round" />
+                            </svg>
+                          ),
+                          'planed-rect-v3': (
+                            <svg viewBox="0 0 64 64" fill="none">
+                              <path d="M 10,49 L 34,52 L 54,40 L 30,37 Z" fill="#ffedd5" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                              <path d="M 34,56 L 34,52 L 54,40 L 54,44 Z" fill="#ea580c" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                              <path d="M 10,53 L 34,56 L 34,52 L 10,49 Z" fill="#f8a170" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                            </svg>
+                          ),
+                          'planed-rect-v4': (
+                            <svg viewBox="0 0 64 64" fill="none">
+                              <path d="M 10,42 L 30,46 L 54,34 L 34,30 Z" fill="#ffedd5" stroke="#c2410c" strokeWidth="1.2" strokeLinejoin="round" />
+                              <path d="M 30,48 L 30,42 L 54,34 L 54,40 Z" fill="#ea580c" stroke="#c2410c" strokeWidth="1.2" strokeLinejoin="round" />
+                              <path d="M 10,48 L 30,52 L 54,40 L 34,36 Z" fill="#ffedd5" stroke="#c2410c" strokeWidth="1.2" strokeLinejoin="round" />
+                              <path d="M 30,54 L 30,48 L 54,40 L 54,46 Z" fill="#ea580c" stroke="#c2410c" strokeWidth="1.2" strokeLinejoin="round" />
+                            </svg>
+                          ),
+                          'planed-sq-v1': (
+                            <svg viewBox="0 0 64 64" fill="none">
+                              <path d="M 15,38 L 30,41 L 49,32 L 34,29 Z" fill="#ffedd5" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                              <path d="M 30,56 L 30,41 L 49,32 L 49,47 Z" fill="#ea580c" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                              <path d="M 15,53 L 30,56 L 30,41 L 15,38 Z" fill="#f8a170" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                            </svg>
+                          ),
+                          'planed-sq-v2': (
+                            <svg viewBox="0 0 64 64" fill="none">
+                              <path d="M 15,38 L 30,41 L 49,32 L 34,29 Z" fill="#ffedd5" stroke="#b45309" strokeWidth="2.0" strokeLinejoin="round" />
+                              <path d="M 30,56 L 30,41 L 49,32 L 49,47 Z" fill="#d97706" stroke="#b45309" strokeWidth="2.0" strokeLinejoin="round" />
+                              <path d="M 15,53 L 30,56 L 30,41 L 15,38 Z" fill="#fbbf24" stroke="#b45309" strokeWidth="2.0" strokeLinejoin="round" />
+                            </svg>
+                          ),
+                          'planed-rad3': (
+                            <svg viewBox="0 0 64 64" fill="none">
+                              <path d="M 10,48 C 10,44 14,46 30,50 L 54,38 L 34,34 Z" fill="#ffedd5" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                              <path d="M 30,56 L 30,50 L 54,38 L 54,44 Z" fill="#ea580c" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                              <path d="M 10,52 L 30,56 L 30,50 C 14,46 10,44 10,52 Z" fill="#f8a170" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                            </svg>
+                          ),
+                          'planed-rad6': (
+                            <svg viewBox="0 0 64 64" fill="none">
+                              <path d="M 10,48 C 10,40 16,44 30,50 L 54,38 L 34,34 Z" fill="#ffedd5" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                              <path d="M 30,56 L 30,50 L 54,38 L 54,44 Z" fill="#ea580c" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                              <path d="M 10,52 L 30,56 L 30,50 C 16,44 10,40 10,52 Z" fill="#f8a170" stroke="#c2410c" strokeWidth="1.5" strokeLinejoin="round" />
+                            </svg>
+                          ),
+                        };
+                        return (
+                          <label key={p.id} className="planed-subcat-card">
+                            <input
+                              type="radio"
+                              name="subCategoryPlaned"
+                              value={p.id}
+                              checked={subCategoryPlaned === p.id}
+                              onChange={() => setSubCategoryPlaned(p.id)}
+                            />
+                            <div className="card-content">
+                              <img src={p.img} alt="" className="card-bg-image" />
+                              <div className="card-overlay"></div>
+                              <div className="card-info-overlay">
+                                <div className="card-icon">{svgMap[p.id]}</div>
+                                <span className="card-label">{p.name[lang] || p.name.nl}</span>
+                              </div>
+                            </div>
+                          </label>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
