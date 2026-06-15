@@ -8,7 +8,7 @@ import { useInquiry } from '@/components/InquiryContext';
 // STAP 1: Upload de video naar YouTube (bijvoorbeeld als verborgen/unlisted of openbaar).
 // STAP 2: Kopieer de video ID uit de YouTube link (bijv. 'y9vH9cM0J_4' uit 'https://www.youtube.com/watch?v=y9vH9cM0J_4').
 // STAP 3: Vervang de onderstaande placeholder-ID 'dQw4w9WgXcQ' door uw eigen YouTube video ID.
-const YOUTUBE_VIDEO_ID = 'dQw4w9WgXcQ'; // Standaard placeholder video
+const YOUTUBE_VIDEO_ID = '9c08nP2sCS8'; // Standaard placeholder video
 
 export default function News() {
   const { lang } = useInquiry();
