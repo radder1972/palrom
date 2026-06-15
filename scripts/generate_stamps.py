@@ -37,7 +37,7 @@ def draw_curved_text(draw, img, text, center, radius, font, spacing_factor, text
         rot_deg = -theta_deg - 90
         
         # Create a small image for the character to rotate it
-        char_sz = 200  # Increased size for 72pt characters
+        char_sz = 200
         char_img = Image.new("RGBA", (char_sz, char_sz), (0, 0, 0, 0))
         char_draw = ImageDraw.Draw(char_img)
         
@@ -63,23 +63,28 @@ def generate_stamp(lang, outer_text, center_text, font_path, output_path):
     img = Image.new("RGBA", (1024, 1024), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     
+    # Radius specifications to maximize circular area and match container perfectly
+    r_outer = 504
+    r_outer_inner = 490
+    r_inner = 330
+    radius_text = 410
+    
     # 1. Draw solid yellow circle
-    draw.ellipse([512 - 490, 512 - 490, 512 + 490, 512 + 490], fill=(241, 196, 55, 255))
+    draw.ellipse([512 - r_outer, 512 - r_outer, 512 + r_outer, 512 + r_outer], fill=(241, 196, 55, 255))
     
     # 2. Draw black outer double border
-    # Outermost border (r=490)
-    draw.ellipse([512 - 490, 512 - 490, 512 + 490, 512 + 490], outline=(0, 0, 0, 255), width=7)
-    # Inner outer border (r=476)
-    draw.ellipse([512 - 476, 512 - 476, 512 + 476, 512 + 476], outline=(0, 0, 0, 255), width=7)
+    # Outermost border (r=504)
+    draw.ellipse([512 - r_outer, 512 - r_outer, 512 + r_outer, 512 + r_outer], outline=(0, 0, 0, 255), width=7)
+    # Inner outer border (r=490)
+    draw.ellipse([512 - r_outer_inner, 512 - r_outer_inner, 512 + r_outer_inner, 512 + r_outer_inner], outline=(0, 0, 0, 255), width=7)
     
-    # 3. Draw black inner border (r=320) separating curved text and center text
-    draw.ellipse([512 - 320, 512 - 320, 512 + 320, 512 + 320], outline=(0, 0, 0, 255), width=7)
+    # 3. Draw black inner border (r=330) separating curved text and center text
+    draw.ellipse([512 - r_inner, 512 - r_inner, 512 + r_inner, 512 + r_inner], outline=(0, 0, 0, 255), width=7)
     
     # 4. Calculate outer text font size and spacing dynamically
     # Start at 72pt and auto-adjust if the text is too long (spans > 165 degrees)
     fs_outer = 72
     spacing_factor = 1.05
-    radius_outer = 398  # centered in the 156px band
     chars = list(outer_text)
     
     while fs_outer > 36:
@@ -95,28 +100,28 @@ def generate_stamp(lang, outer_text, center_text, font_path, output_path):
         total_w = sum(char_widths)
         
         # Test spacing factor 1.05
-        angle_span_rad = (total_w * 1.05) / radius_outer
+        angle_span_rad = (total_w * 1.05) / radius_text
         if angle_span_rad <= math.radians(165):
             spacing_factor = 1.05
             break
         else:
             # Squeeze it a bit, down to spacing_factor = 0.95
-            angle_span_rad_min = (total_w * 0.95) / radius_outer
+            angle_span_rad_min = (total_w * 0.95) / radius_text
             if angle_span_rad_min <= math.radians(165):
                 # Calculate exact spacing to fit 165 degrees
-                spacing_factor = (math.radians(165) * radius_outer) / total_w
+                spacing_factor = (math.radians(165) * radius_text) / total_w
                 break
         
         # Decrease font size if it doesn't fit even when squeezed
         fs_outer -= 2
         
     print(f"[{lang}] Outer text: font size {fs_outer}, spacing factor {spacing_factor:.3f}")
-    draw_curved_text(draw, img, outer_text, (512, 512), radius_outer, font_outer, spacing_factor, text_color=(0, 0, 0, 255))
+    draw_curved_text(draw, img, outer_text, (512, 512), radius_text, font_outer, spacing_factor, text_color=(0, 0, 0, 255))
     
     # 5. Calculate center text font size dynamically to prevent overflow
-    # Bounding box limits inside the 320px radius circle
-    max_width = 460
-    max_height = 360
+    # Bounding box limits inside the 330px radius circle
+    max_width = 480
+    max_height = 370
     
     fs_center = 80
     while fs_center > 30:
