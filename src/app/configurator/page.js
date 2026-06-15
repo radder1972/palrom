@@ -50,10 +50,10 @@ const categoryData = {
 };
 
 const mainCategories = [
-  { id: 'planed', name: categoryData.planed.name, img: '/images/config_planed.png' },
-  { id: 'dowels', name: categoryData.dowels.name, img: '/images/config_dowels.png' },
-  { id: 'profiles', name: categoryData.profiles.name, img: '/images/config_profiles.png' },
-  { id: 'specials', name: categoryData.specials.name, img: '/images/config_specials.png' },
+  { id: 'planed', name: categoryData.planed.name, img: '/images/planed_wood.png' },
+  { id: 'dowels', name: categoryData.dowels.name, img: '/images/dowels.png' },
+  { id: 'profiles', name: categoryData.profiles.name, img: '/images/profiles.png' },
+  { id: 'specials', name: categoryData.specials.name, img: '/images/specials.png' },
   { id: 'sawn', name: categoryData.sawn.name, img: '/images/sawmill.png' },
 ];
 
