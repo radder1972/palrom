@@ -124,10 +124,10 @@ export default function CartSidebar() {
   return (
     <>
       <div
-        className={`sidebar-overlay ${isCartOpen ? 'active' : ''}`}
+        className={`sidebar-overlay ${isCartOpen ? 'visible' : ''}`}
         onClick={handleClose}
       />
-      <div className={`quote-sidebar ${isCartOpen ? 'active' : ''}`}>
+      <div className={`quote-sidebar ${isCartOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <h3>{isNl ? 'Uw Offerteaanvraag' : 'Your Quote Inquiry'}</h3>
           <button className="sidebar-close-btn" onClick={handleClose} aria-label="Close Sidebar">
