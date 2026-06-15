@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useInquiry } from './InquiryContext';
 
 const teamMemberData = {
   gabriela: {
@@ -109,7 +110,8 @@ const teamMemberData = {
 
 export default function ContactSection() {
   const pathname = usePathname();
-  const isNl = pathname === '/' || pathname === '/configurator';
+  const { lang } = useInquiry();
+  const isNl = lang === 'nl';
 
   const [activeModalMember, setActiveModalMember] = useState(null);
   const [modalActiveState, setModalActiveState] = useState(false);

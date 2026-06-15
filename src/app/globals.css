@@ -4926,5 +4926,41 @@ ul {
     margin-top: 4rem;
 }
 
+/* Language Switcher */
+.language-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-right: 1.25rem;
+}
+.lang-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+.lang-btn.active, .lang-btn:hover {
+    color: var(--color-primary-light);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+.lang-divider {
+    color: var(--color-border);
+    font-size: 0.85rem;
+    opacity: 0.5;
+}
+
+@media (max-width: 991px) {
+    .language-switcher {
+        margin-right: 0.75rem;
+    }
+}
+
+
 
 

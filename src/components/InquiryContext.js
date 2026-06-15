@@ -6,19 +6,30 @@ const InquiryContext = createContext();
 
 export function InquiryProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
+  const [lang, setLang] = useState('nl');
   const [isInitialized, setIsInitialized] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCookieModalOpen, setIsCookieModalOpen] = useState(false);
 
-  // Load cart on mount
+  // Load cart and language on mount
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('palrom_quote_cart');
-      if (stored) {
-        setCartItems(JSON.parse(stored));
+      const storedCart = localStorage.getItem('palrom_quote_cart');
+      if (storedCart) {
+        setCartItems(JSON.parse(storedCart));
+      }
+      const storedLang = localStorage.getItem('palrom_lang');
+      if (storedLang) {
+        setLang(storedLang);
+      } else {
+        // Fallback to browser language if available
+        const browserLang = navigator.language || navigator.userLanguage;
+        if (browserLang && browserLang.startsWith('en')) {
+          setLang('en');
+        }
       }
     } catch (e) {
-      console.error('Failed to load quote cart', e);
+      console.error('Failed to load settings', e);
     }
     setIsInitialized(true);
   }, []);
@@ -28,10 +39,11 @@ export function InquiryProvider({ children }) {
     if (!isInitialized) return;
     try {
       localStorage.setItem('palrom_quote_cart', JSON.stringify(cartItems));
+      localStorage.setItem('palrom_lang', lang);
     } catch (e) {
-      console.error('Failed to save quote cart', e);
+      console.error('Failed to save settings', e);
     }
-  }, [cartItems, isInitialized]);
+  }, [cartItems, lang, isInitialized]);
 
   const addToCart = (item) => {
     setCartItems((prev) => {
@@ -73,6 +85,8 @@ export function InquiryProvider({ children }) {
         setIsCartOpen,
         isCookieModalOpen,
         setIsCookieModalOpen,
+        lang,
+        setLang,
       }}
     >
       {children}

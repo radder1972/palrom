@@ -7,7 +7,7 @@ import { useInquiry } from './InquiryContext';
 
 export default function Header() {
   const pathname = usePathname();
-  const { cartCount, setIsCartOpen } = useInquiry();
+  const { cartCount, setIsCartOpen, lang, setLang } = useInquiry();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isProductsActive = ['/products', '/dowels', '/four-sides-planed', '/profiles', '/specials'].some(
@@ -26,31 +26,48 @@ export default function Header() {
         </Link>
         <nav className={`nav-menu ${isMobileMenuOpen ? 'open' : ''}`}>
           <Link href="/" className={`nav-link ${pathname === '/' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-            Home
+            {lang === 'nl' ? 'Home' : 'Home'}
           </Link>
           <Link href="/about" className={`nav-link ${pathname === '/about' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-            Company Profile
+            {lang === 'nl' ? 'Bedrijfsprofiel' : 'Company Profile'}
           </Link>
           <Link href="/products" className={`nav-link ${isProductsActive ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-            Our Products
+            {lang === 'nl' ? 'Onze Producten' : 'Our Products'}
           </Link>
           <Link href="/careers" className={`nav-link ${isCareersActive ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-            Careers
+            {lang === 'nl' ? 'Vacatures' : 'Careers'}
           </Link>
           <Link href="/news" className={`nav-link ${pathname === '/news' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-            News
+            {lang === 'nl' ? 'Nieuws' : 'News'}
           </Link>
           <Link href="#contact" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>
-            Contact Us
+            {lang === 'nl' ? 'Contact' : 'Contact Us'}
           </Link>
         </nav>
         <div className="header-actions">
+          <div className="language-switcher">
+            <button 
+              className={`lang-btn ${lang === 'nl' ? 'active' : ''}`} 
+              onClick={() => setLang('nl')}
+              aria-label="Nederlands"
+            >
+              NL
+            </button>
+            <span className="lang-divider">|</span>
+            <button 
+              className={`lang-btn ${lang === 'en' ? 'active' : ''}`} 
+              onClick={() => setLang('en')}
+              aria-label="English"
+            >
+              EN
+            </button>
+          </div>
           <button className="cart-toggle-btn" onClick={() => setIsCartOpen(true)} aria-label="View Inquiry Cart">
             <i className="fa-solid fa-clipboard-list"></i>
             <span className="cart-count-badge">{cartCount}</span>
           </button>
           <Link href="#contact" className="action-btn">
-            Request Quote
+            {lang === 'nl' ? 'Offerte Aanvragen' : 'Request Quote'}
           </Link>
           <button 
             className={`mobile-nav-toggle ${isMobileMenuOpen ? 'open' : ''}`} 

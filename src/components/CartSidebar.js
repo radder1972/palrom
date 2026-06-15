@@ -15,6 +15,7 @@ export default function CartSidebar() {
     isCartOpen,
     setIsCartOpen,
     isInitialized,
+    lang,
   } = useInquiry();
 
   const [name, setName] = useState('');
@@ -23,7 +24,7 @@ export default function CartSidebar() {
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const isNl = pathname === '/' || pathname === '/configurator';
+  const isNl = lang === 'nl';
 
   const handleClose = () => {
     setIsCartOpen(false);

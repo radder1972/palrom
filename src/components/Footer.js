@@ -7,9 +7,9 @@ import { useInquiry } from './InquiryContext';
 
 export default function Footer() {
   const pathname = usePathname();
-  const { setIsCookieModalOpen } = useInquiry();
+  const { setIsCookieModalOpen, lang } = useInquiry();
 
-  const isNl = pathname === '/' || pathname === '/configurator';
+  const isNl = lang === 'nl';
 
   const handleCookieClick = (e) => {
     e.preventDefault();
