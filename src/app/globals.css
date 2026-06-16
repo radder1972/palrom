@@ -5710,7 +5710,6 @@ ul {
         letter-spacing: 0.5px;
     }
 }
-
 /* Accordion Configurator Panels */
 .accordion-step-panel {
     border: 1px solid var(--color-border);
@@ -5722,7 +5721,7 @@ ul {
 }
 
 .accordion-step-panel.active {
-    border-color: var(--color-primary-dark);
+    border-color: var(--color-primary);
     box-shadow: var(--shadow-md);
 }
 
@@ -5768,15 +5767,15 @@ ul {
 }
 
 .accordion-step-panel.active .accordion-step-circle {
-    background-color: var(--color-primary-dark);
-    border-color: var(--color-primary-dark);
-    color: #ffffff;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-forest-dark);
 }
 
 .accordion-step-panel.completed .accordion-step-circle {
-    background-color: var(--color-primary-dark);
-    border-color: var(--color-primary-dark);
-    color: #ffffff;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-forest-dark);
 }
 
 .accordion-step-title {
@@ -5815,7 +5814,7 @@ ul {
 
 .accordion-step-panel.active .accordion-step-arrow {
     transform: rotate(180deg);
-    color: var(--color-primary-dark);
+    color: var(--color-primary);
 }
 
 .accordion-step-body {
