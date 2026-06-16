@@ -78,6 +78,7 @@ export default function BricheteFag() {
   const { lang, setLang } = useInquiry();
   const [isVerifying, setIsVerifying] = useState(true);
   const [isAccessAllowed, setIsAccessAllowed] = useState(false);
+  const [activeImage, setActiveImage] = useState('/images/brichete_fag.png');
 
   const activeLang = lang === 'en' ? 'en' : 'ro';
 
@@ -168,11 +169,55 @@ export default function BricheteFag() {
           <div className="grid grid-2 align-items-center" style={{ gap: '3.5rem' }}>
             <div className="animate-on-scroll">
               <img 
-                src="/images/brichete_fag.png" 
+                src={activeImage} 
                 alt={t.title[activeLang]} 
                 className="img-responsive rounded-lg shadow-lg"
-                style={{ width: '100%', objectFit: 'cover', maxHeight: '480px' }}
+                style={{ width: '100%', objectFit: 'cover', height: '400px', borderRadius: '12px', display: 'block' }}
               />
+              <div style={{ display: 'flex', gap: '1rem', marginTop: '1.25rem' }}>
+                <button 
+                  onClick={() => setActiveImage('/images/brichete_fag.png')}
+                  style={{
+                    border: activeImage === '/images/brichete_fag.png' ? '3px solid var(--color-primary-dark)' : '3px solid transparent',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    padding: 0,
+                    background: 'none',
+                    transition: 'var(--transition-fast)',
+                    width: '90px',
+                    height: '70px'
+                  }}
+                  aria-label="Studio product photo"
+                >
+                  <img 
+                    src="/images/brichete_fag.png" 
+                    alt="Studio" 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
+                  />
+                </button>
+                <button 
+                  onClick={() => setActiveImage('/images/brichete_fag_ambient.png')}
+                  style={{
+                    border: activeImage === '/images/brichete_fag_ambient.png' ? '3px solid var(--color-primary-dark)' : '3px solid transparent',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    padding: 0,
+                    background: 'none',
+                    transition: 'var(--transition-fast)',
+                    width: '90px',
+                    height: '70px'
+                  }}
+                  aria-label="Homely ambient photo"
+                >
+                  <img 
+                    src="/images/brichete_fag_ambient.png" 
+                    alt="Ambient" 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
+                  />
+                </button>
+              </div>
             </div>
             <div className="animate-on-scroll">
               <span className="section-badge">{t.badge[activeLang]}</span>
