@@ -5,30 +5,6 @@ import { useInquiry } from './InquiryContext';
 
 const teamMembers = [
   {
-    id: 'willem',
-    name: 'Willem Roest',
-    role: {
-      nl: 'Vertegenwoordiging Nederland',
-      en: 'Netherlands Representative',
-      de: 'Vertreter Niederlande',
-      ro: 'Reprezentant Olanda'
-    },
-    avatar: '/images/willem.png',
-    languages: {
-      nl: 'Nederlands, Engels, Duits',
-      en: 'Dutch, English, German',
-      de: 'Niederländisch, Englisch, Deutsch',
-      ro: 'Olandeză, Engleză, Germană'
-    },
-    phone: '31628621019',
-    greetings: {
-      nl: "Hallo Willem, ik heb een vraag over uw B2B-meubelcomponenten.",
-      en: "Hello Willem, I have a question about your B2B furniture components.",
-      de: "Hallo Willem, ich habe eine Frage zu Ihren B2B-Möbelkomponenten.",
-      ro: "Bună ziua Willem, am o întrebare despre componentele dvs. de mobilier B2B."
-    }
-  },
-  {
     id: 'gabriela',
     name: 'Gabriela Cioara',
     role: {

@@ -135,32 +135,6 @@ const teamMemberData = {
     phone: '+40254606053',
     whatsapp: 'https://wa.me/40254606053?text=Hallo%20Bogdan,%20ik%20wil%20graag%20de%20status%20van%20een%20order%20of%20een%20offerteaanvraag%20bespreken.',
   },
-  willem: {
-    id: 'willem',
-    name: 'Willem Roest',
-    role: {
-      nl: 'Vertegenwoordiging Nederland',
-      en: 'Netherlands Representative',
-      de: 'Vertreter Niederlande',
-      ro: 'Reprezentant Olanda'
-    },
-    avatar: '/images/willem.png',
-    languages: {
-      nl: 'Nederlands, Engels, Duits',
-      en: 'Dutch, English, German',
-      de: 'Niederländisch, Englisch, Deutsch',
-      ro: 'Olandeză, Engleză, Germană'
-    },
-    bio: {
-      nl: 'Willem is onze vertegenwoordiger in Nederland. Hij is het aanspreekpunt voor logistiek, opslag en distributie in West-Europa en helpt u graag bij lokale leveringen en partnerships.',
-      en: 'Willem is our representative in the Netherlands. He is the main contact for logistics, warehousing, and distribution in Western Europe, and is happy to assist with local deliveries and partnerships.',
-      de: 'Willem ist unser Vertreter in den Niederlanden. Er ist der Hauptansprechpartner für Logistik, Lagerung und Vertrieb in Westeuropa und unterstützt Sie gerne bei lokalen Lieferungen und Partnerschaften.',
-      ro: 'Willem este reprezentantul nostru în Olanda. El este punctul principal de contact pentru logistică, depozitare și distribuție în Europa de Vest, fiind bucuros să vă ajute cu livrările locale și parteneriatele.'
-    },
-    email: 'willem@palromproducts.ro',
-    phone: '+31 6 28621019',
-    whatsapp: 'https://wa.me/31628621019?text=Hallo%20Willem,%20ik%20heb%20een%20vraag%20over%20uw%20B2B-meubelcomponenten.',
-  },
 };
 
 export default function ContactSection() {
