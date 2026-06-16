@@ -140,8 +140,8 @@ export default function About() {
     {
       id: 3,
       image: '/images/1.png',
-      title: lang === 'nl' ? 'Stomen & Conditioneren' : (lang === 'de' ? 'Dämpfen & Bewittern' : (lang === 'ro' ? 'Aburire & Tratare' : 'Steaming & Weathering')),
-      desc: lang === 'nl' ? 'Gecontroleerd stomen van het hout voor kleur en stabiliteit.' : (lang === 'de' ? 'Kontrolliertes Holzdämpfen für Farbe und Stabilität.' : (lang === 'ro' ? 'Aburirea controlată a lemnului pentru culoare și stabilitate.' : 'Controlled wood steaming for color and stability.')),
+      title: lang === 'nl' ? 'Conditioneren' : (lang === 'de' ? 'Dämpfen & Bewittern' : (lang === 'ro' ? 'Aburire & Tratare' : 'Steaming & Weathering')),
+      desc: lang === 'nl' ? 'gecontroleerd conditioneren van het hout voor kleur en stabiliteit.' : (lang === 'de' ? 'Kontrolliertes Holzdämpfen für Farbe und Stabilität.' : (lang === 'ro' ? 'Aburirea controlată a lemnului pentru culoare și stabilitate.' : 'Controlled wood steaming for color and stability.')),
     },
     {
       id: 4,
