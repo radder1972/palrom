@@ -19,8 +19,8 @@ const t = {
     en: 'Premium heating briquettes made 100% from compacted beech sawdust, chemical-free, sourced directly from the production surplus of our sawmill in Brad, Hunedoara.'
   },
   fscNotice: {
-    ro: 'Certificat FSC® Recycled • Disponibil Exclusiv în România',
-    en: 'FSC® Recycled Certified • Available Exclusively in Romania'
+    ro: 'Disponibil Exclusiv în România',
+    en: 'Available Exclusively in Romania'
   },
   badge: {
     ro: 'Calitate Premium locală',
@@ -71,7 +71,7 @@ const t = {
     ro: '1 Palet (pentru ridicare directă) sau camioane complete (pentru distribuție)',
     en: '1 Pallet (for direct pick-up) or full truckloads (for distribution)'
   },
-  certLabel: { ro: 'Certificare Ecologică', en: 'Eco Certification' }
+  certLabel: { ro: 'Ecologic & Natural', en: 'Eco & Natural' }
 };
 
 export default function BricheteFag() {
@@ -158,7 +158,7 @@ export default function BricheteFag() {
           <h1 style={{ marginTop: '1.5rem' }}>{t.title[activeLang]}</h1>
           <p>{t.subtitle[activeLang]}</p>
           <span className="fsc-notice">
-            <i className="fa-solid fa-tree icon-left"></i> {t.fscNotice[activeLang]}
+            <i className="fa-solid fa-location-dot icon-left"></i> {t.fscNotice[activeLang]}
           </span>
         </div>
       </section>
@@ -293,7 +293,7 @@ export default function BricheteFag() {
                 </tr>
                 <tr>
                   <td style={{ padding: '1rem', fontWeight: 600, color: 'var(--color-forest-dark)' }}>{t.certLabel[activeLang]}</td>
-                  <td style={{ padding: '1rem', color: '#444' }}>FSC® Recycled (Chain of Custody)</td>
+                  <td style={{ padding: '1rem', color: '#444' }}>{activeLang === 'ro' ? '100% Natural, fără lianți chimici' : '100% Natural, chemical-free'}</td>
                 </tr>
               </tbody>
             </table>
