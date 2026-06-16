@@ -11,6 +11,28 @@ export function InquiryProvider({ children }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCookieModalOpen, setIsCookieModalOpen] = useState(false);
   const [shouldResetConfigurator, setShouldResetConfigurator] = useState(false);
+  const [isRomania, setIsRomania] = useState(false);
+
+  // Detect if visitor is in Romania (or localhost for dev testing)
+  useEffect(() => {
+    async function checkCountry() {
+      try {
+        const hostname = window.location.hostname;
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+          setIsRomania(true);
+          return;
+        }
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+        if (data.country_code === 'RO') {
+          setIsRomania(true);
+        }
+      } catch (e) {
+        console.error('Failed to detect country', e);
+      }
+    }
+    checkCountry();
+  }, []);
 
   // Load cart and language on mount
   useEffect(() => {
@@ -96,6 +118,7 @@ export function InquiryProvider({ children }) {
         setLang,
         shouldResetConfigurator,
         setShouldResetConfigurator,
+        isRomania,
       }}
     >
       {children}

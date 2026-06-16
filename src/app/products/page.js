@@ -6,7 +6,7 @@ import { useInquiry } from '@/components/InquiryContext';
 import ContactSection from '@/components/ContactSection';
 
 export default function Products() {
-  const { lang } = useInquiry();
+  const { lang, isRomania } = useInquiry();
   const [activeFilter, setActiveFilter] = useState('all');
 
   const productsList = [
@@ -164,42 +164,42 @@ export default function Products() {
     },
   ];
 
-  if (lang === 'ro') {
+  if (isRomania) {
     productsList.push({
       id: 'brichete',
       category: 'specials',
       name: {
         nl: 'Brichete din lemn de fag',
-        en: 'Brichete din lemn de fag',
-        de: 'Brichete din lemn de fag',
+        en: 'Beechwood Heating Briquettes',
+        de: 'Buchenholz-Briketts',
         ro: 'Brichete din lemn de fag',
       },
       description: {
         nl: 'Brichete de foc premium produse din rumeguș compactat de fag, ecologice, 100% naturale și cu putere calorică mare. Destinate exclusiv pieței din România.',
-        en: 'Brichete de foc premium produse din rumeguș compactat de fag, ecologice, 100% naturale și cu putere calorică mare. Destinate exclusiv pieței din România.',
-        de: 'Brichete de foc premium produse din rumeguș compactat de fag, ecologice, 100% naturale și cu putere calorică mare. Destinate exclusiv pieței din România.',
+        en: 'Premium heating briquettes made from compressed beech sawdust, eco-friendly, 100% natural, with high heat output. Exclusively for the Romanian market.',
+        de: 'Premium Buchenholzbriketts aus gepressten Buchenspänen, umweltfreundlich, 100 % natürlich, hoher Heizwert. Exklusiv für den rumänischen Markt.',
         ro: 'Brichete de foc premium produse din rumeguș compactat de fag, ecologice, 100% naturale și cu putere calorică mare. Destinate exclusiv pieței din România.',
       },
       image: '/images/brichete_fag.png',
       link: '/brichete-fag',
       specs: [
         {
-          label: { nl: 'Putere Calorică', en: 'Putere Calorică', de: 'Putere Calorică', ro: 'Putere Calorică' },
+          label: { nl: 'Putere Calorică', en: 'Calorific Value', de: 'Heizwert', ro: 'Putere Calorică' },
           value: { nl: '~18.5 MJ/kg', en: '~18.5 MJ/kg', de: '~18.5 MJ/kg', ro: '~18.5 MJ/kg' }
         },
         {
-          label: { nl: 'Umiditate', en: 'Umiditate', de: 'Umiditate', ro: 'Umiditate' },
+          label: { nl: 'Umiditate', en: 'Moisture', de: 'Feuchtigkeit', ro: 'Umiditate' },
           value: { nl: '< 10%', en: '< 10%', de: '< 10%', ro: '< 10%' }
         },
         {
-          label: { nl: 'Ambalare', en: 'Ambalare', de: 'Ambalare', ro: 'Ambalare' },
-          value: { nl: 'Saci de 10 kg (96 saci/palet)', en: 'Saci de 10 kg (96 saci/palet)', de: 'Saci de 10 kg (96 saci/palet)', ro: 'Saci de 10 kg (96 saci/palet)' }
+          label: { nl: 'Ambalare', en: 'Packaging', de: 'Verpackung', ro: 'Ambalare' },
+          value: { nl: 'Saci de 10 kg (96 saci/palet)', en: '10 kg bags (96 bags/pallet)', de: '10-kg-Säcke (96 Säcke/Palette)', ro: 'Saci de 10 kg (96 saci/palet)' }
         },
       ],
       tag: {
         nl: 'Exclusiv RO',
-        en: 'Exclusiv RO',
-        de: 'Exclusiv RO',
+        en: 'RO Exclusive',
+        de: 'Exklusiv RO',
         ro: 'Exclusiv RO'
       },
     });

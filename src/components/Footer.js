@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useInquiry } from './InquiryContext';
 
 export default function Footer() {
-  const { setIsCookieModalOpen, lang } = useInquiry();
+  const { setIsCookieModalOpen, lang, isRomania } = useInquiry();
   const router = useRouter();
 
   const handleCookieClick = (e) => {
@@ -103,8 +103,8 @@ export default function Footer() {
             <li><Link href="/profiles">{getTranslation('profiles')}</Link></li>
             <li><Link href="/specials">{getTranslation('specials')}</Link></li>
             <li><Link href="/products">{getTranslation('fscBeech')}</Link></li>
-            {lang === 'ro' && (
-              <li><Link href="/brichete-fag">Brichete fag (Exclusiv RO)</Link></li>
+            {isRomania && (
+              <li><Link href="/brichete-fag">{lang === 'ro' ? 'Brichete fag (Exclusiv RO)' : (lang === 'nl' ? 'Houtbriketten (Exclusief RO)' : (lang === 'de' ? 'Holzbriketts (Exklusiv RO)' : 'Beech briquettes (RO Exclusive)'))}</Link></li>
             )}
           </ul>
         </div>

@@ -7,7 +7,7 @@ import { useInquiry } from './InquiryContext';
 
 export default function Header() {
   const pathname = usePathname();
-  const { cartCount, setIsCartOpen, lang, setLang } = useInquiry();
+  const { cartCount, setIsCartOpen, lang, setLang, isRomania } = useInquiry();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isProductsActive = ['/products', '/rods', '/four-sides-planed', '/profiles', '/specials', '/brichete-fag'].some(
@@ -48,9 +48,9 @@ export default function Header() {
           <Link href="/products" className={`nav-link ${isProductsActive ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
             {getTranslation('products')}
           </Link>
-          {lang === 'ro' && (
+          {isRomania && (
             <Link href="/brichete-fag" className={`nav-link ${pathname === '/brichete-fag' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-              Brichete Fag
+              {lang === 'ro' ? 'Brichete Fag' : (lang === 'nl' ? 'Houtbriketten' : (lang === 'de' ? 'Holzbriketts' : 'Beech Briquettes'))}
             </Link>
           )}
           <Link href="/careers" className={`nav-link ${isCareersActive ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
@@ -75,14 +75,22 @@ export default function Header() {
           </Link>
           <div className="language-switcher-vertical">
             {pathname === '/brichete-fag' ? (
-              <button 
-                className="lang-btn active" 
-                disabled 
-                aria-label="Română"
-                style={{ cursor: 'not-allowed', opacity: 0.8 }}
-              >
-                RO
-              </button>
+              <>
+                <button 
+                  className={`lang-btn ${lang === 'en' ? 'active' : ''}`} 
+                  onClick={() => setLang('en')}
+                  aria-label="English"
+                >
+                  EN
+                </button>
+                <button 
+                  className={`lang-btn ${lang === 'ro' ? 'active' : ''}`} 
+                  onClick={() => setLang('ro')}
+                  aria-label="Română"
+                >
+                  RO
+                </button>
+              </>
             ) : (
               <>
                 <button 
