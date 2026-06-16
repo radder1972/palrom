@@ -5570,3 +5570,144 @@ ul {
 .specs-table tr:hover {
     background-color: rgba(0, 0, 0, 0.01);
 }
+
+/* ==========================================================================
+   Configurator Wizard / Multi-step Stepper & Buttons
+   ========================================================================== */
+.configurator-stepper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    margin: 1rem 0 3.5rem 0;
+    padding: 0 1.5rem;
+}
+
+.configurator-stepper::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 1.5rem;
+    right: 1.5rem;
+    height: 3px;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.stepper-progress {
+    position: absolute;
+    top: 50%;
+    left: 1.5rem;
+    height: 3px;
+    background-color: var(--color-accent);
+    transform: translateY(-50%);
+    z-index: 1;
+    transition: width var(--transition-normal) ease;
+}
+
+.step-node {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.step-circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: #1e293b;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all var(--transition-fast) ease;
+}
+
+.step-label {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color var(--transition-fast) ease;
+}
+
+.step-node.active .step-circle {
+    background-color: #0f172a;
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.35);
+}
+
+.step-node.active .step-label {
+    color: var(--color-accent);
+}
+
+.step-node.completed .step-circle {
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+    color: #ffffff;
+}
+
+.step-node.completed .step-label {
+    color: var(--color-primary-dark);
+}
+
+.wizard-nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.wizard-nav-buttons .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 140px;
+    justify-content: center;
+}
+
+.wizard-step-container {
+    animation: fadeInStep 0.4s ease;
+}
+
+@keyframes fadeInStep {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 576px) {
+    .configurator-stepper {
+        margin-bottom: 2rem;
+        padding: 0;
+    }
+    .configurator-stepper::before, .stepper-progress {
+        left: 0;
+        right: 0;
+    }
+    .step-circle {
+        width: 34px;
+        height: 34px;
+        font-size: 0.85rem;
+    }
+    .step-label {
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+    }
+}
+
