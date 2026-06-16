@@ -45,12 +45,20 @@ export default function CartSidebar() {
     const item = cartItems[index];
     if (item.isConfigured) {
       let discountPercent = 0;
-      if (val >= 100000) {
-        discountPercent = 15;
-      } else if (val >= 50000) {
-        discountPercent = 10;
-      } else if (val >= 10000) {
-        discountPercent = 5;
+      if (item.categoryKey === 'brichete') {
+        if (val >= 24) {
+          discountPercent = 10;
+        } else if (val >= 12) {
+          discountPercent = 5;
+        }
+      } else {
+        if (val >= 100000) {
+          discountPercent = 15;
+        } else if (val >= 50000) {
+          discountPercent = 10;
+        } else if (val >= 10000) {
+          discountPercent = 5;
+        }
       }
       const discountFactor = (100 - discountPercent) / 100;
       const totalPrice = item.baseUnitPrice * discountFactor * val;
@@ -344,21 +352,27 @@ export default function CartSidebar() {
                         <div>
                           <strong>{lang === 'nl' ? 'Afmetingen' : (lang === 'de' ? 'Maße' : (lang === 'ro' ? 'Dimensiuni' : 'Dimensions'))}:</strong> {item.dims}
                         </div>
-                        <div>
-                          <strong>{lang === 'nl' ? 'Kwaliteitsklasse' : (lang === 'de' ? 'Holzqualität' : (lang === 'ro' ? 'Clasă Lemn' : 'Wood Grade'))}:</strong>{' '}
-                          {item.grade === 'A' ? (lang === 'nl' ? 'Klasse A (Foutvrij)' : (lang === 'de' ? 'Klasse A (Astfrei)' : (lang === 'ro' ? 'Clasa A (Fără noduri)' : 'Class A (Clear)'))) :
-                           item.grade === 'B' ? (lang === 'nl' ? 'Klasse B (Meubelhout)' : (lang === 'de' ? 'Klasse B (Möbelholz)' : (lang === 'ro' ? 'Clasa B (Lemn pentru mobilă)' : 'Class B (Cabinet)'))) :
-                           item.grade === 'C' ? (lang === 'nl' ? 'Klasse C (Constructief)' : (lang === 'de' ? 'Klasse C (Konstruktive Qualität)' : (lang === 'ro' ? 'Clasa C (Calitate constructivă)' : 'Class C (Structural)'))) :
-                           item.grade}
-                        </div>
+                        {item.categoryKey !== 'brichete' && (
+                          <div>
+                            <strong>{lang === 'nl' ? 'Kwaliteitsklasse' : (lang === 'de' ? 'Holzqualität' : (lang === 'ro' ? 'Clasă Lemn' : 'Wood Grade'))}:</strong>{' '}
+                            {item.grade === 'A' ? (lang === 'nl' ? 'Klasse A (Foutvrij)' : (lang === 'de' ? 'Klasse A (Astfrei)' : (lang === 'ro' ? 'Clasa A (Fără noduri)' : 'Class A (Clear)'))) :
+                             item.grade === 'B' ? (lang === 'nl' ? 'Klasse B (Meubelhout)' : (lang === 'de' ? 'Klasse B (Möbelholz)' : (lang === 'ro' ? 'Clasa B (Lemn pentru mobilă)' : 'Class B (Cabinet)'))) :
+                             item.grade === 'C' ? (lang === 'nl' ? 'Klasse C (Constructief)' : (lang === 'de' ? 'Klasse C (Konstruktive Qualität)' : (lang === 'ro' ? 'Clasa C (Calitate constructivă)' : 'Class C (Structural)'))) :
+                             item.grade}
+                          </div>
+                        )}
                         <div>
                           <strong>{lang === 'nl' ? 'Certificering' : (lang === 'de' ? 'Zertifizierung' : (lang === 'ro' ? 'Certificare' : 'Certification'))}:</strong>{' '}
-                          {item.fsc ? 'FSC® 100%' : (lang === 'nl' ? 'Geen FSC' : (lang === 'de' ? 'Kein FSC' : (lang === 'ro' ? 'Fără FSC' : 'No FSC')))}
+                          {item.categoryKey === 'brichete'
+                            ? (lang === 'ro' ? '100% Natural, fără lianți' : (lang === 'nl' ? '100% Natuurlijk, chemicaliënvrij' : (lang === 'de' ? '100% Natürlich, ohne Zusätze' : '100% Natural, chemical-free')))
+                            : (item.fsc ? 'FSC® 100%' : (lang === 'nl' ? 'Geen FSC' : (lang === 'de' ? 'Kein FSC' : (lang === 'ro' ? 'Fără FSC' : 'No FSC'))))}
                         </div>
-                        <div>
-                          <strong>{lang === 'nl' ? 'Droging' : (lang === 'de' ? 'Trocknung' : (lang === 'ro' ? 'Uscare' : 'Drying'))}:</strong>{' '}
-                          {item.drying === 'luchtdroog' ? (lang === 'nl' ? 'Luchtdroog' : (lang === 'de' ? 'Luftgetrocknet' : (lang === 'ro' ? 'Uscat natural' : 'Air-dried'))) : (lang === 'nl' ? 'Kamerdroog (KD 10-12%)' : (lang === 'de' ? 'Kammergetrocknet (KD 10-12%)' : (lang === 'ro' ? 'Uscat în cameră (KD 10-12%)' : 'Chamber dried (KD 10-12%)')))}
-                        </div>
+                        {item.categoryKey !== 'brichete' && (
+                          <div>
+                            <strong>{lang === 'nl' ? 'Droging' : (lang === 'de' ? 'Trocknung' : (lang === 'ro' ? 'Uscare' : 'Drying'))}:</strong>{' '}
+                            {item.drying === 'luchtdroog' ? (lang === 'nl' ? 'Luchtdroog' : (lang === 'de' ? 'Luftgetrocknet' : (lang === 'ro' ? 'Uscat natural' : 'Air-dried'))) : (lang === 'nl' ? 'Kamerdroog (KD 10-12%)' : (lang === 'de' ? 'Kammergetrocknet (KD 10-12%)' : (lang === 'ro' ? 'Uscat în cameră (KD 10-12%)' : 'Chamber dried (KD 10-12%)')))}
+                          </div>
+                        )}
                         {item.additionalInfo && (
                           <div style={{ wordBreak: 'break-word' }}>
                             <strong>{lang === 'nl' ? 'Aanvullende info' : (lang === 'de' ? 'Zusatzinfo' : (lang === 'ro' ? 'Info suplimentare' : 'Additional info'))}:</strong> {item.additionalInfo}

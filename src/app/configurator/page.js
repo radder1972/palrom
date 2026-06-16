@@ -47,6 +47,11 @@ const categoryData = {
     thickness: { min: 5, max: 200, default: 20, label: { nl: 'Dikte (mm)', en: 'Thickness (mm)', de: 'Dicke (mm)', ro: 'Grosime (mm)' } },
     finish: { nl: 'Op specificatie', en: 'On custom specification', de: 'Nach Spezifikation', ro: 'Conform specificației' },
   },
+  brichete: {
+    id: 'brichete',
+    name: { nl: 'Beukenhoutbriketten', en: 'Beechwood Heating Briquettes', de: 'Buchenholzbriketts', ro: 'Brichete din lemn de fag' },
+    finish: { nl: 'Natuurlijk geperst, zonder chemische toevoegingen', en: '100% Natural, chemical-free', de: '100% Natürlich, ohne chemische Bindemittel', ro: '100% Natural, fără lianți chimici' },
+  },
 };
 
 const mainCategories = [
@@ -55,6 +60,7 @@ const mainCategories = [
   { id: 'profiles', name: categoryData.profiles.name, img: '/images/profiles.png' },
   { id: 'specials', name: categoryData.specials.name, img: '/images/specials.png' },
   { id: 'sawn', name: categoryData.sawn.name, img: '/images/sawmill.png' },
+  { id: 'brichete', name: categoryData.brichete.name, img: '/images/brichete_fag.png' },
 ];
 
 const standardSawnThickness = [20, 25, 32, 36, 42, 47, 52, 57, 67];
@@ -183,6 +189,12 @@ const t = {
   materialValue: { nl: 'FSC®-Gecertificeerd Ongestoomd Beukenhout (natuurlijke kleur)', en: 'FSC®-Certified Unsteamed Beechwood (natural color)', de: 'FSC®-zertifiziertes ungedämpftes Buchenholz (natürliche Farbe)', ro: 'Lemn de Fag neaburit Certificat FSC® (culoare naturală)' },
   materialValueFsc: { nl: 'FSC®-Gecertificeerd Ongestoomd Beukenhout (natuurlijke kleur)', en: 'FSC®-Certified Unsteamed Beechwood (natural color)', de: 'FSC®-zertifiziertes ungedämpftes Buchenholz (natürliche Farbe)', ro: 'Lemn de Fag neaburit Certificat FSC® (culoare naturală)' },
   materialValueNonFsc: { nl: 'Ongestoomd Beukenhout (natuurlijke kleur)', en: 'Unsteamed Beechwood (natural color)', de: 'Ungedämpftes Buchenholz (natürliche Farbe)', ro: 'Lemn de Fag neaburit (culoare naturală)' },
+  materialValueBrichete: {
+    nl: '100% Zuiver beukenhout (zaagsel surplus), chemicaliënvrij',
+    en: '100% Clean beech sawdust surplus, chemical-free',
+    de: '100% Reines Buchenholz-Sägemehl, frei von chemischen Zusätzen',
+    ro: '100% Surplus de rumeguș curat de fag, fără aditivi chimici'
+  },
   statusReady: { nl: 'Gereed', en: 'Ready', de: 'Bereit', ro: 'Pregătit' },
   showPasswordAria: { nl: 'Wachtwoord tonen', en: 'Show password', de: 'Passwort anzeigen', ro: 'Afișează parola' },
   gradeLabel: { nl: 'Houtkwaliteit', en: 'Wood Quality', de: 'Holzqualität', ro: 'Calitatea lemnului' },
@@ -307,7 +319,7 @@ export default function Configurator() {
   const parsedLengthForMinQty = typeof length === 'string' && length.includes('-')
     ? parseInt(length.split('-')[1])
     : (parseInt(length) || 0);
-  const minQty = lengthType === 'custom' ? getMinQuantityForCustom(category, parsedLengthForMinQty, diameter) : 500;
+  const minQty = category === 'brichete' ? 1 : (lengthType === 'custom' ? getMinQuantityForCustom(category, parsedLengthForMinQty, diameter) : 500);
   const currentMaxWidth = category === 'planed' ? getPlanedMaxWidth(thickness) : categoryData[category]?.diameter?.max || 500;
 
   // Clamp diameter to currentMaxWidth if it exceeds it
@@ -370,6 +382,14 @@ export default function Configurator() {
         setThickness(20);
         setDiameter(40);
         setLength(500);
+      } else if (category === 'brichete') {
+        setDrying('kd');
+        setGrade('A');
+        setThickness(90);
+        setDiameter(90);
+        setLength(250);
+        setQuantity(1);
+        setFsc(false);
       }
       setAdditionalInfo('');
     }
@@ -475,28 +495,40 @@ export default function Configurator() {
       const lengthFactor = numericLen / 500.0;
       unitPrice = basePrice * lengthFactor;
       if (unitPrice < 0.35) unitPrice = 0.35;
+    } else if (cat === 'brichete') {
+      unitPrice = 320.00; // Wholesale target price per pallet
     }
 
     // Apply grade factor
     let gradeFactor = 1.0;
-    if (itemGrade === 'B') gradeFactor = 0.9;
-    else if (itemGrade === 'C') gradeFactor = 0.7;
+    if (cat !== 'brichete') {
+      if (itemGrade === 'B') gradeFactor = 0.9;
+      else if (itemGrade === 'C') gradeFactor = 0.7;
+    }
 
     // Apply drying factor
-    const dryingFactor = itemDrying === 'luchtdroog' ? 0.95 : 1.0;
+    const dryingFactor = (cat !== 'brichete' && itemDrying === 'luchtdroog') ? 0.95 : 1.0;
 
     // Apply custom length overhead factor
-    const lenTypeFactor = lenType === 'custom' ? 1.15 : 1.0;
+    const lenTypeFactor = (cat !== 'brichete' && lenType === 'custom') ? 1.15 : 1.0;
 
     unitPrice = unitPrice * gradeFactor * dryingFactor * lenTypeFactor;
 
     let discountPercent = 0;
-    if (qtyVal >= 100000) {
-      discountPercent = 15;
-    } else if (qtyVal >= 50000) {
-      discountPercent = 10;
-    } else if (qtyVal >= 10000) {
-      discountPercent = 5;
+    if (cat === 'brichete') {
+      if (qtyVal >= 24) {
+        discountPercent = 10;
+      } else if (qtyVal >= 12) {
+        discountPercent = 5;
+      }
+    } else {
+      if (qtyVal >= 100000) {
+        discountPercent = 15;
+      } else if (qtyVal >= 50000) {
+        discountPercent = 10;
+      } else if (qtyVal >= 10000) {
+        discountPercent = 5;
+      }
     }
 
     const discountFactor = (100 - discountPercent) / 100.0;
@@ -565,6 +597,8 @@ export default function Configurator() {
       dims = `${thickStr} x ${widthStr} x ${lengthStr}`;
     } else if (category === 'dowels') {
       dims = `Ø ${finalDiameter} mm x ${lengthStr}`;
+    } else if (category === 'brichete') {
+      dims = lang === 'ro' ? 'Palet (960 kg greutate netă)' : (lang === 'nl' ? 'Pallet (960 kg netto gewicht)' : (lang === 'de' ? 'Palette (960 kg Nettogewicht)' : 'Pallet (960 kg net weight)'));
     }
 
     return {
@@ -576,7 +610,9 @@ export default function Configurator() {
       quantity,
       productName: subName,
       dimensions: dims,
-      qtyText: `${quantity.toLocaleString(lang === 'nl' ? 'nl-NL' : 'en-US')} ${getTranslation('pieces')}`,
+      qtyText: category === 'brichete'
+        ? `${quantity.toLocaleString(lang === 'nl' ? 'nl-NL' : 'en-US')} ${lang === 'ro' ? 'paleți' : (lang === 'nl' ? 'pallets' : (lang === 'de' ? 'Paletten' : 'pallets'))}`
+        : `${quantity.toLocaleString(lang === 'nl' ? 'nl-NL' : 'en-US')} ${getTranslation('pieces')}`,
       qtyVal: quantity,
       finish: data.finish[lang] || data.finish.nl,
       price: details.totalPrice,
@@ -629,7 +665,9 @@ export default function Configurator() {
     if (item.category === 'sawn' || item.category === 'planed' || item.category === 'profiles' || item.category === 'specials') {
       dims = `${thickStr} x ${widthStr} x ${lengthStr}`;
     } else if (item.category === 'dowels') {
-      dims = `Ø ${item.diameter} mm x ${lengthStr}`;
+      dims = `Ø ${item.diameter} mm x ${item.length} mm`;
+    } else if (item.category === 'brichete') {
+      dims = l === 'ro' ? 'Palet (960 kg greutate netă)' : (l === 'nl' ? 'Pallet (960 kg netto gewicht)' : (l === 'de' ? 'Palette (960 kg Nettogewicht)' : 'Pallet (960 kg net weight)'));
     }
 
     return {
@@ -639,7 +677,9 @@ export default function Configurator() {
       fsc: item.fsc !== undefined ? item.fsc : true,
       productName: subName,
       dimensions: dims,
-      qtyText: `${item.quantity.toLocaleString(l === 'nl' ? 'nl-NL' : 'en-US')} ${t['pieces']?.[l] || t['pieces']?.nl}`,
+      qtyText: item.category === 'brichete'
+        ? `${item.quantity.toLocaleString(l === 'nl' ? 'nl-NL' : 'en-US')} ${l === 'ro' ? 'paleți' : (l === 'nl' ? 'pallets' : (l === 'de' ? 'Paletten' : 'pallets'))}`
+        : `${item.quantity.toLocaleString(l === 'nl' ? 'nl-NL' : 'en-US')} ${t['pieces']?.[l] || t['pieces']?.nl}`,
       qtyVal: item.quantity,
       finish: data.finish[l] || data.finish.nl,
       price: details.totalPrice,
@@ -760,6 +800,7 @@ export default function Configurator() {
     addToCart({
       id: 'config-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
       isConfigured: true,
+      categoryKey: currentItem.category,
       category: resolvedDetails.productName.split(' - ')[0],
       name: resolvedDetails.productName,
       qty: currentItem.quantity,
@@ -1086,7 +1127,8 @@ export default function Configurator() {
                   <select
                     id="dbFsc"
                     className="dashboard-select"
-                    value={fsc ? 'yes' : 'no'}
+                    value={category === 'brichete' ? 'no' : (fsc ? 'yes' : 'no')}
+                    disabled={category === 'brichete'}
                     onChange={(e) => setFsc(e.target.value === 'yes')}
                   >
                     <option value="yes">{lang === 'nl' ? 'FSC®-Gecertificeerd' : 'FSC®-Certified'}</option>
@@ -1095,27 +1137,29 @@ export default function Configurator() {
                 </div>
 
                 {/* Kwaliteit */}
-                <div className="control-group" id="controlGroupGrade">
-                  <label htmlFor="dbGrade">{getTranslation('gradeLabel')}</label>
-                  <select
-                    id="dbGrade"
-                    className="dashboard-select"
-                    value={grade}
-                    onChange={(e) => setGrade(e.target.value)}
-                  >
-                    <option value="A">
-                      {lang === 'nl' ? 'A = foutvrij, egaal van kleur' : 'A = defect-free, uniform color'}
-                    </option>
-                    <option value="B">
-                      {lang === 'nl' ? 'B = foutvrij, gezond kleurverschil toegestaan' : 'B = defect-free, healthy color difference allowed'}
-                    </option>
-                    {(category === 'sawn' || category === 'specials') && (
-                      <option value="C">
-                        {lang === 'nl' ? 'C = constructieve kwaliteit' : 'C = structural quality'}
+                {category !== 'brichete' && (
+                  <div className="control-group" id="controlGroupGrade">
+                    <label htmlFor="dbGrade">{getTranslation('gradeLabel')}</label>
+                    <select
+                      id="dbGrade"
+                      className="dashboard-select"
+                      value={grade}
+                      onChange={(e) => setGrade(e.target.value)}
+                    >
+                      <option value="A">
+                        {lang === 'nl' ? 'A = foutvrij, egaal van kleur' : 'A = defect-free, uniform color'}
                       </option>
-                    )}
-                  </select>
-                </div>
+                      <option value="B">
+                        {lang === 'nl' ? 'B = foutvrij, gezond kleurverschil toegestaan' : 'B = defect-free, healthy color difference allowed'}
+                      </option>
+                      {(category === 'sawn' || category === 'specials') && (
+                        <option value="C">
+                          {lang === 'nl' ? 'C = constructieve kwaliteit' : 'C = structural quality'}
+                        </option>
+                      )}
+                    </select>
+                  </div>
+                )}
 
                 {/* Dikte / Diameter */}
                 {categoryData[category]?.thickness && (
@@ -1161,88 +1205,109 @@ export default function Configurator() {
                 )}
 
                 {/* Breedte / Diameter */}
-                <div className="control-group">
-                  <label htmlFor="dbDiameter">
-                    {category === 'dowels'
-                      ? (lang === 'nl' ? 'Diameter (mm)' : 'Diameter (mm)')
-                      : (lang === 'nl' ? 'Breedte (mm)' : 'Width (mm)')}
-                  </label>
-                  <div className="slider-wrapper">
-                    <input
-                      type="range"
-                      className="dashboard-slider"
-                      min={categoryData[category]?.diameter?.min || 5}
-                      max={category === 'dowels' ? 60 : currentMaxWidth}
-                      value={diameter || (categoryData[category]?.diameter?.min || 5)}
-                      onChange={(e) => setDiameter(parseInt(e.target.value) || (categoryData[category]?.diameter?.min || 5))}
-                    />
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                {categoryData[category]?.diameter && (
+                  <div className="control-group">
+                    <label htmlFor="dbDiameter">
+                      {category === 'dowels'
+                        ? (lang === 'nl' ? 'Diameter (mm)' : 'Diameter (mm)')
+                        : (lang === 'nl' ? 'Breedte (mm)' : 'Width (mm)')}
+                    </label>
+                    <div className="slider-wrapper">
                       <input
-                        type="number"
-                        id="dbDiameter"
-                        className="slider-value-display"
+                        type="range"
+                        className="dashboard-slider"
                         min={categoryData[category]?.diameter?.min || 5}
                         max={category === 'dowels' ? 60 : currentMaxWidth}
-                        value={diameter}
-                        onChange={(e) => {
-                          const val = parseInt(e.target.value);
-                          setDiameter(isNaN(val) ? '' : val);
-                        }}
-                        onBlur={() => {
-                          const minVal = categoryData[category]?.diameter?.min || 5;
-                          const maxVal = category === 'dowels' ? 60 : currentMaxWidth;
-                          if (diameter === '' || diameter < minVal) {
-                            setDiameter(minVal);
-                          } else if (diameter > maxVal) {
-                            setDiameter(maxVal);
-                          }
-                        }}
+                        value={diameter || (categoryData[category]?.diameter?.min || 5)}
+                        onChange={(e) => setDiameter(parseInt(e.target.value) || (categoryData[category]?.diameter?.min || 5))}
                       />
-                      <span style={{ color: 'var(--color-text-dark)', fontSize: '0.95rem' }}>mm</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <input
+                          type="number"
+                          id="dbDiameter"
+                          className="slider-value-display"
+                          min={categoryData[category]?.diameter?.min || 5}
+                          max={category === 'dowels' ? 60 : currentMaxWidth}
+                          value={diameter}
+                          onChange={(e) => {
+                            const val = parseInt(e.target.value);
+                            setDiameter(isNaN(val) ? '' : val);
+                          }}
+                          onBlur={() => {
+                            const minVal = categoryData[category]?.diameter?.min || 5;
+                            const maxVal = category === 'dowels' ? 60 : currentMaxWidth;
+                            if (diameter === '' || diameter < minVal) {
+                              setDiameter(minVal);
+                            } else if (diameter > maxVal) {
+                              setDiameter(maxVal);
+                            }
+                          }}
+                        />
+                        <span style={{ color: 'var(--color-text-dark)', fontSize: '0.95rem' }}>mm</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
 
                 {/* Lengte */}
-                <div className="control-group">
-                  <label htmlFor="dbLength">
-                    {lang === 'nl' ? 'Lengte (mm)' : 'Length (mm)'}
-                  </label>
-                  <div className="slider-wrapper">
-                    <input
-                      type="range"
-                      className="dashboard-slider"
-                      min={categoryData[category]?.length?.min || 200}
-                      max={categoryData[category]?.length?.max || 3000}
-                      value={length || (categoryData[category]?.length?.min || 200)}
-                      onChange={(e) => setLength(parseInt(e.target.value) || (categoryData[category]?.length?.min || 200))}
-                    />
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                {categoryData[category]?.length && (
+                  <div className="control-group">
+                    <label htmlFor="dbLength">
+                      {lang === 'nl' ? 'Lengte (mm)' : 'Length (mm)'}
+                    </label>
+                    <div className="slider-wrapper">
                       <input
-                        type="number"
-                        id="dbLength"
-                        className="slider-value-display"
+                        type="range"
+                        className="dashboard-slider"
                         min={categoryData[category]?.length?.min || 200}
                         max={categoryData[category]?.length?.max || 3000}
-                        value={length}
-                        onChange={(e) => {
-                          const val = parseInt(e.target.value);
-                          setLength(isNaN(val) ? '' : val);
-                        }}
-                        onBlur={() => {
-                          const minVal = categoryData[category]?.length?.min || 200;
-                          const maxVal = categoryData[category]?.length?.max || 3000;
-                          if (length === '' || length < minVal) {
-                            setLength(minVal);
-                          } else if (length > maxVal) {
-                            setLength(maxVal);
-                          }
-                        }}
+                        value={length || (categoryData[category]?.length?.min || 200)}
+                        onChange={(e) => setLength(parseInt(e.target.value) || (categoryData[category]?.length?.min || 200))}
                       />
-                      <span style={{ color: 'var(--color-text-dark)', fontSize: '0.95rem' }}>mm</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <input
+                          type="number"
+                          id="dbLength"
+                          className="slider-value-display"
+                          min={categoryData[category]?.length?.min || 200}
+                          max={categoryData[category]?.length?.max || 3000}
+                          value={length}
+                          onChange={(e) => {
+                            const val = parseInt(e.target.value);
+                            setLength(isNaN(val) ? '' : val);
+                          }}
+                          onBlur={() => {
+                            const minVal = categoryData[category]?.length?.min || 200;
+                            const maxVal = categoryData[category]?.length?.max || 3000;
+                            if (length === '' || length < minVal) {
+                              setLength(minVal);
+                            } else if (length > maxVal) {
+                              setLength(maxVal);
+                            }
+                          }}
+                        />
+                        <span style={{ color: 'var(--color-text-dark)', fontSize: '0.95rem' }}>mm</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
+
+                {/* Specs Block for Brichete */}
+                {category === 'brichete' && (
+                  <div className="control-group" style={{ gridColumn: 'span 2', background: 'rgba(255,255,255,0.05)', padding: '1.5rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', marginBottom: '1rem' }}>
+                    <h4 style={{ color: 'var(--color-accent)', marginBottom: '1rem', fontSize: '1.1rem' }}>
+                      {lang === 'ro' ? 'Specificații Brichete RUF' : (lang === 'nl' ? 'Specificaties RUF Briketten' : (lang === 'de' ? 'Spezifikationen RUF Briketts' : 'RUF Briquettes Specifications'))}
+                    </h4>
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', fontSize: '0.95rem', color: '#ccc' }}>
+                      <li><strong>{lang === 'ro' ? 'Formă & Dimensiuni' : 'Shape & Dimensions'}:</strong> Cilindrice, Ø 90 mm</li>
+                      <li><strong>{lang === 'ro' ? 'Tip Lemn' : 'Wood Type'}:</strong> 100% Fag Curat</li>
+                      <li><strong>{lang === 'ro' ? 'Putere Calorică' : 'Calorific Value'}:</strong> ~18.5 MJ/kg</li>
+                      <li><strong>{lang === 'ro' ? 'Umiditate' : 'Moisture'}:</strong> &lt; 10%</li>
+                      <li><strong>{lang === 'ro' ? 'Ambalare' : 'Packaging'}:</strong> {lang === 'ro' ? 'Pachete 10 kg (96 pachete/palet, 960 kg net)' : '10 kg packages (96 packs/pallet, 960 kg net)'}</li>
+                      <li><strong>{lang === 'ro' ? 'Comandă Minimă' : 'Minimum Order'}:</strong> 1 Palet (960 kg)</li>
+                    </ul>
+                  </div>
+                )}
 
                 {/* Aanvullende informatie */}
                 <div className="control-group" style={{ gridColumn: 'span 2' }}>
@@ -1260,7 +1325,11 @@ export default function Configurator() {
 
                 {/* Quantity */}
                 <div className="control-group">
-                  <label htmlFor="dbOplage">{getTranslation('quantityLabel')}</label>
+                  <label htmlFor="dbOplage">
+                    {category === 'brichete'
+                      ? ({ nl: 'Aantal (Pallets van 960 kg)', en: 'Quantity (Pallets of 960 kg)', de: 'Anzahl (Paletten à 960 kg)', ro: 'Cantitate (Paleți de 960 kg)' }[lang] || 'Quantity (Pallets)')
+                      : getTranslation('quantityLabel')}
+                  </label>
                   <input
                     type="number"
                     id="dbOplage"
@@ -1278,7 +1347,12 @@ export default function Configurator() {
                     }}
                     style={{ outline: 'none' }}
                   />
-                  {lengthType === 'custom' && (
+                  {category === 'brichete' ? (
+                    <div style={{ fontSize: '0.85rem', color: '#fbbf24', marginTop: '0.5rem' }}>
+                      <i className="fa-solid fa-circle-info"></i>{' '}
+                      {lang === 'ro' ? 'Comandă minimă: 1 Palet. Reduceri de volum pentru 12 (5%) și 24 (10%) de paleți.' : (lang === 'nl' ? 'Minimale afname: 1 Pallet. Volumekorting beschikbaar vanaf 12 (5%) en 24 (10%) pallets.' : (lang === 'de' ? 'Mindestbestellmenge: 1 Palette. Mengenrabatt ab 12 (5%) und 24 (10%) Paletten.' : 'Minimum order: 1 Pallet. Volume discounts starting at 12 (5%) and 24 (10%) pallets.'))}
+                    </div>
+                  ) : lengthType === 'custom' && (
                     <div style={{ fontSize: '0.85rem', color: '#fbbf24', marginTop: '0.5rem' }}>
                       <i className="fa-solid fa-circle-info"></i>{' '}
                       {getTranslation('moqNotice').replace('{minQty}', minQty.toLocaleString())}
@@ -1419,7 +1493,11 @@ export default function Configurator() {
               <div className="dashboard-status-bar">
                 <div className="status-col">
                   <span className="status-label">{getTranslation('certificationLabel')}</span>
-                  <span className="status-value">{activeSelection.fsc ? getTranslation('materialValueFsc') : getTranslation('materialValueNonFsc')}</span>
+                  <span className="status-value">
+                    {activeSelection.category === 'brichete'
+                      ? getTranslation('materialValueBrichete')
+                      : (activeSelection.fsc ? getTranslation('materialValueFsc') : getTranslation('materialValueNonFsc'))}
+                  </span>
                 </div>
                 <div className="status-col">
                   <span className="status-label">{getTranslation('statusLabel')}</span>
