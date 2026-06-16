@@ -482,6 +482,68 @@ ul {
     60% { transform: translateY(-4px); }
 }
 
+.hero-floating-wrapper {
+    position: absolute;
+    right: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    pointer-events: none;
+    animation: floatUpDown 8s ease-in-out infinite alternate;
+}
+
+.hero-floating-graphic {
+    width: 420px;
+    height: 420px;
+    object-fit: contain;
+    opacity: 0.9;
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.45));
+    animation: rotateSlowly 120s linear infinite;
+}
+
+@keyframes floatUpDown {
+    0% {
+        transform: translateY(-50%) translateY(-15px);
+    }
+    100% {
+        transform: translateY(-50%) translateY(15px);
+    }
+}
+
+@keyframes rotateSlowly {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 1200px) {
+    .hero-floating-graphic {
+        width: 340px;
+        height: 340px;
+        opacity: 0.85;
+    }
+}
+
+@media (max-width: 992px) {
+    .hero-floating-wrapper {
+        right: 4%;
+    }
+    .hero-floating-graphic {
+        width: 280px;
+        height: 280px;
+        opacity: 0.75;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-floating-wrapper {
+        display: none;
+    }
+}
+
 /* 5. Introduction Section */
 .intro-text-column {
     display: flex;

@@ -310,6 +310,15 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Floating Decorative Wood Mosaic */}
+        <div className="hero-floating-wrapper animate-fade-in-delay">
+          <img 
+            src="/images/floating_wood.png" 
+            alt="Decorative beechwood circular mosaic" 
+            className="hero-floating-graphic" 
+          />
+        </div>
+
         {/* Hiring Stamp on Hero Photo */}
         <Link href="/careers" className="hiring-stamp-hero" title={getTranslation('hiringTitle')}>
           <img src={`/images/hiring_stamp_${lang}.png`} alt={getTranslation('hiringAlt')} />
