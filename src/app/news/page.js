@@ -29,6 +29,44 @@ export default function News() {
 
   const newsItems = [
     {
+      id: 'configurator',
+      tag: lang === 'nl' ? 'Innovatie' : (lang === 'de' ? 'Innovation' : (lang === 'ro' ? 'Inovație' : 'Innovation')),
+      date: lang === 'nl' ? '17 juni 2026' : (lang === 'de' ? '17. Juni 2026' : (lang === 'ro' ? '17 iunie 2026' : 'June 17, 2026')),
+      author: 'Digital Team',
+      title: lang === 'nl'
+        ? 'Nieuwe Interactieve B2B Configurator Gelanceerd!'
+        : (lang === 'de' ? 'Neuer interaktiver B2B-Konfigurator gestartet!' : (lang === 'ro' ? 'Noul Configurator B2B Interactiv a Fost Lansat!' : 'New Interactive B2B Configurator Launched!')),
+      content: (
+        <>
+          {lang === 'nl' && (
+            <p>
+              We hebben met trots onze nieuwe interactieve B2B product configurator gelanceerd. Hiermee kunt u direct uw beukenhouten stokken, latten, profielen en specials op maat samenstellen, specificaties selecteren en een offerte aanvragen.
+            </p>
+          )}
+          {lang === 'de' && (
+            <p>
+              Wir haben stolz unseren neuen interaktiven B2B-Produktkonfigurator gestartet. Mit diesem Tool können Sie Ihre Buchenholzstäbe, Leisten, Profile und Sonderzuschnitte direkt anpassen, Spezifikationen auswählen und ein Angebot anfordern.
+            </p>
+          )}
+          {lang === 'ro' && (
+            <p>
+              Am lansat cu mândrie noul nostru configurator de produse B2B interactiv. Acest instrument vă permite să personalizați tijele, șipcile, profilele și piesele speciale din lemn de fag direct la dimensiunile dorite, să selectați specificațiile și să solicitați o ofertă.
+            </p>
+          )}
+          {lang !== 'nl' && lang !== 'de' && lang !== 'ro' && (
+            <p>
+              We have proudly launched our new interactive B2B product configurator. This tool allows you to customize your beechwood sticks, slats, profiles, and specials directly to your exact dimensions, select specifications, and request a quote.
+            </p>
+          )}
+          <Link href="/configurator" className="news-link">
+            {lang === 'nl' ? 'Probeer de configurator' : (lang === 'de' ? 'Konfigurator ausprobieren' : (lang === 'ro' ? 'Încercați configuratorul' : 'Try the configurator'))}{' '}
+            <i className="fa-solid fa-arrow-right"></i>
+          </Link>
+        </>
+      ),
+      image: '/images/config_specials.png',
+    },
+    {
       id: 'drying',
       tag: lang === 'nl' ? 'Productie' : (lang === 'de' ? 'Produktion' : (lang === 'ro' ? 'Producție' : 'Production')),
       date: lang === 'nl' ? '24 mei 2026' : (lang === 'de' ? '24. Mai 2026' : (lang === 'ro' ? '24 mai 2026' : 'May 24, 2026')),
@@ -226,7 +264,11 @@ export default function News() {
                 {selectedArticle.content}
               </div>
               <div className="news-modal-actions" style={{ marginTop: '1.5rem' }}>
-                {selectedArticle.id === 'drying' ? (
+                {selectedArticle.id === 'configurator' ? (
+                  <Link href="/configurator" onClick={() => setSelectedArticle(null)} className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                    {lang === 'nl' ? 'Probeer de configurator' : (lang === 'de' ? 'Konfigurator ausprobieren' : (lang === 'ro' ? 'Încercați configuratorul' : 'Try the configurator'))} <i className="fa-solid fa-arrow-right icon-right"></i>
+                  </Link>
+                ) : selectedArticle.id === 'drying' ? (
                   <Link href="/about#timeline-details" onClick={() => setSelectedArticle(null)} className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                     {lang === 'nl' ? 'Lees onze geschiedenis' : (lang === 'de' ? 'Unsere Geschichte lesen' : (lang === 'ro' ? 'Citiți istoricul nostru' : 'Read our history'))} <i className="fa-solid fa-arrow-right icon-right"></i>
                   </Link>
