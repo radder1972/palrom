@@ -44,7 +44,7 @@ const teamMembers = [
       de: 'Englisch, Rumänisch',
       ro: 'Engleză, Română'
     },
-    phone: '40254606053',
+    phone: '40754202807',
     greetings: {
       nl: "Hallo Bogdan, ik wil graag de status van een order of een offerteaanvraag bespreken.",
       en: "Hello Bogdan, I would like to discuss the status of an order or a quote request.",
@@ -68,7 +68,7 @@ const teamMembers = [
       de: 'Englisch, Rumänisch',
       ro: 'Engleză, Română'
     },
-    phone: '40254606053',
+    phone: '40754202808',
     greetings: {
       nl: "Hallo Adi, ik heb een technische vraag over de productie van houten componenten.",
       en: "Hello Adi, I have a technical question about the production of wooden components.",
@@ -92,7 +92,7 @@ const teamMembers = [
       de: 'Englisch, Rumänisch',
       ro: 'Engleză, Română'
     },
-    phone: '40254606053',
+    phone: '40754202802',
     greetings: {
       nl: "Hallo Ciprian, ik wil graag de beschikbaarheid en inkoop van hout bespreken.",
       en: "Hello Ciprian, I would like to discuss wood availability and purchasing.",
@@ -116,7 +116,7 @@ const teamMembers = [
       de: 'Englisch, Rumänisch',
       ro: 'Engleză, Română'
     },
-    phone: '40254606053',
+    phone: '40754202811',
     greetings: {
       nl: "Hallo Anca, ik heb een vraag over carrièremogelijkheden bij Palrom.",
       en: "Hello Anca, I have a question about career opportunities at Palrom.",

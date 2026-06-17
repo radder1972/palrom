@@ -54,8 +54,8 @@ const teamMemberData = {
       ro: 'Adi supraveghează liniile noastre moderne de tăiere și rindeluire. El transpune desenele tehnice la nivel de milimetru ale clienților în loturi de producție în masă eficiente și fără defecte.'
     },
     email: 'production@palromproducts.ro',
-    phone: '+40254606053',
-    whatsapp: 'https://wa.me/40254606053?text=Hallo%20Adi,%20ik%20heb%20een%20technische%20vraag%20over%20de%20productie%20van%20houten%20componenten.',
+    phone: '+40754202808',
+    whatsapp: 'https://wa.me/40754202808?text=Hallo%20Adi,%20ik%20heb%20een%20technische%20vraag%20over%20de%20productie%20van%20houten%20componenten.',
   },
   ciprian: {
     id: 'ciprian',
@@ -80,8 +80,8 @@ const teamMemberData = {
       ro: 'Ciprian administrează achizițiile noastre de cherestea și logistica. El se asigură că toate materiile noastre prime din lemn de fag sunt obținute în mod durabil din păduri locale gestionate în regiunile Brad și Hunedoara.'
     },
     email: 'ciprian.jude@palromproducts.ro',
-    phone: '+40254606053',
-    whatsapp: 'https://wa.me/40254606053?text=Hallo%20Ciprian,%20ik%20wil%20graag%20de%20beschikbaarheid%20en%20inkoop%20van%20hout%20bespreken.',
+    phone: '+40754202802',
+    whatsapp: 'https://wa.me/40754202802?text=Hallo%20Ciprian,%20ik%20wil%20graag%20de%20beschikbaarheid%20en%20inkoop%20van%20hout%20bespreken.',
   },
   anca: {
     id: 'anca',
@@ -106,8 +106,8 @@ const teamMemberData = {
       ro: 'Anca coordonează recrutarea și bunăstarea angajaților în cadrul fabricii de cherestea și rindeluire Palrom din Brad. Ea este punctul dumneavoastră direct de contact pentru posturile vacante și aplicațiile de angajare.'
     },
     email: 'anca.mihut@palromproducts.ro',
-    phone: '+40254606053',
-    whatsapp: 'https://wa.me/40254606053?text=Hallo%20Anca,%20ik%20heb%20een%20vraag%20over%20carri%C3%A8remogelijkheden%20bij%20Palrom.',
+    phone: '+40754202811',
+    whatsapp: 'https://wa.me/40754202811?text=Hallo%20Anca,%20ik%20heb%20een%20vraag%20over%20carri%C3%A8remogelijkheden%20bij%20Palrom.',
   },
   bogdan: {
     id: 'bogdan',
@@ -132,8 +132,8 @@ const teamMemberData = {
       ro: 'Bogdan este responsabil de preluarea comenzilor B2B, ofertele de volum și programarea livrărilor. El asigură procesarea rapidă a cererilor și eficientizează fluxul administrativ.'
     },
     email: 'orders@palromproducts.ro',
-    phone: '+40254606053',
-    whatsapp: 'https://wa.me/40254606053?text=Hallo%20Bogdan,%20ik%20wil%20graag%20de%20status%20van%20een%20order%20of%20een%20offerteaanvraag%20bespreken.',
+    phone: '+40754202807',
+    whatsapp: 'https://wa.me/40754202807?text=Hallo%20Bogdan,%20ik%20wil%20graag%20de%20status%20van%20een%20order%20of%20een%20offerteaanvraag%20bespreken.',
   },
 };
 
