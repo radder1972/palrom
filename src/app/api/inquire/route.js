@@ -186,30 +186,29 @@ export async function POST(request) {
     } else if (resendApiKey) {
       // 1. Send internal notification email to sales office (always in English for tests)
       try {
-        const itemsHtml = items.map(item => {
+        const itemsHtml = items.map((item, index) => {
           const specsList = Object.entries(item).map(([k, v]) => {
-            if (['id', 'isConfigured', 'name', 'category', 'qty', 'price', 'baseUnitPrice', 'discountPercent'].includes(k)) return null;
+            if (['id', 'isConfigured', 'name', 'category', 'categoryKey', 'qty', 'price', 'baseUnitPrice', 'discountPercent'].includes(k)) return null;
             if (v === undefined || v === null || v === '') return null;
             
             // Render specifications in English for sales office
             const label = localizeSpecKey(k, 'en');
             const val = localizeSpecValue(k, v, 'en');
             
-            return `<strong>${label}</strong>: ${val}`;
-          }).filter(Boolean).join('<br />');
+            return `<div style="margin-top: 4px;"><strong>${label}</strong>: ${val}</div>`;
+          }).filter(Boolean).join('');
 
           return `
-            <tr style="border-bottom: 1px solid #edf2f7;">
-              <td style="padding: 16px 0; vertical-align: top; font-family: sans-serif;">
-                <span style="font-weight: 600; color: #1a202c; display: block; margin-bottom: 4px;">${item.name}</span>
-                <span style="font-size: 0.85rem; color: #718096; display: block; line-height: 1.5;">
-                  <strong>Category</strong>: ${item.category}${specsList ? `<br />${specsList}` : ''}
-                </span>
-              </td>
-              <td style="padding: 16px 0; text-align: right; vertical-align: top; font-family: sans-serif; font-weight: 600; color: #1a202c;">
-                ${item.qty}
-              </td>
-            </tr>
+            <div style="margin-bottom: 20px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); font-family: sans-serif;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #edf2f7; padding-bottom: 12px; margin-bottom: 12px;">
+                <h4 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: #0f172a;">Material ${index + 1}: ${item.name}</h4>
+                <span style="font-size: 0.85rem; font-weight: 700; color: #1e3a2b; background-color: #f0fdf4; border: 1px solid #dcfce7; padding: 4px 10px; border-radius: 6px; white-space: nowrap;">Qty: ${item.qty}</span>
+              </div>
+              <div style="font-size: 0.9rem; color: #475569; line-height: 1.5;">
+                <div><strong>Category</strong>: ${item.category}</div>
+                ${specsList}
+              </div>
+            </div>
           `;
         }).join('');
 
@@ -221,25 +220,25 @@ export async function POST(request) {
               <h2 style="margin: 6px 0 0; font-size: 1.5rem; font-weight: 600; color: #1a202c;">B2B Quote Inquiry</h2>
             </div>
 
-            <div style="margin-bottom: 32px;">
-              <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #718096; margin-bottom: 16px; margin-top: 0;">Client Details</h3>
+            <div style="margin-bottom: 32px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px;">
+              <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #475569; margin-bottom: 16px; margin-top: 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">Client Details</h3>
               <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
                 <tr>
-                  <td style="padding: 8px 0; border-bottom: 1px solid #f7fafc; color: #4a5568; font-weight: 500; width: 140px;">Name</td>
-                  <td style="padding: 8px 0; border-bottom: 1px solid #f7fafc; color: #1a202c;">${clientName}</td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #64748b; font-weight: 500; width: 120px;">Name</td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #0f172a; font-weight: 600;">${clientName}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 8px 0; border-bottom: 1px solid #f7fafc; color: #4a5568; font-weight: 500;">Email</td>
-                  <td style="padding: 8px 0; border-bottom: 1px solid #f7fafc;"><a href="mailto:${clientEmail}" style="color: #1e3a2b; text-decoration: none; border-bottom: 1px dotted #1e3a2b;">${clientEmail}</a></td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #64748b; font-weight: 500;">Email</td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7;"><a href="mailto:${clientEmail}" style="color: #1e3a2b; text-decoration: none; font-weight: 600;">${clientEmail}</a></td>
                 </tr>
                 <tr>
-                  <td style="padding: 8px 0; border-bottom: 1px solid #f7fafc; color: #4a5568; font-weight: 500;">Phone</td>
-                  <td style="padding: 8px 0; border-bottom: 1px solid #f7fafc; color: #1a202c;">${clientPhone}</td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #64748b; font-weight: 500;">Phone</td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #0f172a; font-weight: 600;">${clientPhone}</td>
                 </tr>
                 ${clientNotes ? `
                 <tr>
-                  <td style="padding: 8px 0; vertical-align: top; color: #4a5568; font-weight: 500;">Notes</td>
-                  <td style="padding: 8px 0; color: #2d3748; white-space: pre-line;">${clientNotes}</td>
+                  <td style="padding: 8px 0; vertical-align: top; color: #64748b; font-weight: 500;">Notes</td>
+                  <td style="padding: 8px 0; color: #334155; white-space: pre-line;">${clientNotes}</td>
                 </tr>
                 ` : ''}
               </table>
@@ -247,17 +246,7 @@ export async function POST(request) {
 
             <div style="margin-bottom: 40px;">
               <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #718096; margin-bottom: 16px; margin-top: 0;">Requested Materials</h3>
-              <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
-                <thead>
-                  <tr style="border-bottom: 2px solid #edf2f7;">
-                    <th style="padding: 12px 0; text-align: left; font-weight: 600; color: #4a5568;">Product Description</th>
-                    <th style="padding: 12px 0; text-align: right; font-weight: 600; color: #4a5568; width: 80px;">Quantity</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${itemsHtml}
-                </tbody>
-              </table>
+              ${itemsHtml}
             </div>
 
             <div style="border-top: 1px solid #edf2f7; padding-top: 24px; text-align: center; font-size: 0.8rem; color: #a0aec0;">
