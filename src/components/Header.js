@@ -54,9 +54,9 @@ export default function Header() {
           <Link href="/news" className={`nav-link ${pathname === '/news' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
             {getTranslation('news')}
           </Link>
-          <Link href="/#contact" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>
+          <a href="/#contact" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>
             {getTranslation('contact')}
-          </Link>
+          </a>
         </nav>
         <div className="header-actions">
           {pathname === '/configurator' && (
@@ -65,9 +65,9 @@ export default function Header() {
               <span className={`cart-count-badge ${cartCount > 0 ? 'visible' : ''}`}>{cartCount}</span>
             </button>
           )}
-          <Link href="/#contact" className="action-btn">
+          <a href="/#contact" className="action-btn">
             {getTranslation('requestQuote')}
-          </Link>
+          </a>
           <div className="language-switcher-vertical">
             {pathname === '/brichete-fag' ? (
               <>

@@ -327,9 +327,9 @@ export default function Home() {
             {getTranslation('heroSubtitle')}
           </p>
           <div className="hero-buttons animate-slide-up-delay-2">
-            <Link href="#contact" className="btn btn-primary">
+            <a href="#contact" className="btn btn-primary">
               {getTranslation('requestQuote')}
-            </Link>
+            </a>
             <Link href="/products" className="btn btn-secondary">
               {getTranslation('viewProducts')}
             </Link>
