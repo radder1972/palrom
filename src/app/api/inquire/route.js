@@ -128,13 +128,62 @@ export async function POST(request) {
       console.error('Failed to write to local inquiries file:', err);
     }
 
-    // Send email via Resend if API key is configured
+    // Send email via FormSubmit.co or Resend
     const resendApiKey = process.env.RESEND_API_KEY;
+    const useFormSubmit = process.env.USE_FORMSUBMIT !== 'false'; // Default to true
     const emailTo = process.env.EMAIL_TO || 'office@palromproducts.ro';
     const emailFrom = process.env.EMAIL_FROM || 'onboarding@resend.dev';
 
     let emailSent = false;
-    if (resendApiKey) {
+    if (useFormSubmit) {
+      try {
+        const specsListSummary = items.map(item => {
+          const specsList = Object.entries(item).map(([k, v]) => {
+            if (['id', 'isConfigured', 'name', 'category', 'qty', 'price', 'baseUnitPrice', 'discountPercent'].includes(k)) return null;
+            if (v === undefined || v === null || v === '') return null;
+            
+            // Render specifications in Romanian for sales office
+            const label = localizeSpecKey(k, 'ro');
+            const val = localizeSpecValue(k, v, 'ro');
+            
+            return `${label}: ${val}`;
+          }).filter(Boolean).join(', ');
+
+          return `- ${item.name} (Cantitate: ${item.qty})${specsList ? ` | Specificatii: ${specsList}` : ''}`;
+        }).join('\n');
+
+        const formSubmitRes = await fetch(`https://formsubmit.co/ajax/${emailTo}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Referer': 'https://palromproducts.ro/',
+            'Origin': 'https://palromproducts.ro'
+          },
+          body: JSON.stringify({
+            _subject: `Cerere nouă de ofertă B2B de la ${clientName}`,
+            _template: 'table',
+            _captcha: 'false',
+            _replyto: clientEmail,
+            "Nume Client": clientName,
+            "Email Client": clientEmail,
+            "Telefon Client": clientPhone,
+            "Observatii": clientNotes || 'Fără observații',
+            "Materiale solicitate": specsListSummary
+          })
+        });
+
+        const data = await formSubmitRes.json();
+        if (formSubmitRes.ok && data.success !== 'false') {
+          console.log(`Internal quote inquiry sent successfully via FormSubmit.co to ${emailTo}`);
+          emailSent = true;
+        } else {
+          console.error('FormSubmit.co API error response for inquiry:', data);
+        }
+      } catch (err) {
+        console.error('Failed to send inquiry via FormSubmit.co:', err);
+      }
+    } else if (resendApiKey) {
       // 1. Send internal notification email to sales office (always in Romanian)
       try {
         const itemsHtml = items.map(item => {
@@ -391,7 +440,7 @@ export async function POST(request) {
         console.warn('Failed to send client confirmation email:', clientErr);
       }
     } else {
-      console.log('Resend API key not configured, skipping email delivery');
+      console.log('Neither FormSubmit nor Resend configured, skipping email delivery');
     }
 
     return NextResponse.json({
