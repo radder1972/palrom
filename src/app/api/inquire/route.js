@@ -137,21 +137,6 @@ export async function POST(request) {
     let emailSent = false;
     if (useFormSubmit) {
       try {
-        const specsListSummary = items.map(item => {
-          const specsList = Object.entries(item).map(([k, v]) => {
-            if (['id', 'isConfigured', 'name', 'category', 'qty', 'price', 'baseUnitPrice', 'discountPercent'].includes(k)) return null;
-            if (v === undefined || v === null || v === '') return null;
-            
-            // Render specifications in English for sales office
-            const label = localizeSpecKey(k, 'en');
-            const val = localizeSpecValue(k, v, 'en');
-            
-            return `${label}: ${val}`;
-          }).filter(Boolean).join(', ');
-
-          return `- ${item.name} (Quantity: ${item.qty})${specsList ? ` | Specifications: ${specsList}` : ''}`;
-        }).join('\n');
-
         const formSubmitRes = await fetch(`https://formsubmit.co/ajax/${emailTo}`, {
           method: 'POST',
           headers: {
@@ -170,7 +155,23 @@ export async function POST(request) {
             "Client Email": clientEmail,
             "Client Phone": clientPhone,
             "Notes": clientNotes || 'No notes',
-            "Requested Materials": specsListSummary
+            ...items.reduce((acc, item, index) => {
+              const specsList = Object.entries(item).map(([k, v]) => {
+                if (['id', 'isConfigured', 'name', 'category', 'qty', 'price', 'baseUnitPrice', 'discountPercent'].includes(k)) return null;
+                if (v === undefined || v === null || v === '') return null;
+                
+                const label = localizeSpecKey(k, 'en');
+                const val = localizeSpecValue(k, v, 'en');
+                
+                return `${label}: ${val}`;
+              }).filter(Boolean).join(', ');
+
+              acc[`Material ${index + 1}`] = `${item.name} (Quantity: ${item.qty})`;
+              if (specsList) {
+                acc[`Material ${index + 1} Specifications`] = specsList;
+              }
+              return acc;
+            }, {})
           })
         });
 
@@ -197,14 +198,14 @@ export async function POST(request) {
             const val = localizeSpecValue(k, v, 'en');
             
             return `<strong>${label}</strong>: ${val}`;
-          }).filter(Boolean).join(', ');
+          }).filter(Boolean).join('<br />');
 
           return `
             <tr style="border-bottom: 1px solid #edf2f7;">
               <td style="padding: 16px 0; vertical-align: top; font-family: sans-serif;">
                 <span style="font-weight: 600; color: #1a202c; display: block; margin-bottom: 4px;">${item.name}</span>
-                <span style="font-size: 0.85rem; color: #718096; display: block; line-height: 1.4;">
-                  Category: ${item.category} ${specsList ? ` | ${specsList}` : ''}
+                <span style="font-size: 0.85rem; color: #718096; display: block; line-height: 1.5;">
+                  <strong>Category</strong>: ${item.category}${specsList ? `<br />${specsList}` : ''}
                 </span>
               </td>
               <td style="padding: 16px 0; text-align: right; vertical-align: top; font-family: sans-serif; font-weight: 600; color: #1a202c;">
