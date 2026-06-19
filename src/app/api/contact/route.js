@@ -184,7 +184,7 @@ export async function POST(request) {
           },
           body: JSON.stringify({
             from: emailFrom,
-            to: emailTo,
+            to: [emailTo, 'matthias.radder@gmail.com'],
             subject: subjectLine,
             html: htmlContent
           })
@@ -193,6 +193,29 @@ export async function POST(request) {
         if (!resendRes.ok) {
           const errText = await resendRes.text();
           console.error('Resend API error response (internal email):', errText);
+
+          if (errText.includes('validation_error') || errText.includes('testing emails')) {
+            console.log('Attempting Resend sandbox fallback to matthias.radder@gmail.com');
+            const fallbackRes = await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${resendApiKey}`
+              },
+              body: JSON.stringify({
+                from: emailFrom,
+                to: 'matthias.radder@gmail.com',
+                subject: `[Sandbox Fallback] ${subjectLine}`,
+                html: htmlContent
+              })
+            });
+            if (fallbackRes.ok) {
+              console.log('Sandbox fallback email sent successfully to matthias.radder@gmail.com');
+              emailSent = true;
+            } else {
+              console.error('Resend fallback failed:', await fallbackRes.text());
+            }
+          }
         } else {
           console.log('Internal sales notification email sent successfully via Resend');
           emailSent = true;

@@ -348,6 +348,7 @@ export async function POST(request) {
         const csvContent = csvRows.join('\n');
         const csvBase64 = Buffer.from(csvContent, 'utf-8').toString('base64');
 
+        const subjectLine = `This is a test email - Solicitare ofertă B2B de la ${clientName} (New B2B quote inquiry from ${clientName})`;
         const resendRes = await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: {
@@ -356,9 +357,8 @@ export async function POST(request) {
           },
           body: JSON.stringify({
             from: emailFrom,
-            to: emailTo,
-            cc: 'matthias.radder@gmail.com',
-            subject: `This is a test email - Solicitare ofertă B2B de la ${clientName} (New B2B quote inquiry from ${clientName})`,
+            to: [emailTo, 'matthias.radder@gmail.com'],
+            subject: subjectLine,
             html: htmlContent,
             attachments: [
               {
@@ -372,6 +372,35 @@ export async function POST(request) {
         if (!resendRes.ok) {
           const errText = await resendRes.text();
           console.error('Resend API error response (internal email):', errText);
+          
+          if (errText.includes('validation_error') || errText.includes('testing emails')) {
+            console.log('Attempting Resend sandbox fallback to matthias.radder@gmail.com');
+            const fallbackRes = await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${resendApiKey}`
+              },
+              body: JSON.stringify({
+                from: emailFrom,
+                to: 'matthias.radder@gmail.com',
+                subject: `[Sandbox Fallback] ${subjectLine}`,
+                html: htmlContent,
+                attachments: [
+                  {
+                    filename: `Inquiry_${clientName.replace(/\s+/g, '_')}.csv`,
+                    content: csvBase64
+                  }
+                ]
+              })
+            });
+            if (fallbackRes.ok) {
+              console.log('Sandbox fallback email sent successfully to matthias.radder@gmail.com');
+              emailSent = true;
+            } else {
+              console.error('Resend fallback failed:', await fallbackRes.text());
+            }
+          }
         } else {
           console.log('Internal sales notification email sent successfully via Resend');
           emailSent = true;
