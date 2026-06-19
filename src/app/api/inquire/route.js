@@ -146,33 +146,38 @@ export async function POST(request) {
             'Origin': 'https://palromproducts.ro'
           },
           body: JSON.stringify({
-            _subject: `This is a test email - New B2B quote inquiry from ${clientName}`,
+            _subject: `This is a test email - Solicitare ofertă B2B de la ${clientName} (New B2B quote inquiry from ${clientName})`,
             _template: 'table',
             _captcha: 'false',
             _cc: 'matthias.radder@gmail.com',
             _replyto: clientEmail,
-            "B2B Configurator Output": "This quote inquiry has been automatically generated and submitted as a direct output of the online B2B quote configurator on the PALROM Products website. It contains the contact details of the prospect and the technical specifications of their configured products. Please review this information below to process their request and draft a customized B2B quotation.",
+            "Rezultatul configuratorului B2B (B2B Configurator Output)": "Această cerere de ofertă a fost generată automat și trimisă ca rezultat direct al configuratorului online de oferte B2B de pe site-ul PALROM Products. Aceasta conține datele de contact ale potențialului client și specificațiile tehnice ale produselor configurate. Vă rugăm să analizați aceste informații de mai jos pentru a procesa solicitarea și a redacta o ofertă personalizată B2B. / This quote inquiry has been automatically generated and submitted as a direct output of the online B2B quote configurator on the PALROM Products website. It contains the contact details of the prospect and the technical specifications of their configured products. Please review this information below to process their request and draft a customized B2B quotation.",
             " ": " ",
-            "=== CLIENT DETAILS ===": "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
-            "Client Name": clientName,
-            "Client Email": clientEmail,
-            "Client Phone": clientPhone,
-            "Notes": clientNotes || 'No notes',
+            "=== DETALII CLIENT (CLIENT DETAILS) ===": "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+            "Nume client (Client Name)": clientName,
+            "E-mail client (Client Email)": clientEmail,
+            "Telefon client (Client Phone)": clientPhone,
+            "Note (Notes)": clientNotes || 'Fără note (No notes)',
             ...items.reduce((acc, item, index) => {
-              const prodKey = `=== PRODUCT ${index + 1} ===`;
+              const prodKey = `=== PRODUSUL ${index + 1} (PRODUCT ${index + 1}) ===`;
               acc["  " + index] = " ";
               acc[prodKey] = "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬";
-              acc[`Product ${index + 1} Name`] = item.name;
-              acc[`Product ${index + 1} Qty`] = item.qty;
+              acc[`Nume produs ${index + 1} (Product ${index + 1} Name)`] = item.name;
+              acc[`Cantitate produs ${index + 1} (Product ${index + 1} Qty)`] = item.qty;
               
               Object.entries(item).forEach(([k, v]) => {
                 if (['id', 'isConfigured', 'name', 'category', 'categoryKey', 'qty', 'price', 'baseUnitPrice', 'discountPercent'].includes(k)) return;
                 if (v === undefined || v === null || v === '') return;
                 
-                const label = localizeSpecKey(k, 'en');
-                const val = localizeSpecValue(k, v, 'en');
+                const labelRo = localizeSpecKey(k, 'ro');
+                const labelEn = localizeSpecKey(k, 'en');
+                const label = `${labelRo} (${labelEn})`;
                 
-                acc[`Product ${index + 1} - ${label}`] = val;
+                const valRo = localizeSpecValue(k, v, 'ro');
+                const valEn = localizeSpecValue(k, v, 'en');
+                const val = valRo === valEn ? valRo : `${valRo} (${valEn})`;
+                
+                acc[`Produsul ${index + 1} - ${label}`] = val;
               });
               return acc;
             }, {})
@@ -197,13 +202,18 @@ export async function POST(request) {
             if (['id', 'isConfigured', 'name', 'category', 'categoryKey', 'qty', 'price', 'baseUnitPrice', 'discountPercent'].includes(k)) return null;
             if (v === undefined || v === null || v === '') return null;
             
-            // Render specifications in English for sales office
-            const label = localizeSpecKey(k, 'en');
-            const val = localizeSpecValue(k, v, 'en');
+            // Render specifications in Romanian + English for sales office
+            const labelRo = localizeSpecKey(k, 'ro');
+            const labelEn = localizeSpecKey(k, 'en');
+            const label = `${labelRo} (${labelEn})`;
+
+            const valRo = localizeSpecValue(k, v, 'ro');
+            const valEn = localizeSpecValue(k, v, 'en');
+            const val = valRo === valEn ? valRo : `${valRo} (${valEn})`;
             
             return `
               <tr>
-                <td style="padding: 4px 0; color: #64748b; font-weight: 500; width: 140px; vertical-align: top;">${label}</td>
+                <td style="padding: 4px 0; color: #64748b; font-weight: 500; width: 200px; vertical-align: top;">${label}</td>
                 <td style="padding: 4px 0; color: #0f172a; font-weight: 600; vertical-align: top;">${val}</td>
               </tr>
             `;
@@ -216,17 +226,17 @@ export async function POST(request) {
                   <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; border-bottom: 1px solid #edf2f7;">
                     <tr>
                       <td style="padding: 0 0 12px 0; vertical-align: middle;">
-                        <h4 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: #0f172a;">Product ${index + 1}: ${item.name}</h4>
+                        <h4 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: #0f172a;">Produsul ${index + 1} (Product ${index + 1}): ${item.name}</h4>
                       </td>
-                      <td style="padding: 0 0 12px 0; text-align: right; vertical-align: middle; width: 100px;">
-                        <span style="font-size: 0.85rem; font-weight: 700; color: #1e3a2b; background-color: #f0fdf4; border: 1px solid #dcfce7; padding: 4px 10px; border-radius: 6px; white-space: nowrap;">Qty: ${item.qty}</span>
+                      <td style="padding: 0 0 12px 0; text-align: right; vertical-align: middle; width: 140px;">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: #1e3a2b; background-color: #f0fdf4; border: 1px solid #dcfce7; padding: 4px 10px; border-radius: 6px; white-space: nowrap;">Cant. (Qty): ${item.qty}</span>
                       </td>
                     </tr>
                   </table>
                   <div style="font-size: 0.9rem; color: #475569; line-height: 1.6;">
                     <table style="width: 100%; border-collapse: collapse;">
                       <tr>
-                        <td style="padding: 4px 0; color: #64748b; font-weight: 500; width: 140px; vertical-align: top;">Category</td>
+                        <td style="padding: 4px 0; color: #64748b; font-weight: 500; width: 200px; vertical-align: top;">Categorie (Category)</td>
                         <td style="padding: 4px 0; color: #0f172a; font-weight: 600; vertical-align: top;">${item.category}</td>
                       </tr>
                       ${specsList}
@@ -243,48 +253,57 @@ export async function POST(request) {
             <!-- Top brand bar -->
             <div style="margin-bottom: 24px; border-bottom: 1px solid #edf2f7; padding-bottom: 20px;">
               <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #1e3a2b;">PALROM PRODUCTS</span>
-              <h2 style="margin: 6px 0 0; font-size: 1.5rem; font-weight: 600; color: #1a202c;">B2B Quote Inquiry</h2>
+              <h2 style="margin: 6px 0 0; font-size: 1.5rem; font-weight: 600; color: #1a202c;">Cerere de ofertă B2B (B2B Quote Inquiry)</h2>
             </div>
 
             <p style="font-size: 0.95rem; color: #475569; margin-top: 0; margin-bottom: 24px; line-height: 1.6;">
-              This internal email notification has been automatically generated and sent as a direct output of the online B2B configurator on the PALROM Products website. A potential customer has successfully finalized their custom configurations and requested a price quotation. Below, you will find the customer's contact details, optional notes, and a structured breakdown of the specifications for each configured product. Please use these details to prepare a formal quote.
+              Această notificare internă a fost generată automat și trimisă ca rezultat direct al configuratorului online B2B de pe site-ul PALROM Products. Un potențial client a finalizat configurarea produselor și a trimis o solicitare de preț. Mai jos veți găsi datele de contact ale clientului, notele opționale și specificațiile detaliate pentru fiecare produs solicitat. Vă rugăm să analizați aceste detalii pentru a pregăti o ofertă oficială.
+              <br><br>
+              <span style="font-style: italic; color: #718096; font-size: 0.85rem;">
+                (This internal email notification has been automatically generated and sent as a direct output of the online B2B configurator on the PALROM Products website. A potential customer has successfully finalized their custom configurations and requested a price quotation. Below, you will find the customer's contact details, optional notes, and a structured breakdown of the specifications for each configured product. Please use these details to prepare a formal quote.)
+              </span>
             </p>
 
             <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; margin-bottom: 24px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; border-collapse: separate; font-family: sans-serif;">
               <tr>
                 <td style="padding: 24px;">
-                  <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #475569; margin: 0 0 16px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">Client Details</h3>
+                  <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #475569; margin: 0 0 16px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">Detalii client (Client Details)</h3>
                   <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
                     <tr>
-                      <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #64748b; font-weight: 500; width: 120px;">Name</td>
+                      <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #64748b; font-weight: 500; width: 160px;">Nume (Name)</td>
                       <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #0f172a; font-weight: 600;">${clientName}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #64748b; font-weight: 500;">Email</td>
+                      <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #64748b; font-weight: 500;">E-mail (Email)</td>
                       <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7;"><a href="mailto:${clientEmail}" style="color: #1e3a2b; text-decoration: none; font-weight: 600;">${clientEmail}</a></td>
                     </tr>
                     <tr>
-                      <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #64748b; font-weight: 500;">Phone</td>
+                      <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #64748b; font-weight: 500;">Telefon (Phone)</td>
                       <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #0f172a; font-weight: 600;">${clientPhone}</td>
                     </tr>
                     ${clientNotes ? `
                     <tr>
-                      <td style="padding: 8px 0; vertical-align: top; color: #64748b; font-weight: 500;">Notes</td>
+                      <td style="padding: 8px 0; vertical-align: top; color: #64748b; font-weight: 500;">Note (Notes)</td>
                       <td style="padding: 8px 0; color: #334155; white-space: pre-line;">${clientNotes}</td>
                     </tr>
-                    ` : ''}
+                    ` : `
+                    <tr>
+                      <td style="padding: 8px 0; vertical-align: top; color: #64748b; font-weight: 500;">Note (Notes)</td>
+                      <td style="padding: 8px 0; color: #718096; font-style: italic;">Fără note (No notes)</td>
+                    </tr>
+                    `}
                   </table>
                 </td>
               </tr>
             </table>
 
             <div style="margin-bottom: 40px;">
-              <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #718096; margin-bottom: 16px; margin-top: 0;">Requested Products</h3>
+              <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #718096; margin-bottom: 16px; margin-top: 0;">Produse solicitate (Requested Products)</h3>
               ${itemsHtml}
             </div>
 
             <div style="border-top: 1px solid #edf2f7; padding-top: 24px; text-align: center; font-size: 0.8rem; color: #a0aec0;">
-              <p style="margin: 0 0 4px;">This is an automated message from the B2B Quote Configurator.</p>
+              <p style="margin: 0 0 4px;">Acest e-mail a fost trimis automat de configuratorul de oferte B2B. (This is an automated message from the B2B Quote Configurator.)</p>
               <p style="margin: 0;">PALROM Products SRL • 8 Poienita St, Brad City, Hunedoara, Romania</p>
             </div>
           </div>
@@ -300,7 +319,7 @@ export async function POST(request) {
             from: emailFrom,
             to: emailTo,
             cc: 'matthias.radder@gmail.com',
-            subject: `This is a test email - New B2B quote inquiry from ${clientName}`,
+            subject: `This is a test email - Solicitare ofertă B2B de la ${clientName} (New B2B quote inquiry from ${clientName})`,
             html: htmlContent
           })
         });
