@@ -249,11 +249,11 @@ export async function POST(request) {
         }).join('');
 
         const htmlContent = `
-          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 40px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff; color: #1a202c; line-height: 1.6;">
-            <!-- Top brand bar -->
-            <div style="margin-bottom: 24px; border-bottom: 1px solid #edf2f7; padding-bottom: 20px;">
-              <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #1e3a2b;">PALROM PRODUCTS</span>
-              <h2 style="margin: 6px 0 0; font-size: 1.5rem; font-weight: 600; color: #1a202c;">Cerere de ofertă B2B (B2B Quote Inquiry)</h2>
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 40px; border: 1px solid #e2e8f0; border-top: 4px solid #e7b124; border-radius: 8px; background-color: #ffffff; color: #1a202c; line-height: 1.6;">
+            <!-- Header -->
+            <div style="margin-bottom: 32px; border-bottom: 1px solid #edf2f7; padding-bottom: 20px;">
+              <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #1e3a2b; display: block; margin-bottom: 4px;">PALROM PRODUCTS</span>
+              <h2 style="margin: 0; font-size: 1.4rem; font-weight: 600; color: #1a202c;">Cerere de ofertă B2B (B2B Quote Inquiry)</h2>
             </div>
 
             <p style="font-size: 0.95rem; color: #475569; margin-top: 0; margin-bottom: 24px; line-height: 1.6;">
@@ -266,7 +266,7 @@ export async function POST(request) {
 
             <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; margin-bottom: 24px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; border-collapse: separate; font-family: sans-serif;">
               <tr>
-                <td style="padding: 24px;">
+                <td style="padding: 20px;">
                   <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #475569; margin: 0 0 16px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">Detalii client (Client Details)</h3>
                   <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
                     <tr>
@@ -303,8 +303,8 @@ export async function POST(request) {
             </div>
 
             <div style="border-top: 1px solid #edf2f7; padding-top: 24px; text-align: center; font-size: 0.8rem; color: #a0aec0;">
-              <p style="margin: 0 0 4px;">Acest e-mail a fost trimis automat de configuratorul de oferte B2B. (This is an automated message from the B2B Quote Configurator.)</p>
-              <p style="margin: 0;">PALROM Products SRL • 8 Poienita St, Brad City, Hunedoara, Romania</p>
+              <p style="margin: 0 0 8px;">Acest e-mail a fost trimis automat de configuratorul de oferte B2B. (This is an automated message from the B2B Quote Configurator.)</p>
+              <p style="margin: 0; font-weight: 500;">PALROM Products SRL • 8 Poienita St, Brad City, Hunedoara, Romania</p>
             </div>
           </div>
         `;
@@ -457,7 +457,7 @@ export async function POST(request) {
           }[emailLang] || 'Product';
 
           return `
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #e2e8f0; background-color: #ffffff; border-radius: 8px; font-family: sans-serif;">
+            <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; margin-bottom: 20px; border: 1px solid #e2e8f0; background-color: #ffffff; border-radius: 8px; border-collapse: separate; font-family: sans-serif;">
               <tr>
                 <td style="padding: 20px;">
                   <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; border-bottom: 1px solid #edf2f7;">
@@ -501,7 +501,7 @@ export async function POST(request) {
             </div>
 
             <!-- Client Details Box -->
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; border: 1px solid #e2e8f0; background-color: #f8fafc; border-radius: 8px; font-family: sans-serif;">
+            <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; margin-bottom: 24px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; border-collapse: separate; font-family: sans-serif;">
               <tr>
                 <td style="padding: 20px;">
                   <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #475569; margin: 0 0 16px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">${clientDetailsTitle}</h3>
