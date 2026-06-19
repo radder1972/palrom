@@ -330,25 +330,46 @@ export async function POST(request) {
         }[emailLang] || 'Een medewerker van ons hoofdkantoor in Brad (Roemenië) zal uw aanvraag beoordelen. U ontvangt binnen 24 uur een gedetailleerde B2B-prijsopgave.';
 
         const clientTitleItems = {
-          nl: 'Aangevraagde Materialen',
-          en: 'Requested Materials',
-          de: 'Angeforderte Materialien',
-          ro: 'Materiale Solicitate'
-        }[emailLang] || 'Aangevraagde Materialen';
+          nl: 'Aangevraagde Producten',
+          en: 'Requested Products',
+          de: 'Angeforderte Produkte',
+          ro: 'Produse Solicitate'
+        }[emailLang] || 'Aangevraagde Producten';
 
-        const clientHeaderDesc = {
-          nl: 'Productomschrijving',
-          en: 'Product Description',
-          de: 'Produktbeschreibung',
-          ro: 'Descrierea Produsului'
-        }[emailLang] || 'Productomschrijving';
+        const clientDetailsTitle = {
+          nl: 'Uw Contactgegevens',
+          en: 'Your Contact Details',
+          de: 'Ihre Kontaktdaten',
+          ro: 'Datele Dvs. de Contact'
+        }[emailLang] || 'Uw Contactgegevens';
 
-        const clientHeaderQty = {
-          nl: 'Aantal',
-          en: 'Quantity',
-          de: 'Menge',
-          ro: 'Cantitate'
-        }[emailLang] || 'Aantal';
+        const clientNameLabel = {
+          nl: 'Naam',
+          en: 'Name',
+          de: 'Name',
+          ro: 'Nume'
+        }[emailLang] || 'Naam';
+
+        const clientEmailLabel = {
+          nl: 'E-mail',
+          en: 'Email',
+          de: 'E-Mail',
+          ro: 'Email'
+        }[emailLang] || 'E-mail';
+
+        const clientPhoneLabel = {
+          nl: 'Telefoon',
+          en: 'Phone',
+          de: 'Telefon',
+          ro: 'Telefon'
+        }[emailLang] || 'Telefoon';
+
+        const clientNotesLabel = {
+          nl: 'Opmerkingen',
+          en: 'Notes',
+          de: 'Notizen',
+          ro: 'Note'
+        }[emailLang] || 'Opmerkingen';
 
         const clientFooterNote = {
           nl: 'Dit is een geautomatiseerde bevestiging van uw aanvraag. We nemen zo snel mogelijk contact met u op.',
@@ -357,29 +378,69 @@ export async function POST(request) {
           ro: 'Aceasta este o confirmare automată a solicitării dumneavoastră. Vă vom contacta în cel mai scurt timp posibil.'
         }[emailLang] || 'Dit is een geautomatiseerde bevestiging van uw aanvraag. We nemen zo snel mogelijk contact met u op.';
 
-        const clientItemsHtml = items.map(item => {
+        const clientItemsHtml = items.map((item, index) => {
           const specsList = Object.entries(item).map(([k, v]) => {
-            if (['id', 'isConfigured', 'name', 'category', 'qty', 'price', 'baseUnitPrice', 'discountPercent'].includes(k)) return null;
+            if (['id', 'isConfigured', 'name', 'category', 'categoryKey', 'qty', 'price', 'baseUnitPrice', 'discountPercent'].includes(k)) return null;
             if (v === undefined || v === null || v === '') return null;
             
             const label = localizeSpecKey(k, emailLang);
             const val = localizeSpecValue(k, v, emailLang);
             
-            return `<strong>${label}</strong>: ${val}`;
-          }).filter(Boolean).join(', ');
+            return `
+              <tr>
+                <td style="padding: 4px 0; color: #64748b; font-weight: 500; width: 140px; vertical-align: top;">${label}</td>
+                <td style="padding: 4px 0; color: #0f172a; font-weight: 600; vertical-align: top;">${val}</td>
+              </tr>
+            `;
+          }).filter(Boolean).join('');
+
+          const qtyLabel = {
+            nl: 'Aantal',
+            en: 'Qty',
+            de: 'Menge',
+            ro: 'Cantitate'
+          }[emailLang] || 'Aantal';
+
+          const categoryLabel = {
+            nl: 'Categorie',
+            en: 'Category',
+            de: 'Kategorie',
+            ro: 'Categorie'
+          }[emailLang] || 'Categorie';
+
+          const productTitleLabel = {
+            nl: 'Product',
+            en: 'Product',
+            de: 'Produkt',
+            ro: 'Produs'
+          }[emailLang] || 'Product';
 
           return `
-            <tr style="border-bottom: 1px solid #edf2f7;">
-              <td style="padding: 16px 0; vertical-align: top; font-family: sans-serif;">
-                <span style="font-weight: 600; color: #1a202c; display: block; margin-bottom: 4px;">${item.name}</span>
-                <span style="font-size: 0.85rem; color: #718096; display: block; line-height: 1.4;">
-                  Categorie: ${item.category} ${specsList ? ` | ${specsList}` : ''}
-                </span>
-              </td>
-              <td style="padding: 16px 0; text-align: right; vertical-align: top; font-family: sans-serif; font-weight: 600; color: #1a202c;">
-                ${item.qty}
-              </td>
-            </tr>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #e2e8f0; background-color: #ffffff; border-radius: 8px; font-family: sans-serif;">
+              <tr>
+                <td style="padding: 20px;">
+                  <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; border-bottom: 1px solid #edf2f7;">
+                    <tr>
+                      <td style="padding: 0 0 12px 0; vertical-align: middle;">
+                        <h4 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: #0f172a;">${productTitleLabel} ${index + 1}: ${item.name}</h4>
+                      </td>
+                      <td style="padding: 0 0 12px 0; text-align: right; vertical-align: middle; width: 100px;">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: #1e3a2b; background-color: #f0fdf4; border: 1px solid #dcfce7; padding: 4px 10px; border-radius: 6px; white-space: nowrap;">${qtyLabel}: ${item.qty}</span>
+                      </td>
+                    </tr>
+                  </table>
+                  <div style="font-size: 0.9rem; color: #475569; line-height: 1.6;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                      <tr>
+                        <td style="padding: 4px 0; color: #64748b; font-weight: 500; width: 140px; vertical-align: top;">${categoryLabel}</td>
+                        <td style="padding: 4px 0; color: #0f172a; font-weight: 600; vertical-align: top;">${item.category}</td>
+                      </tr>
+                      ${specsList}
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            </table>
           `;
         }).join('');
 
@@ -398,20 +459,39 @@ export async function POST(request) {
               ${clientReassurance}
             </div>
 
+            <!-- Client Details Box -->
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; border: 1px solid #e2e8f0; background-color: #f8fafc; border-radius: 8px; font-family: sans-serif;">
+              <tr>
+                <td style="padding: 20px;">
+                  <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #475569; margin: 0 0 16px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">${clientDetailsTitle}</h3>
+                  <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+                    <tr>
+                      <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #64748b; font-weight: 500; width: 140px;">${clientNameLabel}</td>
+                      <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #0f172a; font-weight: 600;">${clientName}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #64748b; font-weight: 500;">${clientEmailLabel}</td>
+                      <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7;"><a href="mailto:${clientEmail}" style="color: #1e3a2b; text-decoration: none; font-weight: 600;">${clientEmail}</a></td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #64748b; font-weight: 500;">${clientPhoneLabel}</td>
+                      <td style="padding: 8px 0; border-bottom: 1px solid #edf2f7; color: #0f172a; font-weight: 600;">${clientPhone}</td>
+                    </tr>
+                    ${clientNotes ? `
+                    <tr>
+                      <td style="padding: 8px 0; vertical-align: top; color: #64748b; font-weight: 500;">${clientNotesLabel}</td>
+                      <td style="padding: 8px 0; color: #334155; white-space: pre-line;">${clientNotes}</td>
+                    </tr>
+                    ` : ''}
+                  </table>
+                </td>
+              </tr>
+            </table>
+
             <!-- Items list -->
             <div style="margin-bottom: 40px;">
               <h3 style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #718096; margin-bottom: 16px; margin-top: 0;">${clientTitleItems}</h3>
-              <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
-                <thead>
-                  <tr style="border-bottom: 2px solid #edf2f7;">
-                    <th style="padding: 12px 0; text-align: left; font-weight: 600; color: #4a5568;">${clientHeaderDesc}</th>
-                    <th style="padding: 12px 0; text-align: right; font-weight: 600; color: #4a5568; width: 80px;">${clientHeaderQty}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${clientItemsHtml}
-                </tbody>
-              </table>
+              ${clientItemsHtml}
             </div>
             
             <!-- Footer -->
