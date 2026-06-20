@@ -55,9 +55,6 @@ export default function Header() {
           <Link href="/news" className={`nav-link ${pathname === '/news' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
             {getTranslation('news')}
           </Link>
-          <Link href="/portal" className={`nav-link ${pathname === '/portal' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-            {getTranslation('b2bPortal')}
-          </Link>
           <a href="/#contact" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>
             {getTranslation('contact')}
           </a>
