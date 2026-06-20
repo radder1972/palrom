@@ -164,6 +164,7 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const { clientName, clientEmail, clientPhone, clientNotes, items, lang = 'nl' } = body;
+    let pdfBase64 = '';
 
     // Validation
     if (!clientName?.trim() || !clientEmail?.trim() || !clientPhone?.trim()) {
@@ -455,7 +456,6 @@ export async function POST(request) {
         const csvBase64 = Buffer.from(csvContent, 'utf-8').toString('base64');
 
         // Generate PDF on the server
-        let pdfBase64 = '';
         try {
           const pdfBuffer = await generatePdfBuffer(clientName, clientEmail, clientPhone, clientNotes, items);
           pdfBase64 = pdfBuffer.toString('base64');
