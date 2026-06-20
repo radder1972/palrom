@@ -487,7 +487,7 @@ export default function Configurator() {
   // Configurator states
   const [currentStep, setCurrentStep] = useState(1);
   const [highestStepReached, setHighestStepReached] = useState(1);
-  const [category, setCategory] = useState('sawn');
+  const [category, setCategory] = useState('');
   const [subCategoryDowels, setSubCategoryDowels] = useState('dowel-small');
   const [subCategoryProfiles, setSubCategoryProfiles] = useState('profile-semiround');
   const [subCategorySpecials, setSubCategorySpecials] = useState('special-keeplat-spruce');
@@ -510,7 +510,7 @@ export default function Configurator() {
 
   useEffect(() => {
     if (shouldResetConfigurator) {
-      setCategory('sawn');
+      setCategory('');
       setSubCategoryDowels('dowel-small');
       setSubCategoryProfiles('profile-semiround');
       setSubCategorySpecials('special-keeplat-spruce');
@@ -1203,8 +1203,22 @@ export default function Configurator() {
               <h2 className="dashboard-title">{getTranslation('heroTitle')}</h2>
               
               <div className="configurator-top-preview-bar">
-                <WoodVisualizer selection={activeSelection} lang={lang} />
-                <SelectionSummary selection={activeSelection} lang={lang} />
+                {!activeSelection || !activeSelection.category ? (
+                  <div className="configurator-empty-placeholder" style={{ gridColumn: 'span 2', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem 1rem', textAlign: 'center', color: 'var(--color-text-muted)', background: '#fdfbf7', borderRadius: '8px', border: '1px dashed var(--color-border)', width: '100%' }}>
+                    <i className="fa-solid fa-wand-magic-sparkles" style={{ fontSize: '1.6rem', color: 'var(--color-primary-dark)', marginBottom: '0.5rem' }}></i>
+                    <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--color-forest-dark)', margin: '0 0 0.25rem 0' }}>
+                      {lang === 'nl' ? 'Start uw configuratie' : (lang === 'de' ? 'Starten Sie Ihre Konfiguration' : (lang === 'ro' ? 'Începeți configurarea' : 'Start your configuration'))}
+                    </h3>
+                    <p style={{ fontSize: '0.8rem', margin: 0 }}>
+                      {lang === 'nl' ? 'Kies hieronder een product om het live voorbeeld en de samenvatting te activeren.' : (lang === 'de' ? 'Wählen Sie unten ein Produkt aus, um die Live-Vorschau und die Zusammenfassung zu aktivieren.' : (lang === 'ro' ? 'Alegeți un produs mai jos pentru a activa previzualizarea live și rezumatul.' : 'Choose a product below to activate the live preview and summary.'))}
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <WoodVisualizer selection={activeSelection} lang={lang} />
+                    <SelectionSummary selection={activeSelection} lang={lang} />
+                  </>
+                )}
               </div>
               
               <div className="configurator-layout-grid">
@@ -1374,10 +1388,12 @@ export default function Configurator() {
                     <button
                       type="button"
                       className="btn btn-primary"
+                      disabled={!category}
                       onClick={() => {
                         setCurrentStep(2);
                         setHighestStepReached((prev) => Math.max(prev, 2));
                       }}
+                      style={!category ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                     >
                       {lang === 'ro' ? 'Înainte' : (lang === 'nl' ? 'Volgende' : (lang === 'de' ? 'Weiter' : 'Next'))}{' '}
                       <i className="fa-solid fa-arrow-right icon-right"></i>
