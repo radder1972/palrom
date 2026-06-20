@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import PDFDocument from 'pdfkit';
 
-function generatePdfBuffer(clientName, clientEmail, clientPhone, clientNotes, items) {
+export function generatePdfBuffer(clientName, clientEmail, clientPhone, clientNotes, items) {
   return new Promise((resolve, reject) => {
     try {
       const doc = new PDFDocument({ size: 'A4', margin: 40 });

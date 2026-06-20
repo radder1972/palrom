@@ -25,6 +25,7 @@ export default function Header() {
     careers: { nl: 'Vacatures', en: 'Careers', de: 'Karriere', ro: 'Cariere' },
     news: { nl: 'Nieuws', en: 'News', de: 'Neuigkeiten', ro: 'Știri' },
     contact: { nl: 'Contact', en: 'Contact Us', de: 'Kontakt', ro: 'Contact' },
+    b2bPortal: { nl: 'B2B Portal', en: 'B2B Portal', de: 'B2B-Portal', ro: 'Portal B2B' },
     requestQuote: { nl: 'Offerte Aanvragen', en: 'Request Quote', de: 'Angebot anfordern', ro: 'Solicită Ofertă' }
   };
 
@@ -53,6 +54,9 @@ export default function Header() {
           </Link>
           <Link href="/news" className={`nav-link ${pathname === '/news' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
             {getTranslation('news')}
+          </Link>
+          <Link href="/portal" className={`nav-link ${pathname === '/portal' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+            {getTranslation('b2bPortal')}
           </Link>
           <a href="/#contact" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>
             {getTranslation('contact')}

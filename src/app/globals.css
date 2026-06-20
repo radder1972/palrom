@@ -6007,4 +6007,51 @@ ul {
     border-left: 4px solid var(--color-primary);
 }
 
+/* B2B Partner Portal hover and table styles */
+.portal-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.portal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.portal-table-row {
+    transition: background-color var(--transition-fast);
+}
+
+.portal-table-row:hover {
+    background-color: #fdfbf7;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+/* Step transition keyframe for Configurator */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(15px);
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.configurator-step.active {
+    animation: slideInRight 0.4s ease-out forwards;
+}
+
 

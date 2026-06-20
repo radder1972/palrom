@@ -1962,14 +1962,15 @@ export default function Configurator() {
             <div style={{ padding: '1.75rem', fontSize: '0.9rem', color: 'var(--color-text-dark)', lineHeight: 1.6, maxHeight: '70vh', overflowY: 'auto' }}>
               {activeTooltipModal === 'grade' ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', borderBottom: '1px solid #edf2f7', paddingBottom: '1.25rem' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(231, 177, 36, 0.1)', border: '1.5px solid var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary-dark)', fontWeight: 800, flexShrink: 0 }}>
                       <span style={{ margin: 'auto' }}>A</span>
                     </div>
-                    <div>
+                    <div style={{ flex: 1 }}>
                       <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '0.95rem', fontWeight: 700 }}>
                         {lang === 'nl' ? 'Klasse A (Foutvrij)' : (lang === 'en' ? 'Class A (Clear)' : (lang === 'de' ? 'Klasse A (Astfrei)' : 'Clasa A (Fără noduri)'))}
                       </h4>
+                      <img src="/images/grade_a_beech.png" alt="Grade A Beechwood" style={{ width: '100%', height: '110px', objectFit: 'cover', borderRadius: '6px', margin: '0.5rem 0', border: '1px solid #e5e7eb' }} />
                       <p style={{ margin: 0, fontSize: '0.85rem', color: '#4b5563' }}>
                         {lang === 'nl' ? 'Hoogste kwaliteit, volledig noestvrij en vrij van fouten. Geschikt voor zichtwerk, speelgoed, fijn timmerwerk en deuvels.' : 
                          lang === 'en' ? 'Highest quality, completely knot-free and clear. Ideal for visible applications, toys, furniture-making, and precision dowels.' :
@@ -1978,14 +1979,15 @@ export default function Configurator() {
                       </p>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', borderBottom: '1px solid #edf2f7', paddingBottom: '1.25rem' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(74, 85, 104, 0.1)', border: '1.5px solid #4a5568', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a5568', fontWeight: 800, flexShrink: 0 }}>
                       <span style={{ margin: 'auto' }}>B</span>
                     </div>
-                    <div>
+                    <div style={{ flex: 1 }}>
                       <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '0.95rem', fontWeight: 700 }}>
                         {lang === 'nl' ? 'Klasse B (Meubelhout)' : (lang === 'en' ? 'Class B (Cabinet)' : (lang === 'de' ? 'Klasse B (Möbelholz)' : 'Clasa B (Lemn mobilă)'))}
                       </h4>
+                      <img src="/images/grade_b_beech.png" alt="Grade B Beechwood" style={{ width: '100%', height: '110px', objectFit: 'cover', borderRadius: '6px', margin: '0.5rem 0', border: '1px solid #e5e7eb' }} />
                       <p style={{ margin: 0, fontSize: '0.85rem', color: '#4b5563' }}>
                         {lang === 'nl' ? 'Meubelkwaliteit. Bevat gezonde, vaste noesten en natuurlijke kleurvariaties (rode kern). Uitstekend voor structurele delen van meubels.' : 
                          lang === 'en' ? 'Cabinet quality. Contains healthy, tight knots and natural color variations (red heartwood). Excellent for furniture components.' :
@@ -1998,10 +2000,11 @@ export default function Configurator() {
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(156, 163, 175, 0.1)', border: '1.5px solid #9ca3af', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af', fontWeight: 800, flexShrink: 0 }}>
                       <span style={{ margin: 'auto' }}>C</span>
                     </div>
-                    <div>
+                    <div style={{ flex: 1 }}>
                       <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '0.95rem', fontWeight: 700 }}>
                         {lang === 'nl' ? 'Klasse C (Constructief)' : (lang === 'en' ? 'Class C (Structural)' : (lang === 'de' ? 'Klasse C (Konstruktive Qualität)' : 'Clasa C (Calitate constructivă)'))}
                       </h4>
+                      <img src="/images/grade_c_beech.png" alt="Grade C Beechwood" style={{ width: '100%', height: '110px', objectFit: 'cover', borderRadius: '6px', margin: '0.5rem 0', border: '1px solid #e5e7eb' }} />
                       <p style={{ margin: 0, fontSize: '0.85rem', color: '#4b5563' }}>
                         {lang === 'nl' ? 'Constructiekwaliteit. Bevat grotere noesten en kleurverschillen. Wordt gebruikt voor onzichtbare binnenframes en verpakkingen.' : 
                          lang === 'en' ? 'Structural quality. Permits larger knots and variations. Perfect for internal framing, packaging, and non-visible components.' :
@@ -2013,14 +2016,15 @@ export default function Configurator() {
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', borderBottom: '1px solid #edf2f7', paddingBottom: '1.25rem' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: 'rgba(231, 177, 36, 0.1)', border: '1.5px solid var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary-dark)', fontSize: '1.2rem', flexShrink: 0 }}>
                       <i className="fa-solid fa-temperature-high"></i>
                     </div>
-                    <div>
+                    <div style={{ flex: 1 }}>
                       <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '0.95rem', fontWeight: 700 }}>
                         {lang === 'nl' ? 'Kamerdroog (KD 10-12%)' : (lang === 'en' ? 'Kiln-Dried (KD 10-12%)' : (lang === 'de' ? 'Kammergetrocknet (KD 10-12%)' : 'Uscat în Cameră (KD 10-12%)'))}
                       </h4>
+                      <img src="/images/kilns.jpg" alt="Kiln Drying Chambers" style={{ width: '100%', height: '110px', objectFit: 'cover', borderRadius: '6px', margin: '0.5rem 0', border: '1px solid #e5e7eb' }} />
                       <p style={{ margin: 0, fontSize: '0.85rem', color: '#4b5563' }}>
                         {lang === 'nl' ? 'Gecontroleerd gedroogd in moderne droogkamers. Vermindert de werking van het hout drastisch. Vereist voor binnentoepassingen en meubels.' : 
                          lang === 'en' ? 'Dried under computer control in modern drying chambers. Drastically reduces wood movement. Essential for interior joinery and furniture.' :
@@ -2033,10 +2037,11 @@ export default function Configurator() {
                     <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: 'rgba(74, 85, 104, 0.1)', border: '1.5px solid #4a5568', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a5568', fontSize: '1.2rem', flexShrink: 0 }}>
                       <i className="fa-solid fa-wind"></i>
                     </div>
-                    <div>
+                    <div style={{ flex: 1 }}>
                       <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '0.95rem', fontWeight: 700 }}>
                         {lang === 'nl' ? 'Luchtdroog (AD)' : (lang === 'en' ? 'Air-Dried (AD)' : (lang === 'de' ? 'Luftgetrocknet (AD)' : 'Uscat Natural (AD)'))}
                       </h4>
+                      <img src="/images/air_drying_beech.png" alt="Air Drying Yard" style={{ width: '100%', height: '110px', objectFit: 'cover', borderRadius: '6px', margin: '0.5rem 0', border: '1px solid #e5e7eb' }} />
                       <p style={{ margin: 0, fontSize: '0.85rem', color: '#4b5563' }}>
                         {lang === 'nl' ? 'Gedroogd in de buitenlucht tot ca. 18-20% vochtgehalte. Ideaal voor buitenwerk of voor hout dat in een latere fase nog droging ondergaat.' : 
                          lang === 'en' ? 'Naturally air-dried in covered outdoor yards to 18-20% moisture. Suitable for outdoor construction or parts that will be dried later.' :

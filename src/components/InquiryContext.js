@@ -41,20 +41,36 @@ export function InquiryProvider({ children }) {
       if (storedCart) {
         setCartItems(JSON.parse(storedCart));
       }
-      const storedLang = localStorage.getItem('palrom_lang');
-      if (storedLang && ['nl', 'en', 'de', 'ro'].includes(storedLang)) {
-        setLang(storedLang);
+      
+      // Check URL parameters for explicit language overrides (?lang=en)
+      let initialLang = null;
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        const urlLang = params.get('lang');
+        if (urlLang && ['nl', 'en', 'de', 'ro'].includes(urlLang.toLowerCase())) {
+          initialLang = urlLang.toLowerCase();
+          localStorage.setItem('palrom_lang', initialLang);
+        }
+      }
+
+      if (initialLang) {
+        setLang(initialLang);
       } else {
-        // Fallback to browser language if available
-        const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
-        if (browserLang.startsWith('de')) {
-          setLang('de');
-        } else if (browserLang.startsWith('ro')) {
-          setLang('ro');
-        } else if (browserLang.startsWith('en')) {
-          setLang('en');
+        const storedLang = localStorage.getItem('palrom_lang');
+        if (storedLang && ['nl', 'en', 'de', 'ro'].includes(storedLang)) {
+          setLang(storedLang);
         } else {
-          setLang('nl');
+          // Fallback to browser language if available
+          const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+          if (browserLang.startsWith('de')) {
+            setLang('de');
+          } else if (browserLang.startsWith('ro')) {
+            setLang('ro');
+          } else if (browserLang.startsWith('en')) {
+            setLang('en');
+          } else {
+            setLang('nl');
+          }
         }
       }
     } catch (e) {
