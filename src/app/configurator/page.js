@@ -286,7 +286,7 @@ function WoodVisualizer({ selection, lang }) {
           <i className="fa-solid fa-eye"></i> {lang === 'nl' ? 'Live Voorbeeld' : 'Live Preview'}
         </span>
       </div>
-      <div className="visualizer-body" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '180px', background: '#fdfbf7', border: '1px solid #edf2f7', borderRadius: '8px', padding: '10px', position: 'relative' }}>
+      <div className="visualizer-body" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '130px', background: '#fdfbf7', border: '1px solid #edf2f7', borderRadius: '8px', padding: '10px', position: 'relative' }}>
         <svg viewBox={`0 0 ${svgW} ${svgH}`} width="100%" height="100%" style={{ overflow: 'visible' }}>
           <defs>
             <linearGradient id="cylinderGrad" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -421,59 +421,57 @@ function SelectionSummary({ selection, lang }) {
   const getVal = (dict, key) => dict[lang]?.[key] || dict.en?.[key] || key;
 
   return (
-    <div className="selection-summary-card" style={{ marginTop: '1.25rem', backgroundColor: '#ffffff', border: '1px solid var(--color-border)', borderRadius: '8px', padding: '1.5rem', boxShadow: 'var(--shadow-sm)' }}>
-      <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: 'var(--color-forest-dark)', marginTop: 0, marginBottom: '1rem', borderBottom: '1px solid #edf2f7', paddingBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+    <div className="selection-summary-card" style={{ backgroundColor: '#ffffff', border: '1px solid var(--color-border)', borderRadius: '8px', padding: '1.25rem', boxShadow: 'var(--shadow-sm)', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <h3 style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--color-forest-dark)', marginTop: 0, marginBottom: '0.75rem', borderBottom: '1px solid #edf2f7', paddingBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
         <i className="fa-solid fa-list-check" style={{ color: 'var(--color-primary-dark)' }}></i>
         {getVal(t, 'title')}
       </h3>
-      <table style={{ width: '100%', fontSize: '0.85rem', borderCollapse: 'collapse', textAlign: 'left' }}>
-        <tbody>
-          <tr style={{ borderBottom: '1px solid #f8fafc' }}>
-            <td style={{ padding: '6px 0', color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'product')}</td>
-            <td style={{ padding: '6px 0', fontWeight: 600, color: 'var(--color-forest-dark)' }}>{selection.productName}</td>
-          </tr>
-          <tr style={{ borderBottom: '1px solid #f8fafc' }}>
-            <td style={{ padding: '6px 0', color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'dimensions')}</td>
-            <td style={{ padding: '6px 0', fontWeight: 600 }}>{selection.dimensions}</td>
-          </tr>
-          {selection.category !== 'brichete' && (
-            <tr style={{ borderBottom: '1px solid #f8fafc' }}>
-              <td style={{ padding: '6px 0', color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'grade')}</td>
-              <td style={{ padding: '6px 0', fontWeight: 600 }}>{gradeNames[lang]?.[selection.grade] || selection.grade}</td>
-            </tr>
-          )}
-          {selection.category !== 'brichete' && (
-            <tr style={{ borderBottom: '1px solid #f8fafc' }}>
-              <td style={{ padding: '6px 0', color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'drying')}</td>
-              <td style={{ padding: '6px 0', fontWeight: 600 }}>
-                {selection.drying === 'luchtdroog'
-                  ? (lang === 'nl' ? 'Luchtdroog' : (lang === 'ro' ? 'Uscat natural' : (lang === 'de' ? 'Luftgetrocknet' : 'Air-dried')))
-                  : (lang === 'nl' ? 'Kamerdroog (KD 10-12%)' : (lang === 'ro' ? 'Uscat în cameră' : (lang === 'de' ? 'Kammergetrocknet' : 'Kiln-dried')))}
-              </td>
-            </tr>
-          )}
-          <tr style={{ borderBottom: '1px solid #f8fafc' }}>
-            <td style={{ padding: '6px 0', color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'certification')}</td>
-            <td style={{ padding: '6px 0', fontWeight: 600 }}>
-              {selection.category === 'brichete'
-                ? (lang === 'ro' ? '100% Natural' : (lang === 'nl' ? '100% Natuurlijk' : '100% Natural'))
-                : (selection.fsc ? 'FSC® 100%' : 'Geen FSC')}
-            </td>
-          </tr>
-          <tr style={{ borderBottom: '1px solid #f8fafc' }}>
-            <td style={{ padding: '6px 0', color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'qty')}</td>
-            <td style={{ padding: '6px 0', fontWeight: 600, color: 'var(--color-forest-dark)' }}>{selection.qtyText}</td>
-          </tr>
-          {SHOW_PRICING && (
-            <tr>
-              <td style={{ padding: '6px 0', color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'price')}</td>
-              <td style={{ padding: '6px 0', fontWeight: 700, color: 'var(--color-primary-dark)', fontSize: '1rem' }}>
-                € {formatEuro(selection.price)}
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem 1rem', fontSize: '0.82rem' }}>
+        <div style={{ borderBottom: '1px solid #f8fafc', paddingBottom: '3px' }}>
+          <span style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'product')}: </span>
+          <span style={{ fontWeight: 600, color: 'var(--color-forest-dark)' }}>{selection.productName}</span>
+        </div>
+        <div style={{ borderBottom: '1px solid #f8fafc', paddingBottom: '3px' }}>
+          <span style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'dimensions')}: </span>
+          <span style={{ fontWeight: 600 }}>{selection.dimensions}</span>
+        </div>
+        {selection.category !== 'brichete' && (
+          <div style={{ borderBottom: '1px solid #f8fafc', paddingBottom: '3px' }}>
+            <span style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'grade')}: </span>
+            <span style={{ fontWeight: 600 }}>{gradeNames[lang]?.[selection.grade] || selection.grade}</span>
+          </div>
+        )}
+        {selection.category !== 'brichete' && (
+          <div style={{ borderBottom: '1px solid #f8fafc', paddingBottom: '3px' }}>
+            <span style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'drying')}: </span>
+            <span style={{ fontWeight: 600 }}>
+              {selection.drying === 'luchtdroog'
+                ? (lang === 'nl' ? 'Luchtdroog' : (lang === 'ro' ? 'Uscat natural' : (lang === 'de' ? 'Luftgetrocknet' : 'Air-dried')))
+                : (lang === 'nl' ? 'Kamerdroog (KD)' : (lang === 'ro' ? 'Uscat în cameră' : (lang === 'de' ? 'Kammergetrocknet' : 'Kiln-dried')))}
+            </span>
+          </div>
+        )}
+        <div style={{ borderBottom: '1px solid #f8fafc', paddingBottom: '3px' }}>
+          <span style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'certification')}: </span>
+          <span style={{ fontWeight: 600 }}>
+            {selection.category === 'brichete'
+              ? (lang === 'ro' ? '100% Natural' : (lang === 'nl' ? '100% Natuurlijk' : '100% Natural'))
+              : (selection.fsc ? 'FSC® 100%' : 'Geen FSC')}
+          </span>
+        </div>
+        <div style={{ borderBottom: '1px solid #f8fafc', paddingBottom: '3px' }}>
+          <span style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'qty')}: </span>
+          <span style={{ fontWeight: 600, color: 'var(--color-forest-dark)' }}>{selection.qtyText}</span>
+        </div>
+        {SHOW_PRICING && (
+          <div style={{ gridColumn: 'span 2', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', borderTop: '1px solid #edf2f7', paddingTop: '4px', marginTop: '4px' }}>
+            <span style={{ color: 'var(--color-text-muted)', fontWeight: 500, marginRight: '0.5rem' }}>{getVal(t, 'price')}: </span>
+            <span style={{ fontWeight: 700, color: 'var(--color-primary-dark)', fontSize: '0.95rem' }}>
+              € {formatEuro(selection.price)}
+            </span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -1204,6 +1202,11 @@ export default function Configurator() {
             <form onSubmit={handleFormSubmit} className="configurator-dashboard-form">
               <h2 className="dashboard-title">{getTranslation('heroTitle')}</h2>
               
+              <div className="configurator-top-preview-bar">
+                <WoodVisualizer selection={activeSelection} lang={lang} />
+                <SelectionSummary selection={activeSelection} lang={lang} />
+              </div>
+              
               <div className="configurator-layout-grid">
                 <div className="configurator-form-column">
 
@@ -1898,11 +1901,6 @@ export default function Configurator() {
             </div>
           </div>
         </div> {/* End configurator-form-column */}
-
-        <div className="configurator-preview-column">
-          <WoodVisualizer selection={activeSelection} lang={lang} />
-          <SelectionSummary selection={activeSelection} lang={lang} />
-        </div>
       </div> {/* End configurator-layout-grid */}
     </form>
           </div>
