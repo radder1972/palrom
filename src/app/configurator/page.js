@@ -245,6 +245,239 @@ function formatEuro(val, decimals = 2) {
 
 const SHOW_PRICING = false;
 
+function WoodVisualizer({ selection, lang }) {
+  if (!selection || !selection.category) return null;
+
+  const { category, length, diameter, thickness, grade } = selection;
+
+  // Helper to parse numbers
+  const getNumericValue = (val, defaultVal = 0) => {
+    if (typeof val === 'string' && val.includes('-')) {
+      return parseInt(val.split('-')[1]) || defaultVal;
+    }
+    return parseInt(val) || defaultVal;
+  };
+
+  const numLen = getNumericValue(length, 1000);
+  const numDiam = getNumericValue(diameter, 50);
+  const numThick = getNumericValue(thickness, 25);
+
+  // SVG dimensions
+  const svgW = 320;
+  const svgH = 180;
+
+  // Scaling logic
+  // Length maps from 50 to 3000 to SVG width 40 to 220
+  const lScale = Math.min(220, Math.max(50, (numLen / 3000) * 220));
+  // Diameter (width) maps from 3 to 150 to SVG depth/height
+  const wScale = Math.min(60, Math.max(15, (numDiam / 150) * 60));
+  // Thickness maps from 5 to 100 to SVG vertical thickness
+  const tScale = Math.min(50, Math.max(10, (numThick / 100) * 50));
+
+  // Wood color palette based on quality (grade)
+  const woodColorMain = grade === 'A' ? '#ebd4b9' : (grade === 'B' ? '#dfbf9f' : '#cfac8c');
+  const woodColorFront = grade === 'A' ? '#dfbf9f' : (grade === 'B' ? '#cfa67f' : '#be956f');
+  const woodColorEnd = grade === 'A' ? '#cba57e' : (grade === 'B' ? '#b88f66' : '#a77d54');
+
+  return (
+    <div className="wood-visualizer-card">
+      <div className="visualizer-header">
+        <span className="visualizer-badge">
+          <i className="fa-solid fa-eye"></i> {lang === 'nl' ? 'Live Voorbeeld' : 'Live Preview'}
+        </span>
+      </div>
+      <div className="visualizer-body" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '180px', background: '#fdfbf7', border: '1px solid #edf2f7', borderRadius: '8px', padding: '10px', position: 'relative' }}>
+        <svg viewBox={`0 0 ${svgW} ${svgH}`} width="100%" height="100%" style={{ overflow: 'visible' }}>
+          <defs>
+            <linearGradient id="cylinderGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#f3e8de" />
+              <stop offset="30%" stopColor={woodColorMain} />
+              <stop offset="70%" stopColor={woodColorFront} />
+              <stop offset="100%" stopColor={woodColorEnd} />
+            </linearGradient>
+            <linearGradient id="endGrainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor={woodColorEnd} />
+              <stop offset="100%" stopColor="#8d643d" />
+            </linearGradient>
+            <pattern id="grainPattern" width="40" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(5)">
+              <path d="M 0,10 Q 10,8 20,10 T 40,10" fill="none" stroke="rgba(141, 100, 61, 0.15)" strokeWidth="1" />
+              <path d="M 0,3 Q 15,5 20,3 T 40,3" fill="none" stroke="rgba(141, 100, 61, 0.1)" strokeWidth="1.2" />
+            </pattern>
+          </defs>
+
+          {category === 'dowels' ? (
+            (() => {
+              const startX = (svgW - lScale) / 2 - 10;
+              const startY = svgH / 2;
+              const dRadiusX = Math.min(wScale / 2, 20);
+              const dRadiusY = wScale / 2;
+
+              return (
+                <g>
+                  <path d={`M ${startX} ${startY - dRadiusY} A ${dRadiusX} ${dRadiusY} 0 0 0 ${startX} ${startY + dRadiusY}`} fill={woodColorEnd} opacity="0.6" />
+                  <rect x={startX} y={startY - dRadiusY} width={lScale} height={dRadiusY * 2} fill="url(#cylinderGrad)" />
+                  <rect x={startX} y={startY - dRadiusY} width={lScale} height={dRadiusY * 2} fill="url(#grainPattern)" />
+                  <path d={`M ${startX + 10} ${startY - dRadiusY * 0.3} Q ${startX + lScale * 0.4} ${startY - dRadiusY * 0.1} ${startX + lScale - 10} ${startY - dRadiusY * 0.3}`} fill="none" stroke="rgba(141, 100, 61, 0.2)" strokeWidth="1" />
+                  <path d={`M ${startX + 20} ${startY + dRadiusY * 0.4} Q ${startX + lScale * 0.6} ${startY + dRadiusY * 0.2} ${startX + lScale - 20} ${startY + dRadiusY * 0.4}`} fill="none" stroke="rgba(141, 100, 61, 0.15)" strokeWidth="1.2" />
+                  <ellipse cx={startX + lScale} cy={startY} rx={dRadiusX} ry={dRadiusY} fill="url(#endGrainGrad)" stroke="#cfa67f" strokeWidth="0.8" />
+                  <ellipse cx={startX + lScale} cy={startY} rx={dRadiusX * 0.6} ry={dRadiusY * 0.6} fill="none" stroke="rgba(141, 100, 61, 0.3)" strokeWidth="0.8" />
+                  <ellipse cx={startX + lScale} cy={startY} rx={dRadiusX * 0.2} ry={dRadiusY * 0.2} fill="none" stroke="rgba(141, 100, 61, 0.4)" strokeWidth="1" />
+                  
+                  {(grade === 'B' || grade === 'C') && (
+                    <g>
+                      <circle cx={startX + lScale * 0.3} cy={startY - dRadiusY * 0.2} r={Math.min(5, dRadiusY * 0.25)} fill="#784a25" opacity="0.8" />
+                      <circle cx={startX + lScale * 0.7} cy={startY + dRadiusY * 0.3} r={Math.min(4, dRadiusY * 0.2)} fill="#6c401d" opacity="0.8" />
+                    </g>
+                  )}
+                </g>
+              );
+            })()
+          ) : category === 'brichete' ? (
+            (() => {
+              const cx = svgW / 2;
+              const cy = svgH / 2;
+              return (
+                <g>
+                  <rect x={cx - 50} y={cy - 20} width={90} height={40} rx="4" fill="#a77d54" stroke="#8d643d" strokeWidth="1.5" />
+                  <path d={`M ${cx - 50} ${cy} L ${cx + 40} ${cy}`} stroke="#8d643d" strokeWidth="0.8" strokeDasharray="3,3" />
+                  <rect x={cx - 40} y={cy - 5} width={90} height={40} rx="4" fill="#be956f" stroke="#8d643d" strokeWidth="1.5" />
+                  <text x={cx + 5} y={cy + 20} fill="rgba(141, 100, 61, 0.5)" fontSize="10" fontWeight="900" textAnchor="middle" style={{ letterSpacing: '2px' }}>PALROM</text>
+                </g>
+              );
+            })()
+          ) : (
+            (() => {
+              const x0 = (svgW - lScale) / 2 + (wScale * 0.3);
+              const y0 = svgH / 2 + (tScale * 0.4) + 10;
+
+              const lx = lScale;
+              const ly = 0;
+
+              const wx = -wScale * 0.6;
+              const wy = -wScale * 0.4;
+
+              const zx = 0;
+              const zy = -tScale;
+
+              const p0 = `${x0},${y0}`;
+              const p1 = `${x0 + lx},${y0 + ly}`;
+              const p2 = `${x0 + lx + zx},${y0 + ly + zy}`;
+              const p3 = `${x0 + zx},${y0 + zy}`;
+              
+              const p4 = `${x0 + lx + wx + zx},${y0 + ly + wy + zy}`;
+              const p5 = `${x0 + wx + zx},${y0 + wy + zy}`;
+              const p6 = `${x0 + wx},${y0 + wy}`;
+
+              return (
+                <g>
+                  <polygon points={`${p0} ${p3} ${p5} ${p6}`} fill={woodColorEnd} stroke="rgba(141, 100, 61, 0.4)" strokeWidth="0.8" />
+                  <path d={`M ${x0 + wx * 0.5} ${y0 + wy * 0.5} Q ${x0 + wx * 0.5 + zx * 0.5} ${y0 + wy * 0.5 + zy * 0.5} ${x0 + zx * 0.5} ${y0 + zy * 0.5}`} fill="none" stroke="rgba(141, 100, 61, 0.25)" strokeWidth="1" />
+                  <polygon points={`${p0} ${p1} ${p2} ${p3}`} fill="url(#cylinderGrad)" stroke="rgba(141, 100, 61, 0.3)" strokeWidth="0.8" />
+                  <polygon points={`${p3} ${p2} ${p4} ${p5}`} fill={woodColorMain} stroke="rgba(141, 100, 61, 0.3)" strokeWidth="0.8" />
+                  <polygon points={`${p3} ${p2} ${p4} ${p5}`} fill="url(#grainPattern)" opacity="0.7" />
+
+                  {(grade === 'B' || grade === 'C') && (
+                    <g>
+                      <ellipse cx={x0 + lx * 0.4 + wx * 0.5} cy={y0 + zy + wy * 0.5} rx={Math.min(6, wScale * 0.15)} ry={Math.min(3, wScale * 0.08)} fill="#784a25" opacity="0.85" />
+                      <ellipse cx={x0 + lx * 0.75 + wx * 0.3} cy={y0 + zy + wy * 0.3} rx={Math.min(4, wScale * 0.1)} ry={Math.min(2, wScale * 0.05)} fill="#6c401d" opacity="0.85" />
+                      <circle cx={x0 + lx * 0.2} cy={y0 + zy * 0.4} r={Math.min(5, tScale * 0.25)} fill="#5b3314" opacity="0.8" />
+                    </g>
+                  )}
+                </g>
+              );
+            })()
+          )}
+        </svg>
+
+        <div style={{ position: 'absolute', bottom: '8px', left: '0', right: '0', textAlign: 'center', fontSize: '0.78rem', fontWeight: '700', color: 'var(--color-forest-dark)', backgroundColor: 'rgba(255, 255, 255, 0.85)', padding: '2px 8px', borderRadius: '4px', display: 'inline-block', margin: '0 auto', width: 'fit-content', border: '1px solid var(--color-border)' }}>
+          {selection.dimensions}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SelectionSummary({ selection, lang }) {
+  if (!selection || !selection.category) return null;
+
+  const t = {
+    title: { nl: 'Configuratie Samenvatting', en: 'Configuration Summary', de: 'Konfigurations-Zusammenfassung', ro: 'Sumar Configurare' },
+    product: { nl: 'Product', en: 'Product', de: 'Produkt', ro: 'Produs' },
+    dimensions: { nl: 'Afmetingen', en: 'Dimensions', de: 'Maße', ro: 'Dimensiuni' },
+    grade: { nl: 'Kwaliteit', en: 'Grade', de: 'Qualität', ro: 'Calitate' },
+    drying: { nl: 'Droging', en: 'Drying', de: 'Trocknung', ro: 'Uscare' },
+    certification: { nl: 'Certificering', en: 'Certification', de: 'Zertifizierung', ro: 'Certificare' },
+    qty: { nl: 'Aantal', en: 'Quantity', de: 'Menge', ro: 'Cantitate' },
+    price: { nl: 'Richtprijs (excl. btw)', en: 'Target Price (excl. VAT)', de: 'Richtpreis (exkl. MwSt.)', ro: 'Preț Țintă (excl. TVA)' },
+  };
+
+  const gradeNames = {
+    nl: { A: 'Klasse A (Foutvrij)', B: 'Klasse B (Meubelhout)', C: 'Klasse C (Constructief)' },
+    en: { A: 'Class A (Clear)', B: 'Class B (Cabinet)', C: 'Class C (Structural)' },
+    de: { A: 'Klasse A (Astfrei)', B: 'Klasse B (Möbelholz)', C: 'Klasse C (Konstruktive Qualität)' },
+    ro: { A: 'Clasa A (Fără noduri)', B: 'Clasa B (Lemn pentru mobilă)', C: 'Clasa C (Calitate constructivă)' }
+  };
+
+  const getVal = (dict, key) => dict[lang]?.[key] || dict.en?.[key] || key;
+
+  return (
+    <div className="selection-summary-card" style={{ marginTop: '1.25rem', backgroundColor: '#ffffff', border: '1px solid var(--color-border)', borderRadius: '8px', padding: '1.5rem', boxShadow: 'var(--shadow-sm)' }}>
+      <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: 'var(--color-forest-dark)', marginTop: 0, marginBottom: '1rem', borderBottom: '1px solid #edf2f7', paddingBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+        <i className="fa-solid fa-list-check" style={{ color: 'var(--color-primary-dark)' }}></i>
+        {getVal(t, 'title')}
+      </h3>
+      <table style={{ width: '100%', fontSize: '0.85rem', borderCollapse: 'collapse', textAlign: 'left' }}>
+        <tbody>
+          <tr style={{ borderBottom: '1px solid #f8fafc' }}>
+            <td style={{ padding: '6px 0', color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'product')}</td>
+            <td style={{ padding: '6px 0', fontWeight: 600, color: 'var(--color-forest-dark)' }}>{selection.productName}</td>
+          </tr>
+          <tr style={{ borderBottom: '1px solid #f8fafc' }}>
+            <td style={{ padding: '6px 0', color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'dimensions')}</td>
+            <td style={{ padding: '6px 0', fontWeight: 600 }}>{selection.dimensions}</td>
+          </tr>
+          {selection.category !== 'brichete' && (
+            <tr style={{ borderBottom: '1px solid #f8fafc' }}>
+              <td style={{ padding: '6px 0', color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'grade')}</td>
+              <td style={{ padding: '6px 0', fontWeight: 600 }}>{gradeNames[lang]?.[selection.grade] || selection.grade}</td>
+            </tr>
+          )}
+          {selection.category !== 'brichete' && (
+            <tr style={{ borderBottom: '1px solid #f8fafc' }}>
+              <td style={{ padding: '6px 0', color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'drying')}</td>
+              <td style={{ padding: '6px 0', fontWeight: 600 }}>
+                {selection.drying === 'luchtdroog'
+                  ? (lang === 'nl' ? 'Luchtdroog' : (lang === 'ro' ? 'Uscat natural' : (lang === 'de' ? 'Luftgetrocknet' : 'Air-dried')))
+                  : (lang === 'nl' ? 'Kamerdroog (KD 10-12%)' : (lang === 'ro' ? 'Uscat în cameră' : (lang === 'de' ? 'Kammergetrocknet' : 'Kiln-dried')))}
+              </td>
+            </tr>
+          )}
+          <tr style={{ borderBottom: '1px solid #f8fafc' }}>
+            <td style={{ padding: '6px 0', color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'certification')}</td>
+            <td style={{ padding: '6px 0', fontWeight: 600 }}>
+              {selection.category === 'brichete'
+                ? (lang === 'ro' ? '100% Natural' : (lang === 'nl' ? '100% Natuurlijk' : '100% Natural'))
+                : (selection.fsc ? 'FSC® 100%' : 'Geen FSC')}
+            </td>
+          </tr>
+          <tr style={{ borderBottom: '1px solid #f8fafc' }}>
+            <td style={{ padding: '6px 0', color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'qty')}</td>
+            <td style={{ padding: '6px 0', fontWeight: 600, color: 'var(--color-forest-dark)' }}>{selection.qtyText}</td>
+          </tr>
+          {SHOW_PRICING && (
+            <tr>
+              <td style={{ padding: '6px 0', color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'price')}</td>
+              <td style={{ padding: '6px 0', fontWeight: 700, color: 'var(--color-primary-dark)', fontSize: '1rem' }}>
+                € {formatEuro(selection.price)}
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default function Configurator() {
   const { lang, addToCart, setIsCartOpen, shouldResetConfigurator, setShouldResetConfigurator } = useInquiry();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -275,6 +508,7 @@ export default function Configurator() {
   const [length, setLength] = useState(1000);
   const [additionalInfo, setAdditionalInfo] = useState('');
   const [quantity, setQuantity] = useState(10000);
+  const [activeTooltipModal, setActiveTooltipModal] = useState(null);
 
   useEffect(() => {
     if (shouldResetConfigurator) {
@@ -969,6 +1203,9 @@ export default function Configurator() {
           <div className="configurator-dashboard-container">
             <form onSubmit={handleFormSubmit} className="configurator-dashboard-form">
               <h2 className="dashboard-title">{getTranslation('heroTitle')}</h2>
+              
+              <div className="configurator-layout-grid">
+                <div className="configurator-form-column">
 
               {/* Panel 1: Product Selection */}
               <div className={`accordion-step-panel ${currentStep === 1 ? 'active' : ''} ${highestStepReached > 1 ? 'completed' : ''}`}>
@@ -1189,7 +1426,17 @@ export default function Configurator() {
 
                 {/* Droging */}
                 <div className="control-group">
-                  <label htmlFor="dbDrying">{lang === 'nl' ? 'Droging' : 'Drying'}</label>
+                  <label htmlFor="dbDrying" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    {lang === 'nl' ? 'Droging' : 'Drying'}
+                    <button 
+                      type="button" 
+                      className="info-tooltip-btn" 
+                      onClick={() => setActiveTooltipModal('drying')}
+                      aria-label="Info droging"
+                    >
+                      <i className="fa-regular fa-circle-question"></i>
+                    </button>
+                  </label>
                   <select
                     id="dbDrying"
                     className="dashboard-select"
@@ -1222,7 +1469,17 @@ export default function Configurator() {
                 {/* Kwaliteit */}
                 {category !== 'brichete' && (
                   <div className="control-group" id="controlGroupGrade">
-                    <label htmlFor="dbGrade">{getTranslation('gradeLabel')}</label>
+                    <label htmlFor="dbGrade" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      {getTranslation('gradeLabel')}
+                      <button 
+                        type="button" 
+                        className="info-tooltip-btn" 
+                        onClick={() => setActiveTooltipModal('grade')}
+                        aria-label="Info houtkwaliteit"
+                      >
+                        <i className="fa-regular fa-circle-question"></i>
+                      </button>
+                    </label>
                     <select
                       id="dbGrade"
                       className="dashboard-select"
@@ -1640,10 +1897,171 @@ export default function Configurator() {
               </div>
             </div>
           </div>
-        </form>
+        </div> {/* End configurator-form-column */}
+
+        <div className="configurator-preview-column">
+          <WoodVisualizer selection={activeSelection} lang={lang} />
+          <SelectionSummary selection={activeSelection} lang={lang} />
+        </div>
+      </div> {/* End configurator-layout-grid */}
+    </form>
           </div>
         </div>
       </section>
+
+      {/* Tooltip Modal Overlay */}
+      {activeTooltipModal && (
+        <div 
+          className="tooltip-modal-overlay active"
+          onClick={() => setActiveTooltipModal(null)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            backdropFilter: 'blur(4px)',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1.5rem'
+          }}
+        >
+          <div 
+            className="tooltip-modal-card"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: '#ffffff',
+              borderRadius: '12px',
+              border: '1px solid var(--color-border)',
+              width: '100%',
+              maxWidth: '500px',
+              boxShadow: 'var(--shadow-lg)',
+              overflow: 'hidden',
+              fontFamily: 'Inter, sans-serif'
+            }}
+          >
+            <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--color-bg-light)' }}>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-forest-dark)', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <i className="fa-solid fa-circle-info" style={{ color: 'var(--color-primary-dark)' }}></i>
+                {activeTooltipModal === 'grade' 
+                  ? (lang === 'nl' ? 'Uitleg Houtkwaliteiten' : (lang === 'en' ? 'Wood Quality Grades' : (lang === 'de' ? 'Holzqualität Klassen' : 'Calități Lemn')))
+                  : (lang === 'nl' ? 'Uitleg Droogprocessen' : (lang === 'en' ? 'Wood Drying Processes' : (lang === 'de' ? 'Trocknungsprozesse' : 'Procese de Uscare')))}
+              </h3>
+              <button 
+                type="button" 
+                onClick={() => setActiveTooltipModal(null)}
+                style={{ background: 'transparent', border: 'none', fontSize: '1.25rem', color: 'var(--color-text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            
+            <div style={{ padding: '1.75rem', fontSize: '0.9rem', color: 'var(--color-text-dark)', lineHeight: 1.6, maxHeight: '70vh', overflowY: 'auto' }}>
+              {activeTooltipModal === 'grade' ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(231, 177, 36, 0.1)', border: '1.5px solid var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary-dark)', fontWeight: 800, flexShrink: 0 }}>
+                      <span style={{ margin: 'auto' }}>A</span>
+                    </div>
+                    <div>
+                      <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '0.95rem', fontWeight: 700 }}>
+                        {lang === 'nl' ? 'Klasse A (Foutvrij)' : (lang === 'en' ? 'Class A (Clear)' : (lang === 'de' ? 'Klasse A (Astfrei)' : 'Clasa A (Fără noduri)'))}
+                      </h4>
+                      <p style={{ margin: 0, fontSize: '0.85rem', color: '#4b5563' }}>
+                        {lang === 'nl' ? 'Hoogste kwaliteit, volledig noestvrij en vrij van fouten. Geschikt voor zichtwerk, speelgoed, fijn timmerwerk en deuvels.' : 
+                         lang === 'en' ? 'Highest quality, completely knot-free and clear. Ideal for visible applications, toys, furniture-making, and precision dowels.' :
+                         lang === 'de' ? 'Höchste Qualität, absolut astfrei und fehlerfrei. Ideal für sichtbare Anwendungen, Spielzeug, feine Tischlerarbeiten und Dübel.' :
+                         'Calitate maximă, complet fără noduri. Ideal pentru aplicații vizibile, jucării, tâmplărie fină și dibluri.'}
+                      </p>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(74, 85, 104, 0.1)', border: '1.5px solid #4a5568', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a5568', fontWeight: 800, flexShrink: 0 }}>
+                      <span style={{ margin: 'auto' }}>B</span>
+                    </div>
+                    <div>
+                      <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '0.95rem', fontWeight: 700 }}>
+                        {lang === 'nl' ? 'Klasse B (Meubelhout)' : (lang === 'en' ? 'Class B (Cabinet)' : (lang === 'de' ? 'Klasse B (Möbelholz)' : 'Clasa B (Lemn mobilă)'))}
+                      </h4>
+                      <p style={{ margin: 0, fontSize: '0.85rem', color: '#4b5563' }}>
+                        {lang === 'nl' ? 'Meubelkwaliteit. Bevat gezonde, vaste noesten en natuurlijke kleurvariaties (rode kern). Uitstekend voor structurele delen van meubels.' : 
+                         lang === 'en' ? 'Cabinet quality. Contains healthy, tight knots and natural color variations (red heartwood). Excellent for furniture components.' :
+                         lang === 'de' ? 'Möbelqualität. Enthält gesunde, feste Äste und natürliche Farbvariationen (roter Kern). Ausgezeichnet für Möbelteile.' :
+                         'Calitate pentru mobilier. Conține noduri sănătoase, strânse și variații naturale de culoare (inimă roșie). Excelent pentru componente de mobilier.'}
+                      </p>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(156, 163, 175, 0.1)', border: '1.5px solid #9ca3af', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af', fontWeight: 800, flexShrink: 0 }}>
+                      <span style={{ margin: 'auto' }}>C</span>
+                    </div>
+                    <div>
+                      <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '0.95rem', fontWeight: 700 }}>
+                        {lang === 'nl' ? 'Klasse C (Constructief)' : (lang === 'en' ? 'Class C (Structural)' : (lang === 'de' ? 'Klasse C (Konstruktive Qualität)' : 'Clasa C (Calitate constructivă)'))}
+                      </h4>
+                      <p style={{ margin: 0, fontSize: '0.85rem', color: '#4b5563' }}>
+                        {lang === 'nl' ? 'Constructiekwaliteit. Bevat grotere noesten en kleurverschillen. Wordt gebruikt voor onzichtbare binnenframes en verpakkingen.' : 
+                         lang === 'en' ? 'Structural quality. Permits larger knots and variations. Perfect for internal framing, packaging, and non-visible components.' :
+                         lang === 'de' ? 'Konstruktive Qualität. Erlaubt größere Äste und Farbvariationen. Ideal für unsichtbare Innenrahmen und Verpackungen.' :
+                         'Calitate constructivă. Permite noduri și variații mai mari. Perfect pentru cadre interioare, ambalaje și componente ascunse.'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: 'rgba(231, 177, 36, 0.1)', border: '1.5px solid var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary-dark)', fontSize: '1.2rem', flexShrink: 0 }}>
+                      <i className="fa-solid fa-temperature-high"></i>
+                    </div>
+                    <div>
+                      <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '0.95rem', fontWeight: 700 }}>
+                        {lang === 'nl' ? 'Kamerdroog (KD 10-12%)' : (lang === 'en' ? 'Kiln-Dried (KD 10-12%)' : (lang === 'de' ? 'Kammergetrocknet (KD 10-12%)' : 'Uscat în Cameră (KD 10-12%)'))}
+                      </h4>
+                      <p style={{ margin: 0, fontSize: '0.85rem', color: '#4b5563' }}>
+                        {lang === 'nl' ? 'Gecontroleerd gedroogd in moderne droogkamers. Vermindert de werking van het hout drastisch. Vereist voor binnentoepassingen en meubels.' : 
+                         lang === 'en' ? 'Dried under computer control in modern drying chambers. Drastically reduces wood movement. Essential for interior joinery and furniture.' :
+                         lang === 'de' ? 'Computergesteuert in modernen Trockenkammern getrocknet. Reduziert das Verziehen des Holzes drastisch. Erforderlich für Innenausbau und Möbel.' :
+                         'Uscat sub control computerizat în camere moderne de uscare. Reduce drastic mișcarea lemnului. Esențial pentru tâmplărie interioară și mobilier.'}
+                      </p>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: 'rgba(74, 85, 104, 0.1)', border: '1.5px solid #4a5568', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a5568', fontSize: '1.2rem', flexShrink: 0 }}>
+                      <i className="fa-solid fa-wind"></i>
+                    </div>
+                    <div>
+                      <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '0.95rem', fontWeight: 700 }}>
+                        {lang === 'nl' ? 'Luchtdroog (AD)' : (lang === 'en' ? 'Air-Dried (AD)' : (lang === 'de' ? 'Luftgetrocknet (AD)' : 'Uscat Natural (AD)'))}
+                      </h4>
+                      <p style={{ margin: 0, fontSize: '0.85rem', color: '#4b5563' }}>
+                        {lang === 'nl' ? 'Gedroogd in de buitenlucht tot ca. 18-20% vochtgehalte. Ideaal voor buitenwerk of voor hout dat in een latere fase nog droging ondergaat.' : 
+                         lang === 'en' ? 'Naturally air-dried in covered outdoor yards to 18-20% moisture. Suitable for outdoor construction or parts that will be dried later.' :
+                         lang === 'de' ? 'Naturbelassen an der Luft auf 18-20% Feuchte getrocknet. Ideal für Außenanwendungen oder Holz, das später nachgetrocknet wird.' :
+                         'Uscat natural în aer liber sub acoperiș la 18-20% umiditate. Potrivit pentru construcții exterioare sau piese care vor fi uscate mai târziu.'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid var(--color-border)', textAlign: 'right', backgroundColor: '#f8fafc' }}>
+              <button 
+                type="button" 
+                className="btn btn-primary" 
+                onClick={() => setActiveTooltipModal(null)}
+                style={{ padding: '0.5rem 1.5rem', fontSize: '0.85rem', borderRadius: '4px' }}
+              >
+                {lang === 'nl' ? 'Begrepen' : (lang === 'en' ? 'Understood' : (lang === 'de' ? 'Verstanden' : 'Am înțeles'))}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

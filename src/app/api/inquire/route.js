@@ -2,6 +2,112 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
+import PDFDocument from 'pdfkit';
+
+function generatePdfBuffer(clientName, clientEmail, clientPhone, clientNotes, items) {
+  return new Promise((resolve, reject) => {
+    try {
+      const doc = new PDFDocument({ size: 'A4', margin: 40 });
+      const buffers = [];
+      doc.on('data', buffers.push.bind(buffers));
+      doc.on('end', () => {
+        const pdfData = Buffer.concat(buffers);
+        resolve(pdfData);
+      });
+
+      // 1. Brand Header
+      doc.fillColor('#1e3a2b') // forest dark
+         .fontSize(22)
+         .font('Helvetica-Bold')
+         .text('PALROM PRODUCTS', 40, 40);
+         
+      doc.fillColor('#e7b124') // primary gold
+         .fontSize(10)
+         .font('Helvetica-Bold')
+         .text('FSC® 100% CERTIFIED BEECHWOOD MANUFACTURER', 40, 65);
+
+      // Accent top line
+      doc.moveTo(40, 80).lineTo(550, 80).strokeColor('#e7b124').lineWidth(3).stroke();
+
+      // Title
+      doc.fillColor('#000000')
+         .fontSize(16)
+         .font('Helvetica-Bold')
+         .text('B2B Quote Request / Cerere de Oferta', 40, 95);
+
+      // 2. Client Details Box
+      doc.fillColor('#f8fafc');
+      doc.rect(40, 125, 510, 95).fill();
+      doc.strokeColor('#edf2f7').lineWidth(1).stroke();
+
+      doc.fillColor('#1a202c')
+         .fontSize(11)
+         .font('Helvetica-Bold')
+         .text('Client Details / Detalii Client', 50, 135);
+
+      doc.font('Helvetica').fontSize(10);
+      doc.text(`Name / Nume: ${clientName}`, 50, 155);
+      doc.text(`Email: ${clientEmail}`, 50, 170);
+      doc.text(`Phone / Telefon: ${clientPhone}`, 50, 185);
+      
+      const notesY = 235;
+      if (clientNotes) {
+        doc.fillColor('#000000');
+        doc.font('Helvetica-Bold').text('Notes / Note:', 40, notesY);
+        doc.font('Helvetica').text(clientNotes, 40, notesY + 15, { width: 510 });
+      }
+
+      // 3. Table of Products
+      let startY = clientNotes ? notesY + 60 : 235;
+      
+      doc.fillColor('#000000');
+      doc.font('Helvetica-Bold').fontSize(12).text('Requested Products / Produse Solicitate', 40, startY);
+      
+      startY += 20;
+      // Table Header Row
+      doc.fillColor('#1e3a2b').rect(40, startY, 510, 20).fill();
+      doc.fillColor('#ffffff').font('Helvetica-Bold').fontSize(9);
+      doc.text('Product Name', 45, startY + 5, { width: 180 });
+      doc.text('Dimensions', 230, startY + 5, { width: 140 });
+      doc.text('Grade', 380, startY + 5, { width: 50 });
+      doc.text('Drying', 440, startY + 5, { width: 60 });
+      doc.text('Qty', 510, startY + 5, { width: 35, align: 'right' });
+
+      let currentY = startY + 20;
+      doc.fillColor('#000000').font('Helvetica').fontSize(9);
+
+      items.forEach((item, index) => {
+        // Draw row background for alternating rows
+        if (index % 2 === 0) {
+          doc.fillColor('#f8fafc').rect(40, currentY, 510, 24).fill();
+        }
+        
+        doc.fillColor('#000000');
+        doc.text(item.name || '', 45, currentY + 7, { width: 180 });
+        doc.text(item.dims || '', 230, currentY + 7, { width: 140 });
+        doc.text(item.grade || 'A', 380, currentY + 7, { width: 50 });
+        
+        const dryText = item.drying === 'luchtdroog' ? 'AD' : 'KD';
+        doc.text(dryText, 440, currentY + 7, { width: 60 });
+        
+        doc.text(String(item.qty), 510, currentY + 7, { width: 35, align: 'right' });
+        
+        // Bottom border for row
+        doc.moveTo(40, currentY + 24).lineTo(550, currentY + 24).strokeColor('#edf2f7').lineWidth(1).stroke();
+        currentY += 24;
+      });
+
+      // Footer
+      doc.fillColor('#718096')
+         .fontSize(8)
+         .text('PALROM Products SRL \u2022 8 Poienita St, Brad City, Hunedoara, Romania', 40, 770, { align: 'center', width: 510 });
+
+      doc.end();
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
 
 // Load Supabase environment variables if present
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
@@ -348,6 +454,15 @@ export async function POST(request) {
         const csvContent = csvRows.join('\n');
         const csvBase64 = Buffer.from(csvContent, 'utf-8').toString('base64');
 
+        // Generate PDF on the server
+        let pdfBase64 = '';
+        try {
+          const pdfBuffer = await generatePdfBuffer(clientName, clientEmail, clientPhone, clientNotes, items);
+          pdfBase64 = pdfBuffer.toString('base64');
+        } catch (pdfErr) {
+          console.error('Failed to generate B2B inquiry PDF:', pdfErr);
+        }
+
         const subjectLine = `This is a test email - Solicitare ofertă B2B de la ${clientName} (New B2B quote inquiry from ${clientName})`;
         const resendRes = await fetch('https://api.resend.com/emails', {
           method: 'POST',
@@ -364,7 +479,11 @@ export async function POST(request) {
               {
                 filename: `Inquiry_${clientName.replace(/\s+/g, '_')}.csv`,
                 content: csvBase64
-              }
+              },
+              ...(pdfBase64 ? [{
+                filename: `Inquiry_${clientName.replace(/\s+/g, '_')}.pdf`,
+                content: pdfBase64
+              }] : [])
             ]
           })
         });
@@ -390,7 +509,11 @@ export async function POST(request) {
                   {
                     filename: `Inquiry_${clientName.replace(/\s+/g, '_')}.csv`,
                     content: csvBase64
-                  }
+                  },
+                  ...(pdfBase64 ? [{
+                    filename: `Inquiry_${clientName.replace(/\s+/g, '_')}.pdf`,
+                    content: pdfBase64
+                  }] : [])
                 ]
               })
             });
@@ -627,7 +750,13 @@ export async function POST(request) {
             from: emailFrom,
             to: clientEmail,
             subject: clientSubject,
-            html: clientHtmlContent
+            html: clientHtmlContent,
+            attachments: pdfBase64 ? [
+              {
+                filename: `Quote_Request_${clientName.replace(/\s+/g, '_')}.pdf`,
+                content: pdfBase64
+              }
+            ] : []
           })
         });
 

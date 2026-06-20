@@ -5890,3 +5890,121 @@ ul {
     }
 }
 
+/* ==========================================================================
+   19. Advanced Configurator Visualizer, Tooltips, & Transitions
+   ========================================================================== */
+
+/* Split Layout Grid */
+@media (min-width: 992px) {
+    .configurator-dashboard-container {
+        max-width: 1100px; /* Expand slightly for split view */
+    }
+    .configurator-layout-grid {
+        display: grid;
+        grid-template-columns: 1.25fr 0.75fr;
+        gap: 2.5rem;
+        align-items: start;
+    }
+    .configurator-preview-column {
+        position: sticky;
+        top: 130px; /* Keep it sticky on scroll */
+    }
+}
+
+@media (max-width: 991px) {
+    .configurator-layout-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+}
+
+/* Wood Visualizer Card */
+.wood-visualizer-card {
+    background-color: #ffffff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-smooth);
+}
+
+.wood-visualizer-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary);
+}
+
+.visualizer-header {
+    background-color: var(--color-bg-light);
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.visualizer-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-primary-dark);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* Info Tooltips */
+.info-tooltip-btn {
+    background: transparent;
+    border: none;
+    padding: 0.2rem;
+    color: var(--color-primary-dark);
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.info-tooltip-btn:hover {
+    color: var(--color-primary);
+    transform: scale(1.2);
+}
+
+/* Tooltip Modals */
+.tooltip-modal-overlay {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.tooltip-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.tooltip-modal-card {
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tooltip-modal-overlay.active .tooltip-modal-card {
+    transform: scale(1);
+}
+
+/* Animations for step transitions */
+.accordion-step-panel {
+    transition: all 0.3s ease;
+}
+
+.accordion-step-panel.completed {
+    border-left: 4px solid var(--color-success);
+}
+
+.accordion-step-panel.active {
+    border-left: 4px solid var(--color-primary);
+}
+
+
