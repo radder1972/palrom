@@ -421,13 +421,13 @@ function SelectionSummary({ selection, lang }) {
   const getVal = (dict, key) => dict[key]?.[lang] || dict[key]?.en || key;
 
   return (
-    <div className="selection-summary-card" style={{ backgroundColor: '#ffffff', border: '1px solid var(--color-border)', borderRadius: '8px', padding: '1.25rem', boxShadow: 'var(--shadow-sm)', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-      <h3 style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--color-forest-dark)', marginTop: 0, marginBottom: '0.75rem', borderBottom: '1px solid #edf2f7', paddingBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+    <div className="selection-summary-card" style={{ backgroundColor: '#ffffff', border: '1px solid var(--color-border)', borderRadius: '8px', padding: '0.65rem 1rem', boxShadow: 'var(--shadow-sm)', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <h3 style={{ fontSize: '0.92rem', fontWeight: '700', color: 'var(--color-forest-dark)', marginTop: 0, marginBottom: '0.4rem', borderBottom: '1px solid #edf2f7', paddingBottom: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
         <i className="fa-solid fa-list-check" style={{ color: 'var(--color-primary-dark)' }}></i>
         {getVal(t, 'title')}
       </h3>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.82rem' }}>
-        <div style={{ borderBottom: '1px solid #f8fafc', paddingBottom: '3px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', fontSize: '0.8rem' }}>
+        <div style={{ borderBottom: '1px solid #f8fafc', paddingBottom: '2px' }}>
           <span style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'product')}: </span>
           <span style={{ fontWeight: 600, color: 'var(--color-forest-dark)' }}>{selection.productName}</span>
         </div>
@@ -1722,20 +1722,6 @@ export default function Configurator() {
 
                 <div className="accordion-step-body">
                   <div className="dashboard-controls-grid">
-                {/* Aanvullende informatie */}
-                <div className="control-group" style={{ gridColumn: 'span 2' }}>
-                  <label htmlFor="dbAdditionalInfo">{lang === 'nl' ? 'Aanvullende informatie' : 'Additional information'}</label>
-                  <textarea
-                    id="dbAdditionalInfo"
-                    className="dashboard-input"
-                    rows="2"
-                    value={additionalInfo}
-                    onChange={(e) => setAdditionalInfo(e.target.value)}
-                    placeholder={lang === 'nl' ? 'Bijvoorbeeld schaaftoleranties of specifieke verpakkingseisen...' : 'For example planing tolerances or specific packaging requirements...'}
-                    style={{ resize: 'vertical', width: '100%', minHeight: '60px' }}
-                  />
-                </div>
-
                 {/* Quantity */}
                 <div className="control-group">
                   <label htmlFor="dbOplage">
@@ -1772,10 +1758,24 @@ export default function Configurator() {
                     </div>
                   )}
                 </div>
+
+                {/* Aanvullende informatie */}
+                <div className="control-group" style={{ gridColumn: 'span 2' }}>
+                  <label htmlFor="dbAdditionalInfo">{lang === 'nl' ? 'Aanvullende informatie' : 'Additional information'}</label>
+                  <textarea
+                    id="dbAdditionalInfo"
+                    className="dashboard-input"
+                    rows="2"
+                    value={additionalInfo}
+                    onChange={(e) => setAdditionalInfo(e.target.value)}
+                    placeholder={lang === 'nl' ? 'Bijvoorbeeld schaaftoleranties of specifieke verpakkingseisen...' : 'For example planing tolerances or specific packaging requirements...'}
+                    style={{ resize: 'vertical', width: '100%', minHeight: '60px' }}
+                  />
+                </div>
               </div>
 
               {/* Summary Table */}
-              <div className="dashboard-table-wrapper" style={{ marginTop: '1.5rem' }}>
+              <div className="dashboard-table-wrapper" style={{ marginTop: '1rem' }}>
                 <table className="dashboard-table">
                   <thead>
                     <tr>
