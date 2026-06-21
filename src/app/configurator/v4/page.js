@@ -296,6 +296,7 @@ export default function OpenChatConfigurator() {
 
   const [isListening, setIsListening] = useState(false);
   const [hasSpeechSupport, setHasSpeechSupport] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const recognitionRef = useRef(null);
 
   // Initialize Speech Recognition on client
@@ -345,14 +346,54 @@ export default function OpenChatConfigurator() {
     }
   }, [lang]);
 
-  // Clean up speech recognition on unmount
+  // Clean up speech recognition & synthesis on unmount
   useEffect(() => {
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
+      if (typeof window !== 'undefined' && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
     };
   }, []);
+
+  const speakText = (text) => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
+    
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+    
+    // Strip HTML tags and markdown symbols for clean reading
+    let cleanText = text
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\*\*/g, '')
+      .replace(/\*/g, '')
+      .replace(/✓/g, '')
+      .replace(/Ø/g, 'diameter')
+      .trim();
+      
+    if (!cleanText) return;
+    
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    
+    if (lang === 'ro') utterance.lang = 'ro-RO';
+    else if (lang === 'de') utterance.lang = 'de-DE';
+    else if (lang === 'en') utterance.lang = 'en-US';
+    else utterance.lang = 'nl-NL';
+    
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const toggleMute = () => {
+    setIsMuted(prev => {
+      const newVal = !prev;
+      if (newVal && typeof window !== 'undefined' && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+      return newVal;
+    });
+  };
 
   const toggleListening = () => {
     if (!hasSpeechSupport) {
@@ -999,6 +1040,7 @@ export default function OpenChatConfigurator() {
         }
 
         setHistory(prev => [...prev, { sender: 'bot', text: replyText }]);
+        if (!isMuted) speakText(replyText);
       } catch (err) {
         console.error("Willem AI error: ", err);
         setHistory(prev => [...prev, { 
@@ -1199,6 +1241,7 @@ export default function OpenChatConfigurator() {
           }
 
           setHistory(prev => [...prev, { sender: 'bot', text: replyText }]);
+          if (!isMuted) speakText(replyText);
         } catch (err) {
           console.error("Willem AI error (chip click): ", err);
           setHistory(prev => [...prev, { 
@@ -1261,6 +1304,9 @@ export default function OpenChatConfigurator() {
              *${getTranslation('configureAnother')} of klik op de knop om uw offerte aan te vragen.*`,
       isAddedSuccess: true
     }]);
+    if (!isMuted) {
+      speakText(`${getTranslation('addedToCart')}. ${displayName}.`);
+    }
 
     setNotification(getTranslation('addedToCart'));
     setTimeout(() => {
@@ -1649,9 +1695,14 @@ export default function OpenChatConfigurator() {
                     <span><i className="fa-solid fa-circle" style={{ color: '#22c55e', fontSize: '0.55rem' }}></i> Online / Virtual Advisor</span>
                   </div>
                 </div>
-                <button onClick={handleStartOver} className="btn-lock">
-                  <i className="fa-solid fa-rotate-left"></i> {getTranslation('resetText')}
-                </button>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button onClick={toggleMute} className="btn-lock" title={isMuted ? 'Geluid aanzetten' : 'Geluid dempen'}>
+                    <i className={isMuted ? "fa-solid fa-volume-xmark" : "fa-solid fa-volume-high"}></i>
+                  </button>
+                  <button onClick={handleStartOver} className="btn-lock">
+                    <i className="fa-solid fa-rotate-left"></i> {getTranslation('resetText')}
+                  </button>
+                </div>
               </div>
 
               {/* Chat History */}
