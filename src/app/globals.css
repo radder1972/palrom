@@ -5899,6 +5899,13 @@ ul {
         gap: 0.5rem;
         padding: 1rem 1.25rem;
     }
+    .accordion-step-header-left {
+        flex: 1;
+        min-width: 0;
+    }
+    .accordion-step-title {
+        font-size: 1rem;
+    }
     .accordion-step-summary {
         margin-left: 2.75rem;
         margin-right: 0;
