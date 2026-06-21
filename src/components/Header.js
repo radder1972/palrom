@@ -69,14 +69,16 @@ export default function Header() {
         </nav>
         <div className="header-actions">
           {pathname === '/configurator' && (
-            <button className="cart-toggle-btn" onClick={() => setIsCartOpen(true)} aria-label="View Inquiry Cart">
+            <button className="cart-toggle-btn" onClick={() => setIsCartOpen(true)} aria-label="View Inquiry Cart" style={{ fontSize: '1.85rem' }}>
               <i className="fa-solid fa-clipboard-list"></i>
               <span className={`cart-count-badge ${cartCount > 0 ? 'visible' : ''}`}>{cartCount}</span>
             </button>
           )}
-          <a href="/#contact" className="action-btn">
-            {getTranslation('requestQuote')}
-          </a>
+          {pathname !== '/configurator' && (
+            <a href="/#contact" className="action-btn">
+              {getTranslation('requestQuote')}
+            </a>
+          )}
           <div className="language-switcher-vertical">
             {pathname === '/brichete-fag' ? (
               <>
