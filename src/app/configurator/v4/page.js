@@ -1715,67 +1715,6 @@ export default function OpenChatConfigurator() {
 
               {/* Chat Footer with open chat input */}
               <div className="chat-footer">
-                
-                {/* Suggestions / Chips */}
-                <div className="chat-chips-row">
-                  {!filledFields.category && (
-                    <>
-                      {['sawn', 'planed', 'dowels', 'profiles', 'specials', ...(isRomania ? ['brichete'] : [])].map(catKey => {
-                        const cat = categoryData[catKey];
-                        const displayName = cat.name[lang] || cat.name.nl;
-                        let chipText = displayName;
-                        if (catKey === 'sawn') chipText = lang === 'nl' ? 'Blanks' : (lang === 'ro' ? 'Piese brute' : (lang === 'de' ? 'Blanks' : 'Blanks'));
-                        else if (catKey === 'planed') chipText = lang === 'nl' ? 'Latten' : (lang === 'ro' ? 'Șipci' : (lang === 'de' ? 'Leisten' : 'Slats'));
-                        else if (catKey === 'dowels') chipText = lang === 'nl' ? 'Stokken' : (lang === 'ro' ? 'Tije' : (lang === 'de' ? 'Rundstäbe' : 'Dowels'));
-                        else if (catKey === 'profiles') chipText = lang === 'nl' ? 'Profielen' : (lang === 'ro' ? 'Profile' : (lang === 'de' ? 'Profile' : 'Profiles'));
-                        else if (catKey === 'specials') chipText = lang === 'nl' ? 'Bestekken' : (lang === 'ro' ? 'Speciale' : (lang === 'de' ? 'Zuschnitte' : 'Specials'));
-                        else if (catKey === 'brichete') chipText = lang === 'nl' ? 'Briketten' : (lang === 'ro' ? 'Brichete' : (lang === 'de' ? 'Briketts' : 'Briquettes'));
-
-                        const phrase = lang === 'nl' 
-                          ? `Ik zoek ${chipText.toLowerCase()}` 
-                          : (lang === 'ro' 
-                            ? `Caut ${chipText.toLowerCase()}` 
-                            : (lang === 'de' 
-                              ? `Ich suche ${chipText}` 
-                              : `I am looking for ${chipText.toLowerCase()}`));
-
-                        return (
-                          <div 
-                            key={catKey} 
-                            className="chat-chip" 
-                            onClick={() => handleChipClick(phrase, catKey)}
-                          >
-                            {chipText}
-                          </div>
-                        );
-                      })}
-                    </>
-                  )}
-                  {filledFields.category && !filledFields.dimensions && (
-                    <>
-                      <div className="chat-chip" onClick={() => handleChipClick('25x75x1200 mm')}>25x75x1200mm</div>
-                      <div className="chat-chip" onClick={() => handleChipClick('20x50x1000 mm')}>20x50x1000mm</div>
-                      {category === 'dowels' && (
-                        <>
-                          <div className="chat-chip" onClick={() => handleChipClick('Ø 10x1000 mm')}>Ø 10x1000mm</div>
-                          <div className="chat-chip" onClick={() => handleChipClick('Ø 15x1200 mm')}>Ø 15x1200mm</div>
-                        </>
-                      )}
-                    </>
-                  )}
-                  {filledFields.category && filledFields.dimensions && !filledFields.grade && !isBriquettes && (
-                    <>
-                      <div className="chat-chip" onClick={() => handleChipClick(getTranslation('gradeASelect'), 'Grade A')}>Klasse A</div>
-                      <div className="chat-chip" onClick={() => handleChipClick(getTranslation('gradeBSelect'), 'Grade B')}>Klasse B</div>
-                    </>
-                  )}
-                  {filledFields.category && filledFields.dimensions && filledFields.grade && !filledFields.drying && !isBriquettes && (
-                    <>
-                      <div className="chat-chip" onClick={() => handleChipClick(getTranslation('dryingValueKiln'), 'KD kamerdroog')}>Kamerdroog (KD)</div>
-                      <div className="chat-chip" onClick={() => handleChipClick(getTranslation('dryingValueAir'), 'AD luchtdroog')}>Luchtdroog (AD)</div>
-                    </>
-                  )}
-                 </div>
 
                 {/* Input Bar */}
                 <form onSubmit={handleSendMessage} className="chat-input-row">
