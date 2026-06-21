@@ -169,6 +169,7 @@ const translations = {
   addToInquiry: { nl: 'Toevoegen aan Offerteaanvraag', en: 'Add to Quote Request', de: 'Zur Angebotsanfrage hinzufügen', ro: 'Adaugă la solicitarea de ofertă' },
   addedToCart: { nl: 'Toegevoegd aan winkelwagen!', en: 'Added to cart!', de: 'In den Warenkorb gelegt!', ro: 'Adăugat în coș!' },
   configureAnother: { nl: 'Nog een product configureren', en: 'Configure another product', de: 'Anderes Produkt konfigurieren', ro: 'Configurați alt produs' },
+  pieces: { nl: 'stuks', en: 'pieces', de: 'Stück', ro: 'bucăți' },
   viewCart: { nl: 'Bekijk offerteaanvraag', en: 'View quote request', de: 'Angebotsanfrage ansehen', ro: 'Vizualizați cererea de ofertă' },
   activeSelectionTitle: { nl: 'Gedetecteerde Specificaties', en: 'Detected Specifications', de: 'Erkannte Spezifikationen', ro: 'Specificații Detectate' },
   visualizerTitle: { nl: 'Live voorbeeld', en: 'Live preview', de: 'Live-Vorschau', ro: 'Previzualizare live' },
@@ -671,142 +672,151 @@ export default function OpenChatConfigurator() {
     setIsTyping(true);
 
     setTimeout(() => {
-      // 1. Run NLP Parser
-      const parsed = parseFreeText(userText, category);
-      
-      // Keep track of what we detected
-      const detectedFields = [];
-      const updatedFields = { ...filledFields };
+      try {
+        const cleanText = userText.toLowerCase().trim();
+        // 1. Run NLP Parser
+        const parsed = parseFreeText(userText, category);
+        
+        // Keep track of what we detected
+        const detectedFields = [];
+        const updatedFields = { ...filledFields };
 
-      // Apply updates to states
-      if (parsed.category) {
-        setCategory(parsed.category);
-        updatedFields.category = true;
-        detectedFields.push(`✓ ${getTranslation('productRow')}: **${categoryData[parsed.category].name[lang] || categoryData[parsed.category].name.nl}**`);
-      }
+        // Apply updates to states
+        if (parsed.category) {
+          setCategory(parsed.category);
+          updatedFields.category = true;
+          detectedFields.push(`✓ ${getTranslation('productRow')}: **${categoryData[parsed.category].name[lang] || categoryData[parsed.category].name.nl}**`);
+        }
 
-      const activeCat = parsed.category || category;
-      
-      // Clamp values and apply
-      const clamped = clampParsedValues(activeCat, parsed);
+        const activeCat = parsed.category || category;
+        
+        // Clamp values and apply
+        const clamped = clampParsedValues(activeCat, parsed);
 
-      if (clamped.subCategoryDowels) {
-        setSubCategoryDowels(clamped.subCategoryDowels);
-        detectedFields.push(`✓ Subcategorie: **${getSubcategoryName('dowels', clamped.subCategoryDowels)}**`);
-      }
-      if (clamped.subCategoryPlaned) {
-        setSubCategoryPlaned(clamped.subCategoryPlaned);
-        detectedFields.push(`✓ Subcategorie: **${getSubcategoryName('planed', clamped.subCategoryPlaned)}**`);
-      }
-      if (clamped.subCategoryProfiles) {
-        setSubCategoryProfiles(clamped.subCategoryProfiles);
-        detectedFields.push(`✓ Subcategorie: **${getSubcategoryName('profiles', clamped.subCategoryProfiles)}**`);
-      }
-      if (clamped.subCategorySpecials) {
-        setSubCategorySpecials(clamped.subCategorySpecials);
-        detectedFields.push(`✓ Subcategorie: **${getSubcategoryName('specials', clamped.subCategorySpecials)}**`);
-      }
+        if (clamped.subCategoryDowels) {
+          setSubCategoryDowels(clamped.subCategoryDowels);
+          detectedFields.push(`✓ Subcategorie: **${getSubcategoryName('dowels', clamped.subCategoryDowels)}**`);
+        }
+        if (clamped.subCategoryPlaned) {
+          setSubCategoryPlaned(clamped.subCategoryPlaned);
+          detectedFields.push(`✓ Subcategorie: **${getSubcategoryName('planed', clamped.subCategoryPlaned)}**`);
+        }
+        if (clamped.subCategoryProfiles) {
+          setSubCategoryProfiles(clamped.subCategoryProfiles);
+          detectedFields.push(`✓ Subcategorie: **${getSubcategoryName('profiles', clamped.subCategoryProfiles)}**`);
+        }
+        if (clamped.subCategorySpecials) {
+          setSubCategorySpecials(clamped.subCategorySpecials);
+          detectedFields.push(`✓ Subcategorie: **${getSubcategoryName('specials', clamped.subCategorySpecials)}**`);
+        }
 
-      if (clamped.thickness !== undefined) {
-        setThickness(clamped.thickness);
-        updatedFields.dimensions = true;
-      }
-      if (clamped.diameter !== undefined) {
-        setDiameter(clamped.diameter);
-        updatedFields.dimensions = true;
-      }
-      if (clamped.length !== undefined) {
-        setLength(clamped.length);
-        updatedFields.dimensions = true;
-      }
-      
-      if (updatedFields.dimensions && (clamped.thickness !== undefined || clamped.diameter !== undefined || clamped.length !== undefined)) {
-        const dimStr = activeCat === 'dowels' 
-          ? `Ø ${clamped.diameter || diameter} x ${clamped.length || length} mm`
-          : activeCat === 'brichete'
-          ? `RUF Block format`
-          : `${clamped.thickness || thickness} x ${clamped.diameter || diameter} x ${clamped.length || length} mm`;
-        detectedFields.push(`✓ ${getTranslation('dimensionsRow')}: **${dimStr}**`);
-      }
+        if (clamped.thickness !== undefined) {
+          setThickness(clamped.thickness);
+          updatedFields.dimensions = true;
+        }
+        if (clamped.diameter !== undefined) {
+          setDiameter(clamped.diameter);
+          updatedFields.dimensions = true;
+        }
+        if (clamped.length !== undefined) {
+          setLength(clamped.length);
+          updatedFields.dimensions = true;
+        }
+        
+        if (updatedFields.dimensions && (clamped.thickness !== undefined || clamped.diameter !== undefined || clamped.length !== undefined)) {
+          const dimStr = activeCat === 'dowels' 
+            ? `Ø ${clamped.diameter || diameter} x ${clamped.length || length} mm`
+            : activeCat === 'brichete'
+            ? `RUF Block format`
+            : `${clamped.thickness || thickness} x ${clamped.diameter || diameter} x ${clamped.length || length} mm`;
+          detectedFields.push(`✓ ${getTranslation('dimensionsRow')}: **${dimStr}**`);
+        }
 
-      if (clamped.grade) {
-        setGrade(clamped.grade);
-        updatedFields.grade = true;
-        const gradeLabelStr = clamped.grade === 'A' ? getTranslation('gradeAValue') : (clamped.grade === 'B' ? getTranslation('gradeBValue') : getTranslation('gradeCValue'));
-        detectedFields.push(`✓ ${getTranslation('gradeRow')}: **${gradeLabelStr}**`);
-      }
+        if (clamped.grade) {
+          setGrade(clamped.grade);
+          updatedFields.grade = true;
+          const gradeLabelStr = clamped.grade === 'A' ? getTranslation('gradeAValue') : (clamped.grade === 'B' ? getTranslation('gradeBValue') : getTranslation('gradeCValue'));
+          detectedFields.push(`✓ ${getTranslation('gradeRow')}: **${gradeLabelStr}**`);
+        }
 
-      if (clamped.steamed) {
-        setSteamed(clamped.steamed);
-        detectedFields.push(`✓ ${getTranslation('steamedRow')}: **${getSteamedLabel(clamped.steamed)}**`);
-      }
+        if (clamped.steamed) {
+          setSteamed(clamped.steamed);
+          detectedFields.push(`✓ ${getTranslation('steamedRow')}: **${getSteamedLabel(clamped.steamed)}**`);
+        }
 
-      if (clamped.drying) {
-        setDrying(clamped.drying);
-        updatedFields.drying = true;
-        detectedFields.push(`✓ ${getTranslation('dryingRow')}: **${getDryingLabel(clamped.drying)}**`);
-      }
+        if (clamped.drying) {
+          setDrying(clamped.drying);
+          updatedFields.drying = true;
+          detectedFields.push(`✓ ${getTranslation('dryingRow')}: **${getDryingLabel(clamped.drying)}**`);
+        }
 
-      if (clamped.fsc !== undefined) {
-        setFsc(clamped.fsc);
-        updatedFields.fsc = true;
-        detectedFields.push(`✓ ${getTranslation('certificationLabel')}: **${getFscLabel(clamped.fsc)}**`);
-      }
+        if (clamped.fsc !== undefined) {
+          setFsc(clamped.fsc);
+          updatedFields.fsc = true;
+          detectedFields.push(`✓ ${getTranslation('certificationLabel')}: **${getFscLabel(clamped.fsc)}**`);
+        }
 
-      if (clamped.quantity !== undefined) {
-        setQuantity(clamped.quantity);
-        updatedFields.quantity = true;
-        detectedFields.push(`✓ ${getTranslation('quantityRow')}: **${clamped.quantity} ${activeCat === 'brichete' ? (lang === 'nl' ? 'pallets' : 'pallets') : getTranslation('pieces')}**`);
-      }
+        if (clamped.quantity !== undefined) {
+          setQuantity(clamped.quantity);
+          updatedFields.quantity = true;
+          detectedFields.push(`✓ ${getTranslation('quantityRow')}: **${clamped.quantity} ${activeCat === 'brichete' ? (lang === 'nl' ? 'pallets' : 'pallets') : getTranslation('pieces')}**`);
+        }
 
-      // If user typed "ja" or "yes" or similar, and everything was complete, add to cart
-      const wasCompleteBeforeMsg = Object.values(filledFields).every(val => val === true || (category === 'brichete' && ['category', 'quantity'].every(k => filledFields[k])));
-      const isAffirmative = /^(?:ja|yes|oui|da|ok|toevoegen|bestellen|offerte|in winkelwagen|add|submit)/i.test(cleanText);
-      
-      if (wasCompleteBeforeMsg && isAffirmative) {
-        handleAddToCart();
+        // If user typed "ja" or "yes" or similar, and everything was complete, add to cart
+        const wasCompleteBeforeMsg = Object.values(filledFields).every(val => val === true || (category === 'brichete' && ['category', 'quantity'].every(k => filledFields[k])));
+        const isAffirmative = /^(?:ja|yes|oui|da|ok|toevoegen|bestellen|offerte|in winkelwagen|add|submit)/i.test(cleanText);
+        
+        if (wasCompleteBeforeMsg && isAffirmative) {
+          handleAddToCart();
+          return;
+        }
+
+        // Check current category details for brichete (it only requires category and quantity)
+        const currentCatVal = activeCat;
+        const isBriquettes = currentCatVal === 'brichete';
+
+        // Update filled fields based on active state parameters
+        const checkFields = {
+          category: !!currentCatVal,
+          dimensions: isBriquettes ? true : (currentCatVal === 'dowels' ? (!!diameter && !!length) : (!!thickness && !!diameter && !!length)),
+          grade: isBriquettes ? true : !!grade,
+          drying: isBriquettes ? true : !!drying,
+          fsc: true, // FSC always default to true/false, so always filled
+          quantity: !!quantity
+        };
+        setFilledFields(checkFields);
+
+        // 2. Generate Bot Reply based on missing fields
+        let replyText = '';
+        if (detectedFields.length > 0) {
+          replyText += `${getTranslation('understandConfirmation')}<br/>` + detectedFields.join('<br/>') + '<br/><br/>';
+        }
+
+        // Next missing field check
+        if (!checkFields.category) {
+          replyText += getTranslation('askCategory');
+        } else if (!checkFields.dimensions) {
+          replyText += getTranslation('askDimensions');
+        } else if (!checkFields.grade && !isBriquettes) {
+          replyText += getTranslation('askGrade');
+        } else if (!checkFields.drying && !isBriquettes) {
+          replyText += getTranslation('askDrying');
+        } else if (!checkFields.quantity) {
+          replyText += getTranslation('askQuantity');
+        } else {
+          replyText += getTranslation('everythingComplete');
+        }
+
+        setHistory(prev => [...prev, { sender: 'bot', text: replyText }]);
+      } catch (err) {
+        console.error("Willem AI error: ", err);
+        setHistory(prev => [...prev, { 
+          sender: 'bot', 
+          text: lang === 'nl' ? 'Er is een fout opgetreden bij het verwerken. Probeer het opnieuw.' : 'An error occurred while processing. Please try again.' 
+        }]);
+      } finally {
         setIsTyping(false);
-        return;
       }
-
-      // Check current category details for brichete (it only requires category and quantity)
-      const currentCatVal = activeCat;
-      const isBriquettes = currentCatVal === 'brichete';
-
-      // Update filled fields based on active state parameters
-      const checkFields = {
-        category: !!currentCatVal,
-        dimensions: isBriquettes ? true : (currentCatVal === 'dowels' ? (!!diameter && !!length) : (!!thickness && !!diameter && !!length)),
-        grade: isBriquettes ? true : !!grade,
-        drying: isBriquettes ? true : !!drying,
-        fsc: true, // FSC always default to true/false, so always filled
-        quantity: !!quantity
-      };
-      setFilledFields(checkFields);
-
-      // 2. Generate Bot Reply based on missing fields
-      let replyText = '';
-      if (detectedFields.length > 0) {
-        replyText += `${getTranslation('understandConfirmation')}<br/>` + detectedFields.join('<br/>') + '<br/><br/>';
-      }
-
-      // Next missing field check
-      if (!checkFields.category) {
-        replyText += getTranslation('askCategory');
-      } else if (!checkFields.dimensions) {
-        replyText += getTranslation('askDimensions');
-      } else if (!checkFields.grade && !isBriquettes) {
-        replyText += getTranslation('askGrade');
-      } else if (!checkFields.drying && !isBriquettes) {
-        replyText += getTranslation('askDrying');
-      } else if (!checkFields.quantity) {
-        replyText += getTranslation('askQuantity');
-      } else {
-        replyText += getTranslation('everythingComplete');
-      }
-
-      setHistory(prev => [...prev, { sender: 'bot', text: replyText }]);
-      setIsTyping(false);
     }, 800);
   };
 
@@ -820,86 +830,95 @@ export default function OpenChatConfigurator() {
       setIsTyping(true);
       
       setTimeout(() => {
-        const parsed = parseFreeText(parseText || suggestionText, category);
-        const activeCat = parsed.category || category;
-        const clamped = clampParsedValues(activeCat, parsed);
+        try {
+          const parsed = parseFreeText(parseText || suggestionText, category);
+          const activeCat = parsed.category || category;
+          const clamped = clampParsedValues(activeCat, parsed);
 
-        const detectedFields = [];
-        if (parsed.category) {
-          setCategory(parsed.category);
-          detectedFields.push(`✓ ${getTranslation('productRow')}: **${categoryData[parsed.category].name[lang] || categoryData[parsed.category].name.nl}**`);
+          const detectedFields = [];
+          if (parsed.category) {
+            setCategory(parsed.category);
+            detectedFields.push(`✓ ${getTranslation('productRow')}: **${categoryData[parsed.category].name[lang] || categoryData[parsed.category].name.nl}**`);
+          }
+          if (clamped.subCategoryDowels) setSubCategoryDowels(clamped.subCategoryDowels);
+          if (clamped.subCategoryPlaned) setSubCategoryPlaned(clamped.subCategoryPlaned);
+          if (clamped.subCategoryProfiles) setSubCategoryProfiles(clamped.subCategoryProfiles);
+          if (clamped.subCategorySpecials) setSubCategorySpecials(clamped.subCategorySpecials);
+
+          if (clamped.thickness !== undefined) setThickness(clamped.thickness);
+          if (clamped.diameter !== undefined) setDiameter(clamped.diameter);
+          if (clamped.length !== undefined) setLength(clamped.length);
+
+          if (clamped.thickness !== undefined || clamped.diameter !== undefined || clamped.length !== undefined) {
+            const dimStr = activeCat === 'dowels' 
+              ? `Ø ${clamped.diameter || diameter} x ${clamped.length || length} mm`
+              : activeCat === 'brichete'
+              ? `RUF Block format`
+              : `${clamped.thickness || thickness} x ${clamped.diameter || diameter} x ${clamped.length || length} mm`;
+            detectedFields.push(`✓ ${getTranslation('dimensionsRow')}: **${dimStr}**`);
+          }
+
+          if (clamped.grade) {
+            setGrade(clamped.grade);
+            const gradeLabelStr = clamped.grade === 'A' ? getTranslation('gradeAValue') : (clamped.grade === 'B' ? getTranslation('gradeBValue') : getTranslation('gradeCValue'));
+            detectedFields.push(`✓ ${getTranslation('gradeRow')}: **${gradeLabelStr}**`);
+          }
+
+          if (clamped.drying) {
+            setDrying(clamped.drying);
+            detectedFields.push(`✓ ${getTranslation('dryingRow')}: **${getDryingLabel(clamped.drying)}**`);
+          }
+
+          if (clamped.steamed) {
+            setSteamed(clamped.steamed);
+            detectedFields.push(`✓ ${getTranslation('steamedRow')}: **${getSteamedLabel(clamped.steamed)}**`);
+          }
+
+          if (clamped.fsc !== undefined) {
+            setFsc(clamped.fsc);
+            detectedFields.push(`✓ ${getTranslation('certificationLabel')}: **${getFscLabel(clamped.fsc)}**`);
+          }
+
+          if (clamped.quantity !== undefined) {
+            setQuantity(clamped.quantity);
+            detectedFields.push(`✓ ${getTranslation('quantityRow')}: **${clamped.quantity} ${activeCat === 'brichete' ? (lang === 'nl' ? 'pallets' : 'pallets') : getTranslation('pieces')}**`);
+          }
+
+          const currentCatVal = activeCat;
+          const isBriquettes = currentCatVal === 'brichete';
+
+          const checkFields = {
+            category: !!currentCatVal,
+            dimensions: isBriquettes ? true : (currentCatVal === 'dowels' ? (!!diameter && !!length) : (!!thickness && !!diameter && !!length)),
+            grade: isBriquettes ? true : !!grade,
+            drying: isBriquettes ? true : !!drying,
+            fsc: true,
+            quantity: !!quantity
+          };
+          setFilledFields(checkFields);
+
+          let replyText = '';
+          if (detectedFields.length > 0) {
+            replyText += `${getTranslation('understandConfirmation')}<br/>` + detectedFields.join('<br/>') + '<br/><br/>';
+          }
+
+          if (!checkFields.category) replyText += getTranslation('askCategory');
+          else if (!checkFields.dimensions) replyText += getTranslation('askDimensions');
+          else if (!checkFields.grade && !isBriquettes) replyText += getTranslation('askGrade');
+          else if (!checkFields.drying && !isBriquettes) replyText += getTranslation('askDrying');
+          else if (!checkFields.quantity) replyText += getTranslation('askQuantity');
+          else replyText += getTranslation('everythingComplete');
+
+          setHistory(prev => [...prev, { sender: 'bot', text: replyText }]);
+        } catch (err) {
+          console.error("Willem AI error (chip click): ", err);
+          setHistory(prev => [...prev, { 
+            sender: 'bot', 
+            text: lang === 'nl' ? 'Er is een fout opgetreden bij het verwerken. Probeer het opnieuw.' : 'An error occurred while processing. Please try again.' 
+          }]);
+        } finally {
+          setIsTyping(false);
         }
-        if (clamped.subCategoryDowels) setSubCategoryDowels(clamped.subCategoryDowels);
-        if (clamped.subCategoryPlaned) setSubCategoryPlaned(clamped.subCategoryPlaned);
-        if (clamped.subCategoryProfiles) setSubCategoryProfiles(clamped.subCategoryProfiles);
-        if (clamped.subCategorySpecials) setSubCategorySpecials(clamped.subCategorySpecials);
-
-        if (clamped.thickness !== undefined) setThickness(clamped.thickness);
-        if (clamped.diameter !== undefined) setDiameter(clamped.diameter);
-        if (clamped.length !== undefined) setLength(clamped.length);
-
-        if (clamped.thickness !== undefined || clamped.diameter !== undefined || clamped.length !== undefined) {
-          const dimStr = activeCat === 'dowels' 
-            ? `Ø ${clamped.diameter || diameter} x ${clamped.length || length} mm`
-            : activeCat === 'brichete'
-            ? `RUF Block format`
-            : `${clamped.thickness || thickness} x ${clamped.diameter || diameter} x ${clamped.length || length} mm`;
-          detectedFields.push(`✓ ${getTranslation('dimensionsRow')}: **${dimStr}**`);
-        }
-
-        if (clamped.grade) {
-          setGrade(clamped.grade);
-          const gradeLabelStr = clamped.grade === 'A' ? getTranslation('gradeAValue') : (clamped.grade === 'B' ? getTranslation('gradeBValue') : getTranslation('gradeCValue'));
-          detectedFields.push(`✓ ${getTranslation('gradeRow')}: **${gradeLabelStr}**`);
-        }
-
-        if (clamped.drying) {
-          setDrying(clamped.drying);
-          detectedFields.push(`✓ ${getTranslation('dryingRow')}: **${getDryingLabel(clamped.drying)}**`);
-        }
-
-        if (clamped.steamed) {
-          setSteamed(clamped.steamed);
-          detectedFields.push(`✓ ${getTranslation('steamedRow')}: **${getSteamedLabel(clamped.steamed)}**`);
-        }
-
-        if (clamped.fsc !== undefined) {
-          setFsc(clamped.fsc);
-          detectedFields.push(`✓ ${getTranslation('certificationLabel')}: **${getFscLabel(clamped.fsc)}**`);
-        }
-
-        if (clamped.quantity !== undefined) {
-          setQuantity(clamped.quantity);
-          detectedFields.push(`✓ ${getTranslation('quantityRow')}: **${clamped.quantity} ${activeCat === 'brichete' ? (lang === 'nl' ? 'pallets' : 'pallets') : getTranslation('pieces')}**`);
-        }
-
-        const currentCatVal = activeCat;
-        const isBriquettes = currentCatVal === 'brichete';
-
-        const checkFields = {
-          category: !!currentCatVal,
-          dimensions: isBriquettes ? true : (currentCatVal === 'dowels' ? (!!diameter && !!length) : (!!thickness && !!diameter && !!length)),
-          grade: isBriquettes ? true : !!grade,
-          drying: isBriquettes ? true : !!drying,
-          fsc: true,
-          quantity: !!quantity
-        };
-        setFilledFields(checkFields);
-
-        let replyText = '';
-        if (detectedFields.length > 0) {
-          replyText += `${getTranslation('understandConfirmation')}<br/>` + detectedFields.join('<br/>') + '<br/><br/>';
-        }
-
-        if (!checkFields.category) replyText += getTranslation('askCategory');
-        else if (!checkFields.dimensions) replyText += getTranslation('askDimensions');
-        else if (!checkFields.grade && !isBriquettes) replyText += getTranslation('askGrade');
-        else if (!checkFields.drying && !isBriquettes) replyText += getTranslation('askDrying');
-        else if (!checkFields.quantity) replyText += getTranslation('askQuantity');
-        else replyText += getTranslation('everythingComplete');
-
-        setHistory(prev => [...prev, { sender: 'bot', text: replyText }]);
-        setIsTyping(false);
       }, 500);
     }, 10);
   };
