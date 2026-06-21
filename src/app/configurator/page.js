@@ -630,29 +630,33 @@ export default function Configurator() {
   const [quantity, setQuantity] = useState(500);
   const [activeTooltipModal, setActiveTooltipModal] = useState(null);
 
+  const resetConfigurator = () => {
+    setCategory('');
+    setSubCategoryDowels('dowel-small');
+    setSubCategoryProfiles('profile-semiround');
+    setSubCategorySpecials('special-keeplat-spruce');
+    setSubCategoryPlaned('planed-rect-v1');
+    setWoodType('beech');
+    setSteamed('no');
+    setDrying('kd');
+    setFsc(true);
+    setGrade('A');
+    setThicknessType('custom');
+    setThickness(25);
+    setWidthType('custom');
+    setDiameter(50);
+    setLengthType('custom');
+    setLength(1000);
+    setAdditionalInfo('');
+    setQuantity(500);
+    setCurrentStep(1);
+    setHighestStepReached(1);
+  };
+
   useEffect(() => {
     if (shouldResetConfigurator) {
-      setCategory('');
-      setSubCategoryDowels('dowel-small');
-      setSubCategoryProfiles('profile-semiround');
-      setSubCategorySpecials('special-keeplat-spruce');
-      setSubCategoryPlaned('planed-rect-v1');
-      setWoodType('beech');
-      setSteamed('no');
-      setDrying('kd');
-      setFsc(true);
-      setGrade('A');
-      setThicknessType('custom');
-      setThickness(25);
-      setWidthType('custom');
-      setDiameter(50);
-      setLengthType('custom');
-      setLength(1000);
-      setAdditionalInfo('');
-      setQuantity(10000);
+      resetConfigurator();
       setShouldResetConfigurator(false);
-      setCurrentStep(1);
-      setHighestStepReached(1);
     }
   }, [shouldResetConfigurator, setShouldResetConfigurator]);
 
@@ -1371,6 +1375,33 @@ export default function Configurator() {
             <form onSubmit={handleFormSubmit} className="configurator-dashboard-form">
               <div className="configurator-layout-grid">
                 <div className="configurator-form-column">
+                  {category && (
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+                      <button
+                        type="button"
+                        onClick={resetConfigurator}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: '#fbbf24',
+                          fontSize: '0.85rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: '4px',
+                          transition: 'opacity 0.2s',
+                        }}
+                        onMouseEnter={(e) => e.target.style.opacity = 0.8}
+                        onMouseLeave={(e) => e.target.style.opacity = 1}
+                      >
+                        <i className="fa-solid fa-rotate-left"></i>{' '}
+                        {lang === 'nl' ? 'Opnieuw beginnen' : (lang === 'ro' ? 'Reîncepe' : (lang === 'de' ? 'Neustart' : 'Start over'))}
+                      </button>
+                    </div>
+                  )}
 
               {/* Panel 1: Product Selection */}
               <div className={`accordion-step-panel ${currentStep === 1 ? 'active' : ''} ${highestStepReached > 1 ? 'completed' : ''}`}>
@@ -2093,7 +2124,7 @@ export default function Configurator() {
               </div>
 
               {/* Panel 3 Navigation Buttons */}
-              <div className="wizard-nav-buttons" style={{ marginTop: '1.5rem' }}>
+              <div className="wizard-nav-buttons" style={{ marginTop: '1.5rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                 <button
                   type="button"
                   className="btn btn-secondary"
@@ -2101,6 +2132,15 @@ export default function Configurator() {
                 >
                   <i className="fa-solid fa-arrow-left icon-left"></i>{' '}
                   {lang === 'ro' ? 'Înapoi' : (lang === 'nl' ? 'Vorige' : (lang === 'de' ? 'Zurück' : 'Previous'))}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  style={{ borderColor: 'var(--color-primary)', color: 'var(--color-primary-dark)' }}
+                  onClick={resetConfigurator}
+                >
+                  <i className="fa-solid fa-rotate-left icon-left"></i>{' '}
+                  {lang === 'nl' ? 'Opnieuw beginnen' : (lang === 'ro' ? 'Reîncepe' : (lang === 'de' ? 'Neustart' : 'Start over'))}
                 </button>
                 <button
                   type="submit"
