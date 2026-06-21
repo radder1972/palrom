@@ -15,15 +15,21 @@ export function generatePdfBuffer(clientName, clientEmail, clientPhone, clientNo
         resolve(pdfData);
       });
 
+      // Register custom fonts to support Romanian diacritics
+      const fontPath = path.join(process.cwd(), 'public/fonts/Roboto-Regular.ttf');
+      const fontBoldPath = path.join(process.cwd(), 'public/fonts/Roboto-Bold.ttf');
+      doc.registerFont('Roboto', fontPath);
+      doc.registerFont('Roboto-Bold', fontBoldPath);
+
       // 1. Brand Header
       doc.fillColor('#1e3a2b') // forest dark
          .fontSize(22)
-         .font('Helvetica-Bold')
+         .font('Roboto-Bold')
          .text('PALROM PRODUCTS', 40, 40);
          
       doc.fillColor('#e7b124') // primary gold
          .fontSize(10)
-         .font('Helvetica-Bold')
+         .font('Roboto-Bold')
          .text('FSC® 100% CERTIFIED BEECHWOOD MANUFACTURER', 40, 65);
 
       // Accent top line
@@ -32,7 +38,7 @@ export function generatePdfBuffer(clientName, clientEmail, clientPhone, clientNo
       // Title
       doc.fillColor('#000000')
          .fontSize(16)
-         .font('Helvetica-Bold')
+         .font('Roboto-Bold')
          .text('B2B Quote Request / Cerere de Oferta', 40, 95);
 
       // 2. Client Details Box
@@ -42,10 +48,10 @@ export function generatePdfBuffer(clientName, clientEmail, clientPhone, clientNo
 
       doc.fillColor('#1a202c')
          .fontSize(11)
-         .font('Helvetica-Bold')
+         .font('Roboto-Bold')
          .text('Client Details / Detalii Client', 50, 135);
 
-      doc.font('Helvetica').fontSize(10);
+      doc.font('Roboto').fontSize(10);
       doc.text(`Name / Nume: ${clientName}`, 50, 155);
       doc.text(`Email: ${clientEmail}`, 50, 170);
       doc.text(`Phone / Telefon: ${clientPhone}`, 50, 185);
@@ -53,20 +59,20 @@ export function generatePdfBuffer(clientName, clientEmail, clientPhone, clientNo
       const notesY = 235;
       if (clientNotes) {
         doc.fillColor('#000000');
-        doc.font('Helvetica-Bold').text('Notes / Note:', 40, notesY);
-        doc.font('Helvetica').text(clientNotes, 40, notesY + 15, { width: 510 });
+        doc.font('Roboto-Bold').text('Notes / Note:', 40, notesY);
+        doc.font('Roboto').text(clientNotes, 40, notesY + 15, { width: 510 });
       }
 
       // 3. Table of Products
       let startY = clientNotes ? notesY + 60 : 235;
       
       doc.fillColor('#000000');
-      doc.font('Helvetica-Bold').fontSize(12).text('Requested Products / Produse Solicitate', 40, startY);
+      doc.font('Roboto-Bold').fontSize(12).text('Requested Products / Produse Solicitate', 40, startY);
       
       startY += 20;
       // Table Header Row
       doc.fillColor('#1e3a2b').rect(40, startY, 510, 20).fill();
-      doc.fillColor('#ffffff').font('Helvetica-Bold').fontSize(9);
+      doc.fillColor('#ffffff').font('Roboto-Bold').fontSize(9);
       doc.text('Product Name', 45, startY + 5, { width: 180 });
       doc.text('Dimensions', 230, startY + 5, { width: 140 });
       doc.text('Grade', 380, startY + 5, { width: 50 });
@@ -74,7 +80,7 @@ export function generatePdfBuffer(clientName, clientEmail, clientPhone, clientNo
       doc.text('Qty', 510, startY + 5, { width: 35, align: 'right' });
 
       let currentY = startY + 20;
-      doc.fillColor('#000000').font('Helvetica').fontSize(9);
+      doc.fillColor('#000000').font('Roboto').fontSize(9);
 
       items.forEach((item, index) => {
         // Draw row background for alternating rows
