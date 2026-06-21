@@ -1829,7 +1829,7 @@ export default function Configurator() {
                       {lang === 'ro' ? 'Specificații Brichete RUF' : (lang === 'nl' ? 'Specificaties RUF Briketten' : (lang === 'de' ? 'Spezifikationen RUF Briketts' : 'RUF Briquettes Specifications'))}
                     </h4>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', fontSize: '0.95rem', color: '#ccc' }}>
-                      <li><strong>{lang === 'ro' ? 'Formă & Dimensiuni' : 'Shape & Dimensions'}:</strong> Cilindrice, Ø 90 mm</li>
+                      <li><strong>{lang === 'ro' ? 'Formă & Dimensiuni' : 'Shape & Dimensions'}:</strong> Block</li>
                       <li><strong>{lang === 'ro' ? 'Tip Lemn' : 'Wood Type'}:</strong> 100% Fag Curat</li>
                       <li><strong>{lang === 'ro' ? 'Putere Calorică' : 'Calorific Value'}:</strong> ~18.5 MJ/kg</li>
                       <li><strong>{lang === 'ro' ? 'Umiditate' : 'Moisture'}:</strong> &lt; 10%</li>

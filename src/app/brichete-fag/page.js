@@ -53,8 +53,8 @@ const t = {
     ro: '100% Bej / Fag Curat (fără coajă sau aditivi)',
     en: '100% Clean Beechwood (no bark or chemical additives)'
   },
-  shapeLabel: { ro: 'Formă & Diametru', en: 'Shape & Diameter' },
-  shapeValue: { ro: 'Cilindrice, Ø 90 mm', en: 'Cylindrical, Ø 90 mm' },
+  shapeLabel: { ro: 'Formă & Dimensiuni', en: 'Shape & Dimensions' },
+  shapeValue: { ro: 'Block', en: 'Block' },
   densityLabel: { ro: 'Densitate brichetă', en: 'Briquette Density' },
   densityValue: { ro: '~1.2 g/cm³', en: '~1.2 g/cm³' },
   packLabel: { ro: 'Mod de ambalare', en: 'Packaging Mode' },
