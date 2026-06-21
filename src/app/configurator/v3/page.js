@@ -1372,22 +1372,26 @@ export default function ChatbotConfigurator() {
                           ))}
                         </div>
                       ) : (
-                        <div className="slider-control-row">
+                        <div className="slider-wrapper" style={{ width: '100%', gap: '1rem', display: 'flex', alignItems: 'center' }}>
                           <input
                             type="range"
                             min={categoryData[category].diameter.min}
                             max={currentMaxWidth}
                             value={localInputWidth}
                             onChange={(e) => setLocalInputWidth(parseInt(e.target.value))}
-                            className="range-slider-input"
+                            className="dashboard-slider"
                           />
-                          <input
-                            type="number"
-                            value={localInputWidth}
-                            onChange={(e) => setLocalInputWidth(Math.max(categoryData[category].diameter.min, Math.min(currentMaxWidth, parseInt(e.target.value) || 0)))}
-                            className="numeric-text-input"
-                          />
-                          <button onClick={() => proceedToNextStep(localInputWidth)} className="btn btn-primary btn-sm">Ok</button>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}>
+                            <input
+                              type="number"
+                              value={localInputWidth}
+                              onChange={(e) => setLocalInputWidth(Math.max(categoryData[category].diameter.min, Math.min(currentMaxWidth, parseInt(e.target.value) || 0)))}
+                              className="slider-value-display"
+                              style={{ width: '75px', height: '40px', fontSize: '0.9rem', paddingLeft: '0.65rem' }}
+                            />
+                            <span style={{ color: 'var(--color-text-dark)', fontSize: '0.9rem', fontWeight: 600 }}>mm</span>
+                          </div>
+                          <button onClick={() => proceedToNextStep(localInputWidth)} className="btn btn-primary btn-sm" style={{ padding: '0.5rem 1rem', height: '40px', borderRadius: 'var(--border-radius-md)' }}>Ok</button>
                         </div>
                       )}
                     </div>
@@ -1403,22 +1407,26 @@ export default function ChatbotConfigurator() {
                           ))}
                         </div>
                       ) : (
-                        <div className="slider-control-row">
+                        <div className="slider-wrapper" style={{ width: '100%', gap: '1rem', display: 'flex', alignItems: 'center' }}>
                           <input
                             type="range"
                             min={categoryData[category].thickness.min}
                             max={categoryData[category].thickness.max}
                             value={localInputThickness}
                             onChange={(e) => setLocalInputThickness(parseInt(e.target.value))}
-                            className="range-slider-input"
+                            className="dashboard-slider"
                           />
-                          <input
-                            type="number"
-                            value={localInputThickness}
-                            onChange={(e) => setLocalInputThickness(Math.max(categoryData[category].thickness.min, Math.min(categoryData[category].thickness.max, parseInt(e.target.value) || 0)))}
-                            className="numeric-text-input"
-                          />
-                          <button onClick={() => proceedToNextStep(localInputThickness)} className="btn btn-primary btn-sm">Ok</button>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}>
+                            <input
+                              type="number"
+                              value={localInputThickness}
+                              onChange={(e) => setLocalInputThickness(Math.max(categoryData[category].thickness.min, Math.min(categoryData[category].thickness.max, parseInt(e.target.value) || 0)))}
+                              className="slider-value-display"
+                              style={{ width: '75px', height: '40px', fontSize: '0.9rem', paddingLeft: '0.65rem' }}
+                            />
+                            <span style={{ color: 'var(--color-text-dark)', fontSize: '0.9rem', fontWeight: 600 }}>mm</span>
+                          </div>
+                          <button onClick={() => proceedToNextStep(localInputThickness)} className="btn btn-primary btn-sm" style={{ padding: '0.5rem 1rem', height: '40px', borderRadius: 'var(--border-radius-md)' }}>Ok</button>
                         </div>
                       )}
                     </div>
@@ -1434,7 +1442,7 @@ export default function ChatbotConfigurator() {
                           ))}
                         </div>
                       ) : (
-                        <div className="slider-control-row">
+                        <div className="slider-wrapper" style={{ width: '100%', gap: '1rem', display: 'flex', alignItems: 'center' }}>
                           <input
                             type="range"
                             min={categoryData[category].length.min}
@@ -1442,15 +1450,19 @@ export default function ChatbotConfigurator() {
                             step="10"
                             value={localInputLength}
                             onChange={(e) => setLocalInputLength(parseInt(e.target.value))}
-                            className="range-slider-input"
+                            className="dashboard-slider"
                           />
-                          <input
-                            type="number"
-                            value={localInputLength}
-                            onChange={(e) => setLocalInputLength(Math.max(categoryData[category].length.min, Math.min(categoryData[category].length.max, parseInt(e.target.value) || 0)))}
-                            className="numeric-text-input"
-                          />
-                          <button onClick={() => proceedToNextStep(localInputLength)} className="btn btn-primary btn-sm">Ok</button>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}>
+                            <input
+                              type="number"
+                              value={localInputLength}
+                              onChange={(e) => setLocalInputLength(Math.max(categoryData[category].length.min, Math.min(categoryData[category].length.max, parseInt(e.target.value) || 0)))}
+                              className="slider-value-display"
+                              style={{ width: '75px', height: '40px', fontSize: '0.9rem', paddingLeft: '0.65rem' }}
+                            />
+                            <span style={{ color: 'var(--color-text-dark)', fontSize: '0.9rem', fontWeight: 600 }}>mm</span>
+                          </div>
+                          <button onClick={() => proceedToNextStep(localInputLength)} className="btn btn-primary btn-sm" style={{ padding: '0.5rem 1rem', height: '40px', borderRadius: 'var(--border-radius-md)' }}>Ok</button>
                         </div>
                       )}
                     </div>
