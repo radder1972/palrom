@@ -1316,7 +1316,7 @@ export default function ChatbotConfigurator() {
                   <i className="fa-solid fa-robot"></i>
                 </div>
                 <div>
-                  <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>Willem</h3>
+                  <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#ffffff' }}>Willem</h3>
                   <span style={{ fontSize: '0.75rem', color: '#cbd5e1', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     <span style={{ width: '6px', height: '6px', background: '#10b981', borderRadius: '50%' }}></span>
                     Online B2B Adviseur
