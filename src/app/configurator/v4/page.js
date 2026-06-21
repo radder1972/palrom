@@ -167,7 +167,7 @@ const translations = {
   resetText: { nl: 'Opnieuw beginnen', en: 'Start Over', de: 'Neustart', ro: 'Reîncepe' },
   backText: { nl: 'Vorige', en: 'Back', de: 'Zurück', ro: 'Înapoi' },
   addToInquiry: { nl: 'Toevoegen aan Offerteaanvraag', en: 'Add to Quote Request', de: 'Zur Angebotsanfrage hinzufügen', ro: 'Adaugă la solicitarea de ofertă' },
-  addedToCart: { nl: 'Toegevoegd aan winkelwagen!', en: 'Added to cart!', de: 'In den Warenkorb gelegt!', ro: 'Adăugat în coș!' },
+  addedToCart: { nl: 'Toegevoegd aan Uw Offerteaanvraag!', en: 'Added to your quote request!', de: 'Zu Ihrer Angebotsanfrage hinzugefügt!', ro: 'Adăugat la cererea dvs. de ofertă!' },
   addedToQuote: { nl: 'Toegevoegd aan offerte', en: 'Added to quote', de: 'Zum Angebot hinzugefügt', ro: 'Adăugat la ofertă' },
   configureAnother: { nl: 'Nog een product configureren', en: 'Configure another product', de: 'Anderes Produkt konfigurieren', ro: 'Configurați alt produs' },
   pieces: { nl: 'stuks', en: 'pieces', de: 'Stück', ro: 'bucăți' },
