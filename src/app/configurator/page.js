@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useInquiry } from '@/components/InquiryContext';
@@ -512,6 +512,27 @@ export default function Configurator() {
 
   // Configurator states
   const [currentStep, setCurrentStep] = useState(1);
+  const configuratorRef = useRef(null);
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    if (configuratorRef.current) {
+      const elementRect = configuratorRef.current.getBoundingClientRect();
+      const absoluteElementTop = elementRect.top + window.scrollY;
+      const offset = 115; // Offset for fixed header + margin spacing
+      
+      window.scrollTo({
+        top: absoluteElementTop - offset,
+        behavior: 'smooth'
+      });
+    }
+  }, [currentStep]);
+
   const [highestStepReached, setHighestStepReached] = useState(1);
   const [category, setCategory] = useState('');
   const [subCategoryDowels, setSubCategoryDowels] = useState('dowel-small');
@@ -1222,7 +1243,7 @@ export default function Configurator() {
       {/* Main dashboard config section */}
       <section className="configurator-dark-section">
         <div className="container">
-          <div className="configurator-dashboard-container">
+          <div ref={configuratorRef} className="configurator-dashboard-container">
             <form onSubmit={handleFormSubmit} className="configurator-dashboard-form">
               <div className="configurator-layout-grid">
                 <div className="configurator-form-column">
