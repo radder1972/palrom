@@ -231,6 +231,12 @@ export default function CartSidebar() {
       de: 'Bitte füllen Sie alle Pflicht-Kontaktfelder aus.',
       ro: 'Vă rugăm să completați toate câmpurile obligatorii de contact.'
     },
+    unconfiguredItemsError: {
+      nl: 'Sommige producten in uw offerteaanvraag zijn niet volledig geconfigureerd. Configureer ze volledig voordat u de aanvraag indient.',
+      en: 'Some products in your quote request are not fully configured. Please configure them fully before submitting.',
+      de: 'Einige Produkte in Ihrer Angebotsanfrage sind nicht vollständig konfiguriert. Bitte konfigurieren Sie sie vollständig, bevor Sie die Anfrage absenden.',
+      ro: 'Unele produse din solicitarea dvs. de ofertă nu sunt complet configurate. Vă rugăm să le configurați complet înainte de a trimite.'
+    },
     errorSubmit: {
       nl: 'Er is een fout opgetreden bij het verzenden. Probeer het later opnieuw.',
       en: 'Something went wrong while submitting. Please try again later.',
@@ -357,6 +363,12 @@ export default function CartSidebar() {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !phone.trim()) {
       alert(getTranslation('validationError'));
+      return;
+    }
+
+    const hasUnconfiguredItems = cartItems.some(item => !item.isConfigured);
+    if (hasUnconfiguredItems) {
+      alert(getTranslation('unconfiguredItemsError'));
       return;
     }
 
@@ -659,6 +671,27 @@ export default function CartSidebar() {
                       </div>
                     ) : (
                       <div className="cart-item-specs" style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', fontSize: '0.8rem' }}>
+                        <div style={{
+                          backgroundColor: '#fffbeb',
+                          border: '1px solid #fef3c7',
+                          color: '#b45309',
+                          padding: '0.5rem',
+                          borderRadius: '4px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          marginTop: '0.25rem',
+                          marginBottom: '0.5rem',
+                          fontWeight: 500
+                        }}>
+                          <i className="fa-solid fa-triangle-exclamation" style={{ flexShrink: 0 }}></i>
+                          <span>
+                            {lang === 'nl' ? 'Niet volledig geconfigureerd' :
+                             lang === 'de' ? 'Nicht vollständig konfiguriert' :
+                             lang === 'ro' ? 'Neconfigurat complet' :
+                             'Not fully configured'}
+                          </span>
+                        </div>
                         <div>
                           <strong>{getTranslation('quantityLabel')}:</strong> {item.qty}
                         </div>
@@ -733,6 +766,29 @@ export default function CartSidebar() {
                 </div>
               )}
               <h4>{getTranslation('contactDetailsTitle')}</h4>
+              {cartItems.some(item => !item.isConfigured) && (
+                <div className="unconfigured-warning-banner" style={{
+                  backgroundColor: '#fee2e2',
+                  border: '1px solid #fca5a5',
+                  color: '#991b1b',
+                  borderRadius: '6px',
+                  padding: '0.75rem 1rem',
+                  marginBottom: '1rem',
+                  fontSize: '0.85rem',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '0.5rem',
+                  lineHeight: '1.4'
+                }}>
+                  <i className="fa-solid fa-circle-exclamation" style={{ marginTop: '0.2rem', flexShrink: 0 }}></i>
+                  <span>
+                    {lang === 'nl' ? 'Let op: Sommige producten zijn niet volledig geconfigureerd. U kunt pas een offerte aanvragen als alle producten volledig zijn geconfigureerd.' :
+                     lang === 'de' ? 'Achtung: Einige Produkte sind nicht vollständig konfiguriert. Sie können erst ein Angebot anfordern, wenn alle Produkte vollständig konfiguriert sind.' :
+                     lang === 'ro' ? 'Atenție: Unele produse nu sunt configurate complet. Puteți solicita o ofertă doar după ce toate produsele sunt complet configurate.' :
+                     'Attention: Some products are not fully configured. You can only request a quote once all products are fully configured.'}
+                  </span>
+                </div>
+              )}
               <form onSubmit={handleSubmit} className="cart-modern-form">
                 <div className="form-group">
                   <label htmlFor="cart_name">{getTranslation('nameLabel')}</label>
@@ -777,7 +833,7 @@ export default function CartSidebar() {
                     onChange={(e) => setNotes(e.target.value)}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting}>
+                <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting || cartItems.some(item => !item.isConfigured)}>
                   {isSubmitting ? (
                     <>
                       <i className="fa-solid fa-spinner fa-spin icon-left"></i> {getTranslation('submittingBtn')}

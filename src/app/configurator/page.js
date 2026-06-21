@@ -257,6 +257,19 @@ export default function ConfiguratorSelector() {
           color: #ef4444;
           background: rgba(239, 68, 68, 0.05);
         }
+        .selector-card .btn-secondary {
+          background-color: #ffffff !important;
+          color: var(--color-text-dark) !important;
+          border: 2px solid var(--color-text-dark) !important;
+          backdrop-filter: none !important;
+        }
+        .selector-card .btn-secondary:hover {
+          background-color: var(--color-text-dark) !important;
+          color: #ffffff !important;
+          border-color: var(--color-text-dark) !important;
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-md);
+        }
       `}</style>
 
       {/* Hero Section */}

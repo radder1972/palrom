@@ -240,6 +240,42 @@ const translations = {
     en: 'Excellent, I have gathered all required specifications! Does the live preview and specifications table below look correct? Click the button to add the configuration to your quote request.',
     de: 'Ausgezeichnet, ich habe alle notwendigen Spezifikationen zusammen! Stimmt die Live-Vorschau und die Spezifikationstabelle unten? Klicken Sie auf die Schaltfläche, um die Konfiguration Ihrer Angebotsanfrage hinzuzufügen.',
     ro: 'Excelent, am strâns toate specificațiile necesare! Previzualizarea live și tabelul de specificații de mai jos sunt corecte? Faceți clic pe buton pentru a adăuga configurarea la solicitarea de ofertă.'
+  },
+  aiGemini: {
+    nl: 'Gemini AI Actief',
+    en: 'Gemini AI Active',
+    de: 'Gemini KI Aktiv',
+    ro: 'Gemini AI Activ'
+  },
+  aiFallback: {
+    nl: 'Lokale Fallback',
+    en: 'Local Fallback',
+    de: 'Lokale Fallback',
+    ro: 'Rezervă Locală'
+  },
+  aiChecking: {
+    nl: 'Controleren...',
+    en: 'Checking...',
+    de: 'Prüfen...',
+    ro: 'Verificare...'
+  },
+  notYetDetected: {
+    nl: 'Nog niet gedetecteerd',
+    en: 'Not yet detected',
+    de: 'Noch nicht erkannt',
+    ro: 'Nedetectat încă'
+  },
+  visualizerPlaceholder: {
+    nl: 'Spreek of typ uw wensen in de chat om het live voorbeeld te starten.',
+    en: 'Speak or type your requirements in the chat to start the live preview.',
+    de: 'Sprechen oder tippen Sie Ihre Anforderungen im Chat, um die Live-Vorschau zu starten.',
+    ro: 'Rostiți sau introduceți specificațiile în chat pentru a porni previzualizarea.'
+  },
+  noSpecsDetected: {
+    nl: 'Er zijn nog geen specificaties gedetecteerd. Begin met chatten of inspreken om specificaties toe te voegen.',
+    en: 'No specifications have been detected yet. Start chatting or speaking to add specifications.',
+    de: 'Es wurden noch keine Spezifikationen erkannt. Beginnen Sie zu chatten oder zu sprechen, um Spezifikationen hinzuzufügen.',
+    ro: 'Nu au fost detectate specificații încă. Începeți conversația sau rostiți cerințele pentru a adăuga specificații.'
   }
 };
 
@@ -283,7 +319,8 @@ export default function OpenChatConfigurator() {
     grade: false,
     drying: false,
     fsc: false,
-    quantity: false
+    quantity: false,
+    steamed: false
   });
 
   const [dimensionFlags, setDimensionFlags] = useState({
@@ -298,6 +335,44 @@ export default function OpenChatConfigurator() {
   const [hasSpeechSupport, setHasSpeechSupport] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const recognitionRef = useRef(null);
+  const isBotSpeakingRef = useRef(false);
+  const activeUtteranceRef = useRef(null);
+  const initialUserInputRef = useRef('');
+  const userInputRef = useRef('');
+  const ignoreSpeechResultsRef = useRef(false);
+  const [aiEngine, setAiEngine] = useState('checking'); // 'checking' | 'gemini' | 'fallback'
+
+  // Ping backend to check if Gemini is active or falling back
+  useEffect(() => {
+    if (isAuthenticated) {
+      const checkEngine = async () => {
+        try {
+          const res = await fetch('/api/configurator/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: 'ping', category: 'sawn', filledFields: {}, lang: 'nl' })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.fallback) {
+              setAiEngine('fallback');
+            } else {
+              setAiEngine('gemini');
+            }
+          } else {
+            setAiEngine('fallback');
+          }
+        } catch (err) {
+          setAiEngine('fallback');
+        }
+      };
+      checkEngine();
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    userInputRef.current = userInput;
+  }, [userInput]);
 
   // Initialize Speech Recognition on client
   useEffect(() => {
@@ -307,7 +382,7 @@ export default function OpenChatConfigurator() {
         setHasSpeechSupport(true);
         const rec = new SpeechRecognition();
         rec.continuous = true;
-        rec.interimResults = false;
+        rec.interimResults = true;
 
         const langMap = {
           nl: 'nl-NL',
@@ -319,26 +394,45 @@ export default function OpenChatConfigurator() {
 
         rec.onstart = () => {
           setIsListening(true);
+          ignoreSpeechResultsRef.current = false;
+          initialUserInputRef.current = userInputRef.current;
         };
 
         rec.onend = () => {
           setIsListening(false);
+          ignoreSpeechResultsRef.current = false;
+          initialUserInputRef.current = '';
         };
 
         rec.onerror = (event) => {
-          console.error('Speech recognition error:', event.error);
+          if (event.error === 'no-speech' || event.error === 'aborted') {
+            console.warn('Speech recognition status:', event.error);
+          } else {
+            console.error('Speech recognition error:', event.error);
+          }
           setIsListening(false);
         };
 
         rec.onresult = (event) => {
-          const result = event.results[event.results.length - 1];
-          if (result.isFinal) {
-            const transcriptText = result[0].transcript;
-            setUserInput(prev => {
-              const base = prev.trim();
-              return base ? `${base} ${transcriptText.trim()}` : transcriptText.trim();
-            });
+          // If the bot is currently speaking or we are ignoring speech, ignore audio input
+          if (isBotSpeakingRef.current || ignoreSpeechResultsRef.current) {
+            return;
           }
+
+          let finalTranscript = '';
+          let interimTranscript = '';
+          for (let i = 0; i < event.results.length; i++) {
+            const transcriptSegment = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+              finalTranscript += transcriptSegment;
+            } else {
+              interimTranscript += transcriptSegment;
+            }
+          }
+          const sessionTranscript = (finalTranscript + interimTranscript).trim();
+          const initial = initialUserInputRef.current || '';
+          const finalVal = initial ? `${initial} ${sessionTranscript}` : sessionTranscript;
+          setUserInput(finalVal);
         };
 
         recognitionRef.current = rec;
@@ -406,6 +500,8 @@ export default function OpenChatConfigurator() {
     
     // Cancel any ongoing speech
     window.speechSynthesis.cancel();
+    isBotSpeakingRef.current = false;
+    activeUtteranceRef.current = null;
     
     // Strip HTML tags and markdown symbols for clean reading
     let cleanText = text
@@ -419,6 +515,7 @@ export default function OpenChatConfigurator() {
     if (!cleanText) return;
     
     const utterance = new SpeechSynthesisUtterance(cleanText);
+    activeUtteranceRef.current = utterance; // Prevent garbage collection of events
     
     let langCode = 'nl';
     if (lang === 'ro') langCode = 'ro';
@@ -436,6 +533,18 @@ export default function OpenChatConfigurator() {
       else utterance.lang = 'nl-NL';
     }
     
+    utterance.onstart = () => {
+      isBotSpeakingRef.current = true;
+    };
+    utterance.onend = () => {
+      isBotSpeakingRef.current = false;
+      activeUtteranceRef.current = null;
+    };
+    utterance.onerror = () => {
+      isBotSpeakingRef.current = false;
+      activeUtteranceRef.current = null;
+    };
+
     window.speechSynthesis.speak(utterance);
   };
 
@@ -444,6 +553,7 @@ export default function OpenChatConfigurator() {
       const newVal = !prev;
       if (newVal && typeof window !== 'undefined' && window.speechSynthesis) {
         window.speechSynthesis.cancel();
+        isBotSpeakingRef.current = false;
       }
       return newVal;
     });
@@ -478,6 +588,11 @@ export default function OpenChatConfigurator() {
     if (isListening) {
       recognitionRef.current.stop();
     } else {
+      // Cancel any active bot speaking when the user starts speaking
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+        isBotSpeakingRef.current = false;
+      }
       try {
         recognitionRef.current.start();
       } catch (err) {
@@ -577,7 +692,8 @@ export default function OpenChatConfigurator() {
       grade: false,
       drying: false,
       fsc: false,
-      quantity: false
+      quantity: false,
+      steamed: false
     });
     setDimensionFlags({
       thickness: false,
@@ -700,8 +816,11 @@ export default function OpenChatConfigurator() {
     }
 
     // 3. Dimensions parsing
-    // Standard format: TxWxL (e.g. 20x50x1200 or 20 * 50 * 1200)
-    const threeDimensionsMatch = cleanText.match(/\b(\d+)\s*(?:mm)?\s*[xX*]\s*(\d+)\s*(?:mm)?\s*[xX*]\s*(\d+)\b/);
+    // Standard format: TxWxL (e.g. 20x50x1200 or 20 bij 50 keer 1200)
+    const sepPattern = "(?:\\s*(?:[xX*]|\\bbij\\b|\\bkeer\\b|\\bby\\b|\\btimes\\b|\\bmal\\b|\\bauf\\b|\\bpe\\b|\\bcu\\b|-)\\s*|\\s+)";
+    const threeDimensionsRegex = new RegExp(`\\b(\\d+)\\s*(?:mm)?${sepPattern}(\\d+)\\s*(?:mm)?${sepPattern}(\\d+)\\b`, 'i');
+    const threeDimensionsMatch = cleanText.match(threeDimensionsRegex);
+
     if (threeDimensionsMatch && targetCat !== 'dowels' && targetCat !== 'brichete') {
       updates.thickness = parseInt(threeDimensionsMatch[1]);
       updates.diameter = parseInt(threeDimensionsMatch[2]); // width is stored in diameter
@@ -711,7 +830,8 @@ export default function OpenChatConfigurator() {
       updates.lengthType = 'custom';
     } else {
       // Two dimensions format for dowels: DxL (e.g. 15x1200 or 15 * 1200)
-      const twoDimensionsMatch = cleanText.match(/\b(\d+)\s*(?:mm)?\s*[xX*]\s*(\d+)\b/);
+      const twoDimensionsRegex = new RegExp(`\\b(\\d+)\\s*(?:mm)?${sepPattern}(\\d+)\\b`, 'i');
+      const twoDimensionsMatch = cleanText.match(twoDimensionsRegex);
       if (twoDimensionsMatch) {
         if (targetCat === 'dowels') {
           updates.diameter = parseInt(twoDimensionsMatch[1]);
@@ -883,6 +1003,13 @@ export default function OpenChatConfigurator() {
     return clamped;
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage(e);
+    }
+  };
+
   const handleSendMessage = (e) => {
     if (e) e.preventDefault();
     if (!userInput.trim()) return;
@@ -890,6 +1017,16 @@ export default function OpenChatConfigurator() {
     const userText = userInput.trim();
     setHistory(prev => [...prev, { sender: 'user', text: userText }]);
     setUserInput('');
+
+    // Stop speech recognition and ignore any late transcription events
+    ignoreSpeechResultsRef.current = true;
+    if (recognitionRef.current && isListening) {
+      try {
+        recognitionRef.current.stop();
+      } catch (err) {
+        console.error('Failed to stop speech recognition on send:', err);
+      }
+    }
 
     // Start bot typing animation
     setIsTyping(true);
@@ -917,11 +1054,14 @@ export default function OpenChatConfigurator() {
 
           if (!res.ok) {
             useFallback = true;
+            setAiEngine('fallback');
           } else {
             const data = await res.json();
             if (data.fallback) {
               useFallback = true;
+              setAiEngine('fallback');
             } else {
+              setAiEngine('gemini');
               // Extract detected parameters
               const dp = data.detected_parameters || {};
               parsed = {};
@@ -957,6 +1097,7 @@ export default function OpenChatConfigurator() {
         } catch (apiErr) {
           console.error("Gemini API request failed, falling back to local NLP parser:", apiErr);
           useFallback = true;
+          setAiEngine('fallback');
         }
 
         if (useFallback) {
@@ -1049,6 +1190,7 @@ export default function OpenChatConfigurator() {
 
         if (clamped.steamed) {
           setSteamed(clamped.steamed);
+          updatedFields.steamed = true;
           detectedFields.push(`✓ ${getTranslation('steamedRow')}: **${getSteamedLabel(clamped.steamed)}**`);
         }
 
@@ -1154,11 +1296,14 @@ export default function OpenChatConfigurator() {
 
             if (!res.ok) {
               useFallback = true;
+              setAiEngine('fallback');
             } else {
               const data = await res.json();
               if (data.fallback) {
                 useFallback = true;
+                setAiEngine('fallback');
               } else {
+                setAiEngine('gemini');
                 // Extract detected parameters
                 const dp = data.detected_parameters || {};
                 parsed = {};
@@ -1194,6 +1339,7 @@ export default function OpenChatConfigurator() {
           } catch (apiErr) {
             console.error("Gemini API request failed, falling back to local NLP parser:", apiErr);
             useFallback = true;
+            setAiEngine('fallback');
           }
 
           if (useFallback) {
@@ -1275,6 +1421,7 @@ export default function OpenChatConfigurator() {
 
           if (clamped.steamed) {
             setSteamed(clamped.steamed);
+            updatedFields.steamed = true;
             detectedFields.push(`✓ ${getTranslation('steamedRow')}: **${getSteamedLabel(clamped.steamed)}**`);
           }
 
@@ -1323,28 +1470,176 @@ export default function OpenChatConfigurator() {
     }, 10);
   };
 
+  const calculatePriceDetails = (cat, len, diam, thick, qtyVal, specificSubcat, itemGrade = 'A', lenType = 'standard', itemDrying = 'kd') => {
+    let unitPrice = 0.0;
+    let subcatName = '';
+
+    const numericLen = typeof len === 'string' && len.includes('-')
+      ? parseInt(len.split('-')[1])
+      : (parseInt(len) || 0);
+    const numericDiam = parseInt(diam) || 0;
+    const numericThick = parseInt(thick) || 0;
+
+    if (cat === 'specials') {
+      const names = {
+        'special-keeplat-spruce': 'Keeplat Spruce',
+        'special-keeplat-beech': 'Keeplat Beech',
+        'special-distancer-mix': 'Distancers Color Mix',
+        'special-threshold': 'Food Industry Components',
+        'special-distancer-ind': 'Industrial Distancer',
+        'special-wood-iron': 'Rough-sawn Specials',
+      };
+      subcatName = names[specificSubcat || subCategorySpecials] || 'Keeplat Spruce';
+    } else if (cat === 'profiles') {
+      const names = {
+        'profile-semiround': 'Semiround Profile',
+        'profile-strip': 'Profile Strip',
+        'profile-finish-v1': 'Profile Finishing (Variant 1)',
+        'profile-quarter-v1': 'Profile Quarter Round (Variant 1)',
+        'profile-finish-v2': 'Profile Finishing (Variant 2)',
+        'profile-plinth-v1': 'Profile Plinth (Variant 1)',
+        'profile-corner-v1': 'Profile Corner (Variant 1)',
+        'profile-corner-v2': 'Profile Corner (Variant 2)',
+        'profile-triangular': 'Profile Triangular',
+        'profile-quarter-v2': 'Profile Quarter Round (Variant 2)',
+        'profile-thread': 'Profile Thread',
+        'profile-calbat': 'Profile Calbat',
+      };
+      subcatName = names[specificSubcat || subCategoryProfiles] || 'Semiround Profile';
+    } else if (cat === 'dowels') {
+      const names = {
+        'dowel-smooth': 'Smooth Dowel Rods',
+        'dowel-rilled': 'Spiral Rilled Pins (6 to 20 mm)',
+      };
+      subcatName = names[specificSubcat || subCategoryDowels] || 'Smooth Dowel Rods';
+    } else if (cat === 'planed') {
+      const names = {
+        'planed-rect-v1': 'Planed Rectangular (Variant 1)',
+        'planed-rect-v2': 'Planed Rectangular (Variant 2)',
+        'planed-rect-v3': 'Planed Rectangular (Variant 3)',
+        'planed-rect-v4': 'Planed Rectangular (Variant 4)',
+        'planed-sq-v1': 'Planed Square (Variant 1)',
+        'planed-sq-v2': 'Planed Square (Variant 2)',
+        'planed-rad3': 'Planed Elements with Radius 3',
+        'planed-rad6': 'Planed Elements with Radius 6',
+      };
+      subcatName = names[specificSubcat || subCategoryPlaned] || 'Planed Rectangular (Variant 1)';
+    }
+
+    if (cat === 'sawn') {
+      const volumeDm3 = (numericLen * numericDiam * numericThick) / 1000000.0;
+      unitPrice = 1.25 * volumeDm3; // Gezaagd is €1250/m3 base price
+      if (unitPrice < 0.20) unitPrice = 0.20;
+    } else if (cat === 'planed') {
+      const volumeDm3 = (numericLen * numericDiam * numericThick) / 1000000.0;
+      unitPrice = 1.65 * volumeDm3; // S4S is €1650/m3 base price
+      if (unitPrice < 0.25) unitPrice = 0.25;
+    } else if (cat === 'dowels') {
+      const baseLength = 40.0;
+      const baseDiameter = 8.0;
+      const basePrice = 0.03;
+
+      const lengthFactor = numericLen / baseLength;
+      const diameterFactor = Math.pow(numericDiam / baseDiameter, 2);
+
+      unitPrice = basePrice * lengthFactor * diameterFactor;
+      if (unitPrice < 0.01) unitPrice = 0.01;
+    } else if (cat === 'profiles') {
+      const lengthM = numericLen / 1000.0;
+      const widthFactor = numericDiam / 50.0;
+      const thicknessFactor = numericThick / 20.0;
+      unitPrice = 0.95 * lengthM * widthFactor * thicknessFactor;
+      if (unitPrice < 0.20) unitPrice = 0.20;
+    } else if (cat === 'specials') {
+      const basePrice = specialsPrices[subcatName] || 1.25;
+      const lengthFactor = numericLen / 500.0;
+      unitPrice = basePrice * lengthFactor;
+      if (unitPrice < 0.35) unitPrice = 0.35;
+    } else if (cat === 'brichete') {
+      unitPrice = 320.00; // Wholesale target price per pallet
+    }
+
+    // Apply grade factor
+    let gradeFactor = 1.0;
+    if (cat !== 'brichete') {
+      if (itemGrade === 'B') gradeFactor = 0.9;
+      else if (itemGrade === 'C') gradeFactor = 0.7;
+    }
+
+    // Apply drying factor
+    const dryingFactor = (cat !== 'brichete' && itemDrying === 'luchtdroog') ? 0.95 : 1.0;
+
+    // Apply custom length overhead factor
+    const lenTypeFactor = (cat !== 'brichete' && lenType === 'custom') ? 1.15 : 1.0;
+
+    unitPrice = unitPrice * gradeFactor * dryingFactor * lenTypeFactor;
+
+    let discountPercent = 0;
+    if (cat === 'brichete') {
+      if (qtyVal >= 24) {
+        discountPercent = 10;
+      } else if (qtyVal >= 12) {
+        discountPercent = 5;
+      }
+    } else {
+      if (qtyVal >= 100000) {
+        discountPercent = 15;
+      } else if (qtyVal >= 50000) {
+        discountPercent = 10;
+      } else if (qtyVal >= 10000) {
+        discountPercent = 5;
+      }
+    }
+
+    const discountFactor = (100 - discountPercent) / 100.0;
+    const discountedUnitPrice = unitPrice * discountFactor;
+    const totalPrice = discountedUnitPrice * qtyVal;
+
+    return {
+      unitPrice,
+      discountPercent,
+      discountedUnitPrice,
+      totalPrice,
+      subcatName,
+    };
+  };
+
   // Add configured product to shopping cart
   const handleAddToCart = () => {
     const currentSubcat = getActiveSubCategoryCode(category);
-    
+    const details = calculatePriceDetails(category, length, diameter, thickness, quantity, currentSubcat, grade, lengthType, drying);
+    const calculatedBase = calculatePriceDetails(category, length, diameter, thickness, 1, currentSubcat, grade, lengthType, drying);
+
+    // Let's get the display name in the format "Category - Subcategory" (or just Category if no subcategory)
+    const displayName = categoryData[category].name[lang] || categoryData[category].name.nl;
+    let displayProductName = displayName;
+    const subName = getSubcategoryName(category, currentSubcat);
+    if (subName) {
+      displayProductName = `${displayName} - ${subName}`;
+    }
+
     // Generate readable description
     let formatDims = '';
-    if (category === 'dowels') {
-      formatDims = `Ø ${diameter} x ${length} mm`;
+    const lengthStr = typeof length === 'string' ? `${length} mm` : `${length} mm`;
+    const widthStr = category === 'dowels' ? 'n.v.t.' : `${diameter} mm`;
+    const thickStr = `${thickness} mm`;
+
+    if (category === 'sawn' || category === 'planed' || category === 'profiles' || category === 'specials') {
+      formatDims = `${thickStr} x ${widthStr} x ${lengthStr}`;
+    } else if (category === 'dowels') {
+      formatDims = `Ø ${diameter} mm x ${lengthStr}`;
     } else if (category === 'brichete') {
-      formatDims = lang === 'nl' ? 'Pallet (960 kg netto gewicht)' : (lang === 'ro' ? 'Palet (960 kg greutate netă)' : (lang === 'de' ? 'Palette (960 kg Nettogewicht)' : 'Pallet (960 kg net weight)'));
-    } else {
-      formatDims = `${thickness} x ${diameter} x ${length} mm`;
+      formatDims = lang === 'ro' ? 'Palet (960 kg greutate netă)' : (lang === 'nl' ? 'Pallet (960 kg netto gewicht)' : (lang === 'de' ? 'Palette (960 kg Nettogewicht)' : 'Pallet (960 kg net weight)'));
     }
 
     const uniqueId = `${category}-${currentSubcat}-${thickness}-${diameter}-${length}-${grade}-${drying}-${steamed}-${fsc}-${Date.now()}`;
-    const displayName = categoryData[category].name[lang] || categoryData[category].name.nl;
     
     const cartItem = {
       id: uniqueId,
-      category: category,
-      subCategory: currentSubcat,
-      name: displayName,
+      isConfigured: true,
+      categoryKey: category,
+      category: displayName,
+      name: displayProductName,
       thickness: thickness,
       thicknessType: thicknessType,
       diameter: diameter, // width
@@ -1358,7 +1653,12 @@ export default function OpenChatConfigurator() {
       fsc: fsc,
       additionalInfo: additionalInfo,
       qty: quantity,
-      price: category === 'brichete' ? 320.00 : 1.25, // pricing mockup
+      dims: formatDims,
+      price: details.totalPrice,
+      baseUnitPrice: calculatedBase.unitPrice,
+      discountPercent: details.discountPercent,
+      finish: categoryData[category].finish[lang] || categoryData[category].finish.nl,
+      subCategory: currentSubcat,
     };
 
     addToCart(cartItem);
@@ -1416,6 +1716,7 @@ export default function OpenChatConfigurator() {
   const woodColorEnd = '#b48154';
 
   const isConfigComplete = isConfigCompleteFor(category, filledFields);
+  const hasAnyDetected = filledFields.category || filledFields.dimensions || filledFields.grade || filledFields.drying || filledFields.fsc || filledFields.quantity || filledFields.steamed;
 
   if (isLoading) {
     return (
@@ -1478,6 +1779,35 @@ export default function OpenChatConfigurator() {
           font-weight: 700;
           color: #ffffff;
           line-height: 1.2;
+          display: flex;
+          align-items: center;
+        }
+        .badge-ai-status {
+          font-size: 0.65rem;
+          padding: 0.15rem 0.45rem;
+          border-radius: 4px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          display: inline-flex;
+          align-items: center;
+          margin-left: 0.5rem;
+          line-height: 1;
+        }
+        .badge-ai-status.gemini {
+          background: rgba(34, 197, 94, 0.15);
+          color: #4ade80;
+          border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        .badge-ai-status.fallback {
+          background: rgba(245, 158, 11, 0.15);
+          color: #fbbf24;
+          border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .badge-ai-status.checking {
+          background: rgba(255, 255, 255, 0.1);
+          color: #cbd5e1;
+          border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .chat-header-info span {
           font-size: 0.75rem;
@@ -1558,39 +1888,54 @@ export default function OpenChatConfigurator() {
           flex-direction: column;
           gap: 0.75rem;
         }
-        .chat-input-row {
+        .chat-input-form {
           display: flex;
+          flex-direction: column;
           gap: 0.75rem;
         }
-        .chat-input-row input {
-          flex: 1;
+        .chat-input-form textarea {
+          width: 100%;
+          height: auto;
+          min-height: 72px; /* ~3 lines */
           padding: 0.75rem 1rem;
           border: 1px solid var(--color-border);
           border-radius: var(--border-radius-md);
           font-size: 0.95rem;
           transition: border-color 0.2s;
+          resize: none;
+          font-family: inherit;
+          line-height: 1.4;
         }
-        .chat-input-row input:focus {
+        .chat-input-form textarea:focus {
           outline: none;
           border-color: var(--color-primary);
         }
+        .chat-buttons-row {
+          display: flex;
+          gap: 0.75rem;
+          justify-content: flex-end;
+          align-items: center;
+        }
         .btn-mic {
-          background: #f1f5f9;
-          border: 1px solid var(--color-border);
-          color: #475569;
-          padding: 0.75rem;
-          border-radius: var(--border-radius-md);
+          background: #ffffff;
+          border: 2px solid var(--color-border);
+          color: var(--color-text-dark);
+          padding: 0 1.5rem;
+          border-radius: 50px;
           cursor: pointer;
           transition: all 0.2s;
-          display: flex;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
-          font-size: 1.1rem;
-          width: 46px;
-          height: 46px;
+          font-size: 0.95rem;
+          font-weight: 600;
+          height: 48px;
+          gap: 0.5rem;
+          box-sizing: border-box;
         }
         .btn-mic:hover:not(:disabled) {
-          background: #e2e8f0;
+          background: #f1f5f9;
+          border-color: var(--color-text-dark);
           color: var(--color-text-dark);
         }
         .btn-mic.listening {
@@ -1759,7 +2104,24 @@ export default function OpenChatConfigurator() {
                     <i className="fa-solid fa-robot"></i>
                   </div>
                   <div className="chat-header-info">
-                    <h3>Willem (AI)</h3>
+                    <h3 style={{ display: 'flex', alignItems: 'center' }}>
+                      Willem (AI)
+                      {aiEngine === 'gemini' && (
+                        <span className="badge-ai-status gemini" title="Connected to Google Gemini AI Engine">
+                          {getTranslation('aiGemini')}
+                        </span>
+                      )}
+                      {aiEngine === 'fallback' && (
+                        <span className="badge-ai-status fallback" title="Connected to local Rule-Based NLP Parser">
+                          {getTranslation('aiFallback')}
+                        </span>
+                      )}
+                      {aiEngine === 'checking' && (
+                        <span className="badge-ai-status checking" title="Checking model status...">
+                          {getTranslation('aiChecking')}
+                        </span>
+                      )}
+                    </h3>
                     <span><i className="fa-solid fa-circle" style={{ color: '#22c55e', fontSize: '0.55rem' }}></i> Online / Virtual Advisor</span>
                   </div>
                 </div>
@@ -1879,30 +2241,68 @@ export default function OpenChatConfigurator() {
               <div className="chat-footer">
 
                 {/* Input Bar */}
-                <form onSubmit={handleSendMessage} className="chat-input-row">
-                  <input
-                    type="text"
-                    placeholder={getTranslation('placeholderInput')}
-                    value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
-                    disabled={isTyping}
-                  />
-                  <button
-                    type="button"
-                    className={`btn-mic ${isListening ? 'listening' : ''}`}
-                    onClick={toggleListening}
-                    disabled={isTyping}
-                    title={getTranslation('micTooltip')}
-                  >
-                    {isListening ? (
-                      <i className="fa-solid fa-microphone-lines"></i>
-                    ) : (
-                      <i className="fa-solid fa-microphone"></i>
+                <form onSubmit={handleSendMessage} className="chat-input-form">
+                  <div style={{ position: 'relative', width: '100%', display: 'flex', alignItems: 'center' }}>
+                    <textarea
+                      placeholder={isListening ? '' : getTranslation('placeholderInput')}
+                      value={userInput}
+                      onChange={(e) => setUserInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      disabled={isTyping}
+                      rows={3}
+                      style={{
+                        width: '100%',
+                        paddingRight: isListening ? '100px' : '12px'
+                      }}
+                    />
+                    {isListening && (
+                      <div className="audio-wave-overlay" style={{
+                        position: 'absolute',
+                        right: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '3px',
+                        pointerEvents: 'none'
+                      }}>
+                        <style>{`
+                          @keyframes bounceWave {
+                            0% { transform: scaleY(0.4); }
+                            100% { transform: scaleY(1.4); }
+                          }
+                        `}</style>
+                        <div className="audio-wave-bar" style={{ width: '3px', height: '10px', backgroundColor: 'var(--color-primary-dark)', borderRadius: '1.5px', animation: 'bounceWave 0.6s ease-in-out infinite alternate', transformOrigin: 'center' }}></div>
+                        <div className="audio-wave-bar" style={{ width: '3px', height: '18px', backgroundColor: 'var(--color-primary-dark)', borderRadius: '1.5px', animation: 'bounceWave 0.6s ease-in-out infinite alternate 0.15s', transformOrigin: 'center' }}></div>
+                        <div className="audio-wave-bar" style={{ width: '3px', height: '8px', backgroundColor: 'var(--color-primary-dark)', borderRadius: '1.5px', animation: 'bounceWave 0.6s ease-in-out infinite alternate 0.3s', transformOrigin: 'center' }}></div>
+                        <div className="audio-wave-bar" style={{ width: '3px', height: '14px', backgroundColor: 'var(--color-primary-dark)', borderRadius: '1.5px', animation: 'bounceWave 0.6s ease-in-out infinite alternate 0.45s', transformOrigin: 'center' }}></div>
+                        <div className="audio-wave-bar" style={{ width: '3px', height: '6px', backgroundColor: 'var(--color-primary-dark)', borderRadius: '1.5px', animation: 'bounceWave 0.6s ease-in-out infinite alternate 0.1s', transformOrigin: 'center' }}></div>
+                      </div>
                     )}
-                  </button>
-                  <button type="submit" className="btn btn-primary" disabled={isTyping || !userInput.trim()}>
-                    {getTranslation('btnSend')} <i className="fa-solid fa-paper-plane icon-right"></i>
-                  </button>
+                  </div>
+                  
+                  <div className="chat-buttons-row">
+                    <button
+                      type="button"
+                      className={`btn-mic ${isListening ? 'listening' : ''}`}
+                      onClick={toggleListening}
+                      disabled={isTyping}
+                      title={getTranslation('micTooltip')}
+                    >
+                      {isListening ? (
+                        <>
+                          <i className="fa-solid fa-microphone-lines icon-left"></i>
+                          <span>{lang === 'nl' ? 'Luisteren...' : (lang === 'ro' ? 'Se ascultă...' : (lang === 'de' ? 'Zuhören...' : 'Listening...'))}</span>
+                        </>
+                      ) : (
+                        <>
+                          <i className="fa-solid fa-microphone icon-left"></i>
+                          <span>{lang === 'nl' ? 'Inspreken' : (lang === 'ro' ? 'Rostiți' : (lang === 'de' ? 'Sprechen' : 'Speak'))}</span>
+                        </>
+                      )}
+                    </button>
+                    <button type="submit" className="btn btn-primary" disabled={isTyping || !userInput.trim()} style={{ height: '48px', padding: '0 1.5rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {getTranslation('btnSend')} <i className="fa-solid fa-paper-plane icon-right"></i>
+                    </button>
+                  </div>
                 </form>
                 {isListening && (
                   <div className="speech-listening-hint">
@@ -1923,126 +2323,150 @@ export default function OpenChatConfigurator() {
               <div className="visualizer-preview-box">
                 <span className="visualizer-badge-v4">{getTranslation('visualizerTitle')}</span>
                 
-                <svg viewBox={`0 0 ${svgW} ${svgH}`} width="100%" height="150" style={{ overflow: 'visible' }}>
-                  <defs>
-                    <linearGradient id="cylinderGradV4" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#f3e8de" />
-                      <stop offset="30%" stopColor={woodColorMain} />
-                      <stop offset="70%" stopColor={woodColorFront} />
-                      <stop offset="100%" stopColor={woodColorEnd} />
-                    </linearGradient>
-                    <linearGradient id="endGrainGradV4" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor={woodColorEnd} />
-                      <stop offset="100%" stopColor="#8d643d" />
-                    </linearGradient>
-                  </defs>
-                  {category === 'dowels' ? (
-                    <g>
-                      <path d={`M ${startX} ${startY - dRadiusY} A ${dRadiusX} ${dRadiusY} 0 0 0 ${startX} ${startY + dRadiusY}`} fill={woodColorEnd} opacity="0.6" />
-                      <rect x={startX} y={startY - dRadiusY} width={lScale} height={dRadiusY * 2} fill="url(#cylinderGradV4)" />
-                      <ellipse cx={startX + lScale} cy={startY} rx={dRadiusX} ry={dRadiusY} fill="url(#endGrainGradV4)" stroke="#cfa67f" strokeWidth="0.8" />
-                    </g>
-                  ) : category === 'brichete' ? (
-                    <g>
-                      <rect x={svgW/2 - 50} y={svgH/2 - 20} width={90} height={40} rx="4" fill="#a77d54" stroke="#8d643d" strokeWidth="1.5" />
-                      <rect x={svgW/2 - 40} y={svgH/2 - 5} width={90} height={40} rx="4" fill="#be956f" stroke="#8d643d" strokeWidth="1.5" />
-                    </g>
-                  ) : (
-                    <g>
-                      <polygon points={`${p0} ${p3} ${p5} ${p6}`} fill={woodColorEnd} stroke="rgba(141, 100, 61, 0.4)" strokeWidth="0.8" />
-                      <polygon points={`${p0} ${p1} ${p2} ${p3}`} fill="url(#cylinderGradV4)" stroke="rgba(141, 100, 61, 0.3)" strokeWidth="0.8" />
-                      <polygon points={`${p3} ${p2} ${p4} ${p5}`} fill={woodColorMain} stroke="rgba(141, 100, 61, 0.3)" strokeWidth="0.8" />
-                    </g>
-                  )}
-                </svg>
+                {filledFields.category ? (
+                  <svg viewBox={`0 0 ${svgW} ${svgH}`} width="100%" height="150" style={{ overflow: 'visible' }}>
+                    <defs>
+                      <linearGradient id="cylinderGradV4" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#f3e8de" />
+                        <stop offset="30%" stopColor={woodColorMain} />
+                        <stop offset="70%" stopColor={woodColorFront} />
+                        <stop offset="100%" stopColor={woodColorEnd} />
+                      </linearGradient>
+                      <linearGradient id="endGrainGradV4" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor={woodColorEnd} />
+                        <stop offset="100%" stopColor="#8d643d" />
+                      </linearGradient>
+                    </defs>
+                    {category === 'dowels' ? (
+                      <g>
+                        <path d={`M ${startX} ${startY - dRadiusY} A ${dRadiusX} ${dRadiusY} 0 0 0 ${startX} ${startY + dRadiusY}`} fill={woodColorEnd} opacity="0.6" />
+                        <rect x={startX} y={startY - dRadiusY} width={lScale} height={dRadiusY * 2} fill="url(#cylinderGradV4)" />
+                        <ellipse cx={startX + lScale} cy={startY} rx={dRadiusX} ry={dRadiusY} fill="url(#endGrainGradV4)" stroke="#cfa67f" strokeWidth="0.8" />
+                      </g>
+                    ) : category === 'brichete' ? (
+                      <g>
+                        <rect x={svgW/2 - 50} y={svgH/2 - 20} width={90} height={40} rx="4" fill="#a77d54" stroke="#8d643d" strokeWidth="1.5" />
+                        <rect x={svgW/2 - 40} y={svgH/2 - 5} width={90} height={40} rx="4" fill="#be956f" stroke="#8d643d" strokeWidth="1.5" />
+                      </g>
+                    ) : (
+                      <g>
+                        <polygon points={`${p0} ${p3} ${p5} ${p6}`} fill={woodColorEnd} stroke="rgba(141, 100, 61, 0.4)" strokeWidth="0.8" />
+                        <polygon points={`${p0} ${p1} ${p2} ${p3}`} fill="url(#cylinderGradV4)" stroke="rgba(141, 100, 61, 0.3)" strokeWidth="0.8" />
+                        <polygon points={`${p3} ${p2} ${p4} ${p5}`} fill={woodColorMain} stroke="rgba(141, 100, 61, 0.3)" strokeWidth="0.8" />
+                      </g>
+                    )}
+                  </svg>
+                ) : (
+                  <div style={{ textAlign: 'center', color: 'var(--color-text-muted)', fontSize: '0.85rem', padding: '1rem 0' }}>
+                    <i className="fa-solid fa-cubes" style={{ fontSize: '2.2rem', display: 'block', marginBottom: '0.75rem', color: '#cbd5e1' }}></i>
+                    {getTranslation('visualizerPlaceholder')}
+                  </div>
+                )}
               </div>
 
               {/* Summary Table */}
-              <table className="sidebar-specs-table">
-                <tbody>
-                  {/* 1. Product */}
-                  <tr>
-                    <td>{getTranslation('productRow')}</td>
-                    <td>{categoryData[category].name[lang] || categoryData[category].name.nl}</td>
-                  </tr>
-                  
-                  {/* 2. Subcategory */}
-                  {category !== 'brichete' && getActiveSubCategoryCode(category) && (
-                    <tr>
-                      <td>Subcategorie</td>
-                      <td>{getSubcategoryName(category, getActiveSubCategoryCode(category))}</td>
-                    </tr>
-                  )}
+              {!hasAnyDetected ? (
+                <div style={{ textAlign: 'center', color: 'var(--color-text-muted)', padding: '2.5rem 1rem', border: '1px dashed var(--color-border)', borderRadius: 'var(--border-radius-md)', background: '#f8fafc', marginTop: '1rem' }}>
+                  <i className="fa-solid fa-list-check" style={{ fontSize: '2.2rem', display: 'block', marginBottom: '0.75rem', color: '#cbd5e1' }}></i>
+                  <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: '1.4' }}>{getTranslation('noSpecsDetected')}</p>
+                </div>
+              ) : (
+                <table className="sidebar-specs-table" style={{ animation: 'slideUp 0.3s ease-out' }}>
+                  <tbody>
+                    {/* 1. Product */}
+                    {filledFields.category && (
+                      <tr>
+                        <td>{getTranslation('productRow')}</td>
+                        <td>{categoryData[category].name[lang] || categoryData[category].name.nl}</td>
+                      </tr>
+                    )}
+                    
+                    {/* 2. Subcategory */}
+                    {filledFields.category && category !== 'brichete' && getActiveSubCategoryCode(category) && (
+                      <tr>
+                        <td>Subcategorie</td>
+                        <td>{getSubcategoryName(category, getActiveSubCategoryCode(category))}</td>
+                      </tr>
+                    )}
 
-                  {/* 3. Wood Species */}
-                  <tr>
-                    <td>{getTranslation('woodSpeciesRow')}</td>
-                    <td>
-                      {category === 'brichete'
-                        ? (lang === 'nl' ? 'Beuken (Surplus zaagsel)' : (lang === 'ro' ? 'Fag (Surplus de rumeguș)' : (lang === 'de' ? 'Buche (Sägemehl)' : 'Beechwood (Sawdust surplus)')))
-                        : getTranslation('beechwoodValue')}
-                    </td>
-                  </tr>
+                    {/* 3. Wood Species */}
+                    {filledFields.category && (
+                      <tr>
+                        <td>{getTranslation('woodSpeciesRow')}</td>
+                        <td>
+                          {category === 'brichete'
+                            ? (lang === 'nl' ? 'Beuken (Surplus zaagsel)' : (lang === 'ro' ? 'Fag (Surplus de rumeguș)' : (lang === 'de' ? 'Buche (Sägemehl)' : 'Beechwood (Sawdust surplus)')))
+                            : getTranslation('beechwoodValue')}
+                        </td>
+                      </tr>
+                    )}
 
-                  {/* 4. Grade */}
-                  {category !== 'brichete' && (
-                    <tr>
-                      <td>{getTranslation('gradeRow')}</td>
-                      <td>{grade === 'A' ? getTranslation('gradeAValue') : (grade === 'B' ? getTranslation('gradeBValue') : getTranslation('gradeCValue'))}</td>
-                    </tr>
-                  )}
+                    {/* 4. Grade */}
+                    {filledFields.grade && category !== 'brichete' && (
+                      <tr>
+                        <td>{getTranslation('gradeRow')}</td>
+                        <td>{grade === 'A' ? getTranslation('gradeAValue') : (grade === 'B' ? getTranslation('gradeBValue') : getTranslation('gradeCValue'))}</td>
+                      </tr>
+                    )}
 
-                  {/* 5. Dimensions */}
-                  <tr>
-                    <td>{getTranslation('dimensionsRow')}</td>
-                    <td>
-                      {category === 'dowels' 
-                        ? `Ø ${diameter} x ${length} mm`
-                        : category === 'brichete'
-                        ? 'RUF Block'
-                        : `${thickness} x ${diameter} x ${length} mm`}
-                    </td>
-                  </tr>
+                    {/* 5. Dimensions */}
+                    {filledFields.dimensions && (
+                      <tr>
+                        <td>{getTranslation('dimensionsRow')}</td>
+                        <td>
+                          {category === 'dowels' 
+                            ? `Ø ${diameter} x ${length} mm`
+                            : category === 'brichete'
+                            ? 'RUF Block'
+                            : `${thickness} x ${diameter} x ${length} mm`}
+                        </td>
+                      </tr>
+                    )}
 
-                  {/* 6. Quantity */}
-                  <tr>
-                    <td>{getTranslation('quantityRow')}</td>
-                    <td>
-                      {quantity} {category === 'brichete' ? 'pallets' : getTranslation('pieces')}
-                    </td>
-                  </tr>
+                    {/* 6. Quantity */}
+                    {filledFields.quantity && (
+                      <tr>
+                        <td>{getTranslation('quantityRow')}</td>
+                        <td>
+                          {`${quantity} ${category === 'brichete' ? 'pallets' : getTranslation('pieces')}`}
+                        </td>
+                      </tr>
+                    )}
 
-                  {/* 7. Finish */}
-                  <tr>
-                    <td>{getTranslation('finishRow')}</td>
-                    <td>{categoryData[category].finish[lang] || categoryData[category].finish.nl}</td>
-                  </tr>
+                    {/* 7. Finish */}
+                    {filledFields.category && (
+                      <tr>
+                        <td>{getTranslation('finishRow')}</td>
+                        <td>{categoryData[category].finish[lang] || categoryData[category].finish.nl}</td>
+                      </tr>
+                    )}
 
-                  {/* 8. Drying */}
-                  {category !== 'brichete' && (
-                    <tr>
-                      <td>{getTranslation('dryingRow')}</td>
-                      <td>{getDryingLabel(drying)}</td>
-                    </tr>
-                  )}
+                    {/* 8. Drying */}
+                    {filledFields.drying && category !== 'brichete' && (
+                      <tr>
+                        <td>{getTranslation('dryingRow')}</td>
+                        <td>{getDryingLabel(drying)}</td>
+                      </tr>
+                    )}
 
-                  {/* 9. Steamed */}
-                  {category !== 'brichete' && (
-                    <tr>
-                      <td>{getTranslation('steamedRow')}</td>
-                      <td>{getSteamedLabel(steamed)}</td>
-                    </tr>
-                  )}
+                    {/* 9. Steamed */}
+                    {filledFields.steamed && category !== 'brichete' && (
+                      <tr>
+                        <td>{getTranslation('steamedRow')}</td>
+                        <td>{getSteamedLabel(steamed)}</td>
+                      </tr>
+                    )}
 
-                  {/* 10. FSC */}
-                  {category !== 'brichete' && (
-                    <tr>
-                      <td>{getTranslation('certificationLabel')}</td>
-                      <td>{getFscLabel(fsc)}</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                    {/* 10. FSC */}
+                    {filledFields.fsc && category !== 'brichete' && (
+                      <tr>
+                        <td>{getTranslation('certificationLabel')}</td>
+                        <td>{getFscLabel(fsc)}</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              )}
 
               {/* Add to Cart button in sidebar once everything is filled */}
               {isConfigComplete && (
