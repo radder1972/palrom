@@ -2004,52 +2004,61 @@ export default function OpenChatConfigurator() {
           background: #ffffff;
           border: 1px solid var(--color-border);
           border-radius: var(--border-radius-lg);
-          padding: 2rem;
+          padding: 1.5rem 1.5rem 1.25rem;
           box-shadow: var(--shadow-md);
           position: sticky;
           top: 171px;
+          height: 680px;
+          display: flex;
+          flex-direction: column;
         }
         .visualizer-preview-box {
           background: #f8fafc;
           border: 1px solid var(--color-border);
           border-radius: var(--border-radius-md);
-          padding: 1.5rem;
+          padding: 1rem;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-bottom: 2rem;
+          margin-bottom: 1rem;
           position: relative;
-          min-height: 180px;
+          min-height: 120px;
         }
         .visualizer-badge-v4 {
           position: absolute;
-          top: 1rem;
-          left: 1rem;
+          top: 0.5rem;
+          left: 0.5rem;
           background: rgba(30, 58, 43, 0.08);
           color: var(--color-primary-dark);
-          font-size: 0.75rem;
+          font-size: 0.65rem;
           font-weight: 700;
-          padding: 0.25rem 0.6rem;
+          padding: 0.15rem 0.45rem;
           border-radius: 50px;
         }
         .sidebar-specs-table {
           width: 100%;
           border-collapse: collapse;
-          margin-top: 1rem;
+          margin-top: 0.5rem;
         }
         .sidebar-specs-table th, .sidebar-specs-table td {
-          padding: 0.75rem 1rem;
+          padding: 0.45rem 0.75rem;
           font-size: 0.9rem;
           border-bottom: 1px solid #edf2f7;
         }
-        .sidebar-specs-table td:first-child {
-          color: var(--color-text-muted);
-          font-weight: 500;
+        .specs-scroll-container {
+          flex: 1;
+          overflow-y: auto;
+          margin-bottom: 1rem;
         }
-        .sidebar-specs-table td:last-child {
-          text-align: right;
-          font-weight: 700;
-          color: var(--color-text-dark);
+        .specs-scroll-container::-webkit-scrollbar {
+          width: 4px;
+        }
+        .specs-scroll-container::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .specs-scroll-container::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 2px;
         }
         
         @keyframes typingBounce {
@@ -2324,7 +2333,7 @@ export default function OpenChatConfigurator() {
                 <span className="visualizer-badge-v4">{getTranslation('visualizerTitle')}</span>
                 
                 {filledFields.category ? (
-                  <svg viewBox={`0 0 ${svgW} ${svgH}`} width="100%" height="150" style={{ overflow: 'visible' }}>
+                  <svg viewBox={`0 0 ${svgW} ${svgH}`} width="100%" height="100" style={{ overflow: 'visible' }}>
                     <defs>
                       <linearGradient id="cylinderGradV4" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stopColor="#f3e8de" />
@@ -2365,115 +2374,117 @@ export default function OpenChatConfigurator() {
               </div>
 
               {/* Summary Table */}
-              {!hasAnyDetected ? (
-                <div style={{ textAlign: 'center', color: 'var(--color-text-muted)', padding: '2.5rem 1rem', border: '1px dashed var(--color-border)', borderRadius: 'var(--border-radius-md)', background: '#f8fafc', marginTop: '1rem' }}>
-                  <i className="fa-solid fa-list-check" style={{ fontSize: '2.2rem', display: 'block', marginBottom: '0.75rem', color: '#cbd5e1' }}></i>
-                  <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: '1.4' }}>{getTranslation('noSpecsDetected')}</p>
-                </div>
-              ) : (
-                <table className="sidebar-specs-table" style={{ animation: 'slideUp 0.3s ease-out' }}>
-                  <tbody>
-                    {/* 1. Product */}
-                    {filledFields.category && (
-                      <tr>
-                        <td>{getTranslation('productRow')}</td>
-                        <td>{categoryData[category].name[lang] || categoryData[category].name.nl}</td>
-                      </tr>
-                    )}
-                    
-                    {/* 2. Subcategory */}
-                    {filledFields.category && category !== 'brichete' && getActiveSubCategoryCode(category) && (
-                      <tr>
-                        <td>Subcategorie</td>
-                        <td>{getSubcategoryName(category, getActiveSubCategoryCode(category))}</td>
-                      </tr>
-                    )}
+              <div className="specs-scroll-container">
+                {!hasAnyDetected ? (
+                  <div style={{ textAlign: 'center', color: 'var(--color-text-muted)', padding: '2.5rem 1rem', border: '1px dashed var(--color-border)', borderRadius: 'var(--border-radius-md)', background: '#f8fafc', marginTop: '0.5rem' }}>
+                    <i className="fa-solid fa-list-check" style={{ fontSize: '2.2rem', display: 'block', marginBottom: '0.75rem', color: '#cbd5e1' }}></i>
+                    <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: '1.4' }}>{getTranslation('noSpecsDetected')}</p>
+                  </div>
+                ) : (
+                  <table className="sidebar-specs-table" style={{ animation: 'slideUp 0.3s ease-out' }}>
+                    <tbody>
+                      {/* 1. Product */}
+                      {filledFields.category && (
+                        <tr>
+                          <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('productRow')}</td>
+                          <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>{categoryData[category].name[lang] || categoryData[category].name.nl}</td>
+                        </tr>
+                      )}
+                      
+                      {/* 2. Subcategory */}
+                      {filledFields.category && category !== 'brichete' && getActiveSubCategoryCode(category) && (
+                        <tr>
+                          <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>Subcategorie</td>
+                          <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>{getSubcategoryName(category, getActiveSubCategoryCode(category))}</td>
+                        </tr>
+                      )}
 
-                    {/* 3. Wood Species */}
-                    {filledFields.category && (
-                      <tr>
-                        <td>{getTranslation('woodSpeciesRow')}</td>
-                        <td>
-                          {category === 'brichete'
-                            ? (lang === 'nl' ? 'Beuken (Surplus zaagsel)' : (lang === 'ro' ? 'Fag (Surplus de rumeguș)' : (lang === 'de' ? 'Buche (Sägemehl)' : 'Beechwood (Sawdust surplus)')))
-                            : getTranslation('beechwoodValue')}
-                        </td>
-                      </tr>
-                    )}
+                      {/* 3. Wood Species */}
+                      {filledFields.category && (
+                        <tr>
+                          <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('woodSpeciesRow')}</td>
+                          <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>
+                            {category === 'brichete'
+                              ? (lang === 'nl' ? 'Beuken (Surplus zaagsel)' : (lang === 'ro' ? 'Fag (Surplus de rumeguș)' : (lang === 'de' ? 'Buche (Sägemehl)' : 'Beechwood (Sawdust surplus)')))
+                              : getTranslation('beechwoodValue')}
+                          </td>
+                        </tr>
+                      )}
 
-                    {/* 4. Grade */}
-                    {filledFields.grade && category !== 'brichete' && (
-                      <tr>
-                        <td>{getTranslation('gradeRow')}</td>
-                        <td>{grade === 'A' ? getTranslation('gradeAValue') : (grade === 'B' ? getTranslation('gradeBValue') : getTranslation('gradeCValue'))}</td>
-                      </tr>
-                    )}
+                      {/* 4. Grade */}
+                      {filledFields.grade && category !== 'brichete' && (
+                        <tr>
+                          <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('gradeRow')}</td>
+                          <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>{grade === 'A' ? getTranslation('gradeAValue') : (grade === 'B' ? getTranslation('gradeBValue') : getTranslation('gradeCValue'))}</td>
+                        </tr>
+                      )}
 
-                    {/* 5. Dimensions */}
-                    {filledFields.dimensions && (
-                      <tr>
-                        <td>{getTranslation('dimensionsRow')}</td>
-                        <td>
-                          {category === 'dowels' 
-                            ? `Ø ${diameter} x ${length} mm`
-                            : category === 'brichete'
-                            ? 'RUF Block'
-                            : `${thickness} x ${diameter} x ${length} mm`}
-                        </td>
-                      </tr>
-                    )}
+                      {/* 5. Dimensions */}
+                      {filledFields.dimensions && (
+                        <tr>
+                          <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('dimensionsRow')}</td>
+                          <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>
+                            {category === 'dowels' 
+                              ? `Ø ${diameter} x ${length} mm`
+                              : category === 'brichete'
+                              ? 'RUF Block'
+                              : `${thickness} x ${diameter} x ${length} mm`}
+                          </td>
+                        </tr>
+                      )}
 
-                    {/* 6. Quantity */}
-                    {filledFields.quantity && (
-                      <tr>
-                        <td>{getTranslation('quantityRow')}</td>
-                        <td>
-                          {`${quantity} ${category === 'brichete' ? 'pallets' : getTranslation('pieces')}`}
-                        </td>
-                      </tr>
-                    )}
+                      {/* 6. Quantity */}
+                      {filledFields.quantity && (
+                        <tr>
+                          <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('quantityRow')}</td>
+                          <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>
+                            {`${quantity} ${category === 'brichete' ? 'pallets' : getTranslation('pieces')}`}
+                          </td>
+                        </tr>
+                      )}
 
-                    {/* 7. Finish */}
-                    {filledFields.category && (
-                      <tr>
-                        <td>{getTranslation('finishRow')}</td>
-                        <td>{categoryData[category].finish[lang] || categoryData[category].finish.nl}</td>
-                      </tr>
-                    )}
+                      {/* 7. Finish */}
+                      {filledFields.category && (
+                        <tr>
+                          <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('finishRow')}</td>
+                          <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>{categoryData[category].finish[lang] || categoryData[category].finish.nl}</td>
+                        </tr>
+                      )}
 
-                    {/* 8. Drying */}
-                    {filledFields.drying && category !== 'brichete' && (
-                      <tr>
-                        <td>{getTranslation('dryingRow')}</td>
-                        <td>{getDryingLabel(drying)}</td>
-                      </tr>
-                    )}
+                      {/* 8. Drying */}
+                      {filledFields.drying && category !== 'brichete' && (
+                        <tr>
+                          <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('dryingRow')}</td>
+                          <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>{getDryingLabel(drying)}</td>
+                        </tr>
+                      )}
 
-                    {/* 9. Steamed */}
-                    {filledFields.steamed && category !== 'brichete' && (
-                      <tr>
-                        <td>{getTranslation('steamedRow')}</td>
-                        <td>{getSteamedLabel(steamed)}</td>
-                      </tr>
-                    )}
+                      {/* 9. Steamed */}
+                      {filledFields.steamed && category !== 'brichete' && (
+                        <tr>
+                          <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('steamedRow')}</td>
+                          <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>{getSteamedLabel(steamed)}</td>
+                        </tr>
+                      )}
 
-                    {/* 10. FSC */}
-                    {filledFields.fsc && category !== 'brichete' && (
-                      <tr>
-                        <td>{getTranslation('certificationLabel')}</td>
-                        <td>{getFscLabel(fsc)}</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              )}
+                      {/* 10. FSC */}
+                      {filledFields.fsc && category !== 'brichete' && (
+                        <tr>
+                          <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('certificationLabel')}</td>
+                          <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>{getFscLabel(fsc)}</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                )}
+              </div>
 
               {/* Add to Cart button in sidebar once everything is filled */}
               {isConfigComplete && (
                 <button
                   onClick={handleAddToCart}
                   className="btn btn-primary btn-block"
-                  style={{ marginTop: '1.5rem', width: '100%' }}
+                  style={{ marginTop: 'auto', width: '100%' }}
                 >
                   <i className="fa-solid fa-cart-plus icon-left"></i> {getTranslation('addToInquiry')}
                 </button>
