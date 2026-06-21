@@ -188,10 +188,10 @@ const translations = {
 
   // Willem replies
   welcomeMessage: {
-    nl: 'Hallo! Ik ben **Willem**, uw virtuele B2B salesadviseur. Typ hieronder in uw eigen woorden wat u zoekt. <br/>Bijvoorbeeld: *"Ik ben op zoek naar 1500 beukenhouten blanks met afmetingen van 25x75x1200 mm in klasse A, kamerdroog."* of geef uw wensen stap voor stap door.',
-    en: 'Hello! I am **Willem**, your virtual B2B sales advisor. Tell me in your own words what you are looking for. <br/>For example: *"I am looking for 1500 beechwood blanks with dimensions of 25x75x1200 mm in class A, kiln dried."* or describe your requirements step by step.',
-    de: 'Hallo! Ich bin **Willem**, Ihr virtueller B2B-Verkaufsberater. Schreiben Sie mir in eigenen Worten, was Sie suchen. <br/>Zum Beispiel: *"Ich suche 1500 Buchenholz-Blanks mit den Maßen 25x75x1200 mm in Klasse A, kammergetrocknet."* oder teilen Sie mir Ihre Wünsche Schritt für Schritt mit.',
-    ro: 'Bună! Sunt **Willem**, consilierul dvs. virtual de vânzări B2B. Scrieți-mi în propriile cuvinte ceea ce căutați. <br/>De exemplu: *"Caut 1500 piese brute din fag cu dimensiunile de 25x75x1200 mm, clasa A, uscate în cameră."* sau descrieți specificațiile dorite pas cu pas.'
+    nl: 'Hallo! Ik ben **Willem**, uw virtuele B2B salesadviseur. Typ hieronder in uw eigen woorden wat u zoekt of spreek in!<br/>Bijvoorbeeld: *"Ik ben op zoek naar 1500 beukenhouten blanks met afmetingen van 25x75x1200 mm in klasse A, kamerdroog."* of geef uw wensen stap voor stap door.',
+    en: 'Hello! I am **Willem**, your virtual B2B sales advisor. Tell me in your own words what you are looking for or speak it!<br/>For example: *"I am looking for 1500 beechwood blanks with dimensions of 25x75x1200 mm in class A, kiln dried."* or describe your requirements step by step.',
+    de: 'Hallo! Ich bin **Willem**, Ihr virtueller B2B-Verkaufsberater. Schreiben Sie mir in eigenen Worten, was Sie suchen, oder sprechen Sie es ein!<br/>Zum Beispiel: *"Ich suche 1500 Buchenholz-Blanks mit den Maßen 25x75x1200 mm in Klasse A, kammergetrocknet."* oder teilen Sie mir Ihre Wünsche Schritt für Schritt mit.',
+    ro: 'Bună! Sunt **Willem**, consilierul dvs. virtual de vânzări B2B. Scrieți-mi în propriile cuvinte ceea ce căutați sau rostiți cerințele!<br/>De exemplu: *"Caut 1500 piese brute din fag cu dimensiunile de 25x75x1200 mm, clasa A, uscate în cameră."* sau descrieți specificațiile dorite pas cu pas.'
   },
   understandConfirmation: {
     nl: 'Ik heb de volgende specificaties gedetecteerd en bijgewerkt:',
