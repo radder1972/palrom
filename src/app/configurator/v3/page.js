@@ -1308,7 +1308,7 @@ export default function ChatbotConfigurator() {
                   {/* CATEGORY INPUT WIDGET */}
                   {activeStep.optionsType === 'category' && (
                     <div className="chip-grid">
-                      {categoriesList.map((cat) => (
+                      {categoriesList.filter(cat => cat.id !== 'brichete' || isRomania).map((cat) => (
                         <button
                           key={cat.id}
                           onClick={() => proceedToNextStep(cat.id)}
