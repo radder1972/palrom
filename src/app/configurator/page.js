@@ -242,8 +242,8 @@ const t = {
   woodSpeciesRow: { nl: 'Houtsoort', en: 'Wood species', de: 'Holzart', ro: 'Specie de lemn' },
   beechwoodValue: { nl: 'Beuken', en: 'Beechwood', de: 'Buchenholz', ro: 'Fag' },
   steamedRow: { nl: 'Gestoomd', en: 'Steamed', de: 'Gedämpft', ro: 'Aburit' },
-  steamedValueNo: { nl: 'Nee (Ongestoomd)', en: 'No (Unsteamed)', de: 'Nein (Ungedämpft)', ro: 'Nu (Neaburit)' },
-  steamedValueNoShort: { nl: 'Nee', en: 'No', de: 'Nein', ro: 'Nu' },
+  steamedValueYes: { nl: 'Gestoomd', en: 'Steamed', de: 'Gedämpft', ro: 'Aburit' },
+  steamedValueNo: { nl: 'Ongestoomd', en: 'Unsteamed', de: 'Ungedämpft', ro: 'Neaburit' },
   dryingRow: { nl: 'Droging', en: 'Drying', de: 'Trocknung', ro: 'Uscare' },
   dryingValueAir: { nl: 'Luchtdroog', en: 'Air-dried', de: 'Luftgetrocknet', ro: 'Uscat natural' },
   dryingValueKiln: { nl: 'Kamerdroog (KD 10-12%)', en: 'Chamber-dried (KD 10-12%)', de: 'Kammergetrocknet (KD 10-12%)', ro: 'Uscat în cameră (KD 10-12%)' },
@@ -466,7 +466,8 @@ function SelectionSummary({ selection, lang }) {
     finish: { nl: 'Afwerking', en: 'Finish', de: 'Oberfläche', ro: 'Finisaj' },
     drying: { nl: 'Droging', en: 'Drying', de: 'Trocknung', ro: 'Uscare' },
     steamed: { nl: 'Gestoomd', en: 'Steamed', de: 'Gedämpft', ro: 'Aburit' },
-    steamedValueNo: { nl: 'Nee (Ongestoomd)', en: 'No (Unsteamed)', de: 'Nein (Ungedämpft)', ro: 'Nu (Neaburit)' },
+    steamedValueYes: { nl: 'Gestoomd', en: 'Steamed', de: 'Gedämpft', ro: 'Aburit' },
+    steamedValueNo: { nl: 'Ongestoomd', en: 'Unsteamed', de: 'Ungedämpft', ro: 'Neaburit' },
     fsc: { nl: 'FSC® Certificering', en: 'FSC® Certification', de: 'FSC®-Zertifizierung', ro: 'Certificare FSC®' },
     yes: { nl: 'Ja', en: 'Yes', de: 'Ja', ro: 'Da' },
     no: { nl: 'Nee', en: 'No', de: 'Nein', ro: 'Nu' },
@@ -549,7 +550,9 @@ function SelectionSummary({ selection, lang }) {
         {selection.steamed && selection.category !== 'brichete' && (
           <div style={{ borderBottom: '1px solid #f8fafc', paddingBottom: '3px' }}>
             <span style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getVal(t, 'steamed')}: </span>
-            <span style={{ fontWeight: 600 }}>{getVal(t, 'steamedValueNo')}</span>
+            <span style={{ fontWeight: 600 }}>
+              {selection.steamed === 'yes' ? getVal(t, 'steamedValueYes') : getVal(t, 'steamedValueNo')}
+            </span>
           </div>
         )}
         {/* 9. FSC */}
@@ -1599,8 +1602,14 @@ export default function Configurator() {
                 {category !== 'brichete' && (
                   <div className="control-group">
                     <label htmlFor="dbSteamed">{getTranslation('steamedRow')}</label>
-                    <select id="dbSteamed" className="dashboard-select" value={steamed} disabled={true}>
-                      <option value="no">{getTranslation('steamedValueNoShort')}</option>
+                    <select
+                      id="dbSteamed"
+                      className="dashboard-select"
+                      value={steamed}
+                      onChange={(e) => setSteamed(e.target.value)}
+                    >
+                      <option value="no">{getTranslation('steamedValueNo')}</option>
+                      <option value="yes">{getTranslation('steamedValueYes')}</option>
                     </select>
                   </div>
                 )}
@@ -2023,7 +2032,11 @@ export default function Configurator() {
                     {category !== 'brichete' && (
                       <tr>
                         <td>{getTranslation('steamedRow')}</td>
-                        <td>{getTranslation('steamedValueNo')}</td>
+                        <td>
+                          {activeSelection.steamed === 'yes'
+                            ? getTranslation('steamedValueYes')
+                            : getTranslation('steamedValueNo')}
+                        </td>
                       </tr>
                     )}
                     {/* 9. FSC */}

@@ -406,7 +406,9 @@ export default function CartSidebar() {
                         {item.categoryKey !== 'brichete' && (
                           <div>
                             <strong>{lang === 'nl' ? 'Gestoomd' : (lang === 'de' ? 'Gedämpft' : (lang === 'ro' ? 'Aburit' : 'Steamed'))}:</strong>{' '}
-                            {lang === 'nl' ? 'Nee (Ongestoomd)' : (lang === 'en' ? 'No (Unsteamed)' : (lang === 'de' ? 'Nein (Ungedämpft)' : 'Nu (Neaburit)'))}
+                            {item.steamed === 'yes' ?
+                              (lang === 'nl' ? 'Gestoomd' : (lang === 'en' ? 'Steamed' : (lang === 'de' ? 'Gedämpft' : 'Aburit'))) :
+                              (lang === 'nl' ? 'Ongestoomd' : (lang === 'en' ? 'Unsteamed' : (lang === 'de' ? 'Ungedämpft' : 'Neaburit')))}
                           </div>
                         )}
                         {/* 9. FSC */}

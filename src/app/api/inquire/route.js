@@ -177,7 +177,10 @@ const localizeSpecValue = (key, val, lang = 'nl', categoryKey = '') => {
     return dryingVals[val]?.[lang] || dryingVals[val]?.nl || val;
   }
   if (key === 'steamed') {
-    return lang === 'nl' ? 'Nee (Ongestoomd)' : (lang === 'en' ? 'No (Unsteamed)' : (lang === 'de' ? 'Nein (Ungedämpft)' : 'Nu (Neaburit)'));
+    if (val === 'yes') {
+      return lang === 'nl' ? 'Gestoomd' : (lang === 'en' ? 'Steamed' : (lang === 'de' ? 'Gedämpft' : 'Aburit'));
+    }
+    return lang === 'nl' ? 'Ongestoomd' : (lang === 'en' ? 'Unsteamed' : (lang === 'de' ? 'Ungedämpft' : 'Neaburit'));
   }
   return val;
 };
