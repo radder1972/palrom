@@ -1699,6 +1699,30 @@ export default function OpenChatConfigurator() {
                         </button>
                       </div>
                     )}
+
+                    {msg.sender === 'bot' && index === history.length - 1 && isConfigComplete && !msg.isAddedSuccess && (
+                      <div style={{ marginTop: '1.5rem' }}>
+                        <button
+                          onClick={handleAddToCart}
+                          className="btn btn-primary"
+                          style={{
+                            fontSize: '0.85rem',
+                            padding: '0.5rem 1rem',
+                            background: 'var(--color-primary)',
+                            color: '#ffffff',
+                            border: 'none',
+                            borderRadius: 'var(--border-radius-sm)',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.5rem'
+                          }}
+                        >
+                          <i className="fa-solid fa-cart-plus"></i> {getTranslation('addToInquiry') || 'Toevoegen aan Offerteaanvraag'}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
 
