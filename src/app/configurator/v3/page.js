@@ -118,43 +118,43 @@ const specialsPrices = {
 };
 
 const dowelSubcategories = [
-  { id: 'dowel-smooth', name: { nl: 'Glad', en: 'Smooth', de: 'Glatt', ro: 'Neted' } },
-  { id: 'dowel-rilled', name: { nl: 'Gerild', en: 'Rilled', de: 'Geriffelt', ro: 'Canelat' } },
+  { id: 'dowel-smooth', name: { nl: 'Glad', en: 'Smooth', de: 'Glatt', ro: 'Neted' }, img: '/images/dowelsmedium.jpg' },
+  { id: 'dowel-rilled', name: { nl: 'Gerild', en: 'Rilled', de: 'Geriffelt', ro: 'Canelat' }, img: '/images/dowelsrilled-300x300-1.jpg' },
 ];
 
 const profileSubcategories = [
-  { id: 'profile-semiround', name: { nl: 'Halfronde latten', en: 'Semiround Profile', de: 'Halbrundprofile', ro: 'Șipci semirotunde' } },
-  { id: 'profile-strip', name: { nl: 'Deklatten / platte lijsten', en: 'Profile Strip', de: 'Profilleisten / Flachleisten', ro: 'Șipci plate' } },
-  { id: 'profile-finish-v1', name: { nl: 'Afwerklijsten (Variant 1)', en: 'Profile Finishing (Variant 1)', de: 'Finishing-Profile (V1)', ro: 'Șipci de finisaj (V1)' } },
-  { id: 'profile-quarter-v1', name: { nl: 'Kwartronde lijsten (Variant 1)', en: 'Profile Quarter Round (Variant 1)', de: 'Viertelrundprofile (V1)', ro: 'Profile sfert de cerc (V1)' } },
-  { id: 'profile-finish-v2', name: { nl: 'Afwerklijsten (Variant 2)', en: 'Profile Finishing (Variant 2)', de: 'Finishing-Profile (V2)', ro: 'Șipci de finisaj (V2)' } },
-  { id: 'profile-plinth-v1', name: { nl: 'Plinten (Variant 1)', en: 'Profile Plinth (Variant 1)', de: 'Sockelleisten (V1)', ro: 'Plinte (V1)' } },
-  { id: 'profile-corner-v1', name: { nl: 'Hoekprofielen (Variant 1)', en: 'Profile Corner (Variant 1)', de: 'Eckprofile (V1)', ro: 'Profile de colț (V1)' } },
-  { id: 'profile-corner-v2', name: { nl: 'Hoekprofielen (Variant 2)', en: 'Profile Corner (Variant 2)', de: 'Eckprofile (V2)', ro: 'Profile de colț (V2)' } },
-  { id: 'profile-triangular', name: { nl: 'Driehoekige glaslatten', en: 'Profile Triangular', de: 'Dreikantleisten', ro: 'Șipci triunghiulare' } },
-  { id: 'profile-quarter-v2', name: { nl: 'Kwartronde lijsten (Variant 2)', en: 'Profile Quarter Round (Variant 2)', de: 'Viertelrundprofile (V2)', ro: 'Profile sfert de cerc (V2)' } },
-  { id: 'profile-thread', name: { nl: 'Geprotocolleerde schroefdraadlatten', en: 'Profile Thread', de: 'Gewindestäbe', ro: 'Profile filetate' } },
-  { id: 'profile-calbat', name: { nl: 'Calbat profielen', en: 'Profile Calbat', de: 'Calbat-Profile', ro: 'Profile Calbat' } },
+  { id: 'profile-semiround', name: { nl: 'Halfronde latten', en: 'Semiround Profile', de: 'Halbrundprofile', ro: 'Șipci semirotunde' }, img: '/images/profile1.jpg' },
+  { id: 'profile-strip', name: { nl: 'Deklatten / platte lijsten', en: 'Profile Strip', de: 'Profilleisten / Flachleisten', ro: 'Șipci plate' }, img: '/images/profile2.jpg' },
+  { id: 'profile-finish-v1', name: { nl: 'Afwerklijsten (Variant 1)', en: 'Profile Finishing (Variant 1)', de: 'Finishing-Profile (V1)', ro: 'Șipci de finisaj (V1)' }, img: '/images/profile3.jpg' },
+  { id: 'profile-quarter-v1', name: { nl: 'Kwartronde lijsten (Variant 1)', en: 'Profile Quarter Round (Variant 1)', de: 'Viertelrundprofile (V1)', ro: 'Profile sfert de cerc (V1)' }, img: '/images/profile4.jpg' },
+  { id: 'profile-finish-v2', name: { nl: 'Afwerklijsten (Variant 2)', en: 'Profile Finishing (Variant 2)', de: 'Finishing-Profile (V2)', ro: 'Șipci de finisaj (V2)' }, img: '/images/profile5.jpg' },
+  { id: 'profile-plinth-v1', name: { nl: 'Plinten (Variant 1)', en: 'Profile Plinth (Variant 1)', de: 'Sockelleisten (V1)', ro: 'Plinte (V1)' }, img: '/images/profile6.jpg' },
+  { id: 'profile-corner-v1', name: { nl: 'Hoekprofielen (Variant 1)', en: 'Profile Corner (Variant 1)', de: 'Eckprofile (V1)', ro: 'Profile de colț (V1)' }, img: '/images/profile7.jpg' },
+  { id: 'profile-corner-v2', name: { nl: 'Hoekprofielen (Variant 2)', en: 'Profile Corner (Variant 2)', de: 'Eckprofile (V2)', ro: 'Profile de colț (V2)' }, img: '/images/profile8.jpg' },
+  { id: 'profile-triangular', name: { nl: 'Driehoekige glaslatten', en: 'Profile Triangular', de: 'Dreikantleisten', ro: 'Șipci triunghiulare' }, img: '/images/profile9.jpg' },
+  { id: 'profile-quarter-v2', name: { nl: 'Kwartronde lijsten (Variant 2)', en: 'Profile Quarter Round (Variant 2)', de: 'Viertelrundprofile (V2)', ro: 'Profile sfert de cerc (V2)' }, img: '/images/profile10.jpg' },
+  { id: 'profile-thread', name: { nl: 'Geprotocolleerde schroefdraadlatten', en: 'Profile Thread', de: 'Gewindestäbe', ro: 'Profile filetate' }, img: '/images/profile11.jpg' },
+  { id: 'profile-calbat', name: { nl: 'Calbat profielen', en: 'Profile Calbat', de: 'Calbat-Profile', ro: 'Profile Calbat' }, img: '/images/profile12.jpg' },
 ];
 
 const specialsSubcategories = [
-  { id: 'special-keeplat-spruce', name: { nl: 'Vuren keeplat (spie)', en: 'Keeplat Spruce', de: 'Keilleiste Fichte', ro: 'Pană din Lemn de Molid' } },
-  { id: 'special-keeplat-beech', name: { nl: 'Beuken keeplat (spie)', en: 'Keeplat Beech', de: 'Keilleiste Buche', ro: 'Pană din Lemn de Fag' } },
-  { id: 'special-distancer-mix', name: { nl: 'Afstandhouders kleurenmix', en: 'Distancers Color Mix', de: 'Abstandhalter Farbmix', ro: 'Distanțiere Mix de Culori' } },
-  { id: 'special-threshold', name: { nl: 'Componenten voedingsindustrie', en: 'Food industry components', de: 'Komponenten für Lebensmittelindustrie', ro: 'Componente pentru industria alimentară' } },
-  { id: 'special-distancer-ind', name: { nl: 'Industriële afstandhouder', en: 'Industrial Distancer', de: 'Industrieller Abstandhalter', ro: 'Distanțier Industrial' } },
-  { id: 'special-wood-iron', name: { nl: 'Gezaagde bestekken (fijnbezaagd)', en: 'Rough-sawn specials (fine-sawn)', de: 'Sägerauhe Zuschnitte', ro: 'Piese brute netăiate' } },
+  { id: 'special-keeplat-spruce', name: { nl: 'Vuren keeplat (spie)', en: 'Keeplat Spruce', de: 'Keilleiste Fichte', ro: 'Pană din Lemn de Molid' }, img: '/images/special1.jpg' },
+  { id: 'special-keeplat-beech', name: { nl: 'Beuken keeplat (spie)', en: 'Keeplat Beech', de: 'Keilleiste Buche', ro: 'Pană din Lemn de Fag' }, img: '/images/special2.jpg' },
+  { id: 'special-distancer-mix', name: { nl: 'Afstandhouders kleurenmix', en: 'Distancers Color Mix', de: 'Abstandhalter Farbmix', ro: 'Distanțiere Mix de Culori' }, img: '/images/special3.jpg' },
+  { id: 'special-threshold', name: { nl: 'Componenten voedingsindustrie', en: 'Food industry components', de: 'Komponenten für Lebensmittelindustrie', ro: 'Componente pentru industria alimentară' }, img: '/images/special4.jpg' },
+  { id: 'special-distancer-ind', name: { nl: 'Industriële afstandhouder', en: 'Industrial Distancer', de: 'Industrieller Abstandhalter', ro: 'Distanțier Industrial' }, img: '/images/special5.jpg' },
+  { id: 'special-wood-iron', name: { nl: 'Gezaagde bestekken (fijnbezaagd)', en: 'Rough-sawn specials (fine-sawn)', de: 'Sägerauhe Zuschnitte', ro: 'Piese brute netăiate' }, img: '/images/special6.jpg' },
 ];
 
 const planedSubcategories = [
-  { id: 'planed-rect-v1', name: { nl: 'Geschaafde latten (Variant 1)', en: 'Planed Rectangular (Variant 1)', de: 'Gehobelte Leisten (V1)', ro: 'Șipci rinduite (V1)' } },
-  { id: 'planed-rect-v2', name: { nl: 'Geschaafde latten (Variant 2)', en: 'Planed Rectangular (Variant 2)', de: 'Gehobelte Leisten (V2)', ro: 'Șipci rinduite (V2)' } },
-  { id: 'planed-rect-v3', name: { nl: 'Geschaafde latten (Variant 3)', en: 'Planed Rectangular (Variant 3)', de: 'Gehobelte Leisten (V3)', ro: 'Șipci rinduite (V3)' } },
-  { id: 'planed-rect-v4', name: { nl: 'Geschaafde latten (Variant 4)', en: 'Planed Rectangular (Variant 4)', de: 'Gehobelte Leisten (V4)', ro: 'Șipci rinduite (V4)' } },
-  { id: 'planed-sq-v1', name: { nl: 'Vierkante latten (Variant 1)', en: 'Planed Square (Variant 1)', de: 'Quadratische Leisten (V1)', ro: 'Șipci pătrate (V1)' } },
-  { id: 'planed-sq-v2', name: { nl: 'Vierkante latten (Variant 2)', en: 'Planed Square (Variant 2)', de: 'Quadratische Leisten (V2)', ro: 'Șipci pătrate (V2)' } },
-  { id: 'planed-rad3', name: { nl: 'Geschaafd met radius R3', en: 'Planed Elements with Radius 3', de: 'Gehobelte Elemente mit R3', ro: 'Elemente rinduite cu rază R3' } },
-  { id: 'planed-rad6', name: { nl: 'Geschaafd met radius R6', en: 'Planed Elements with Radius 6', de: 'Gehobelte Elemente mit R6', ro: 'Elemente rinduite cu rază R6' } },
+  { id: 'planed-rect-v1', name: { nl: 'Geschaafde latten (Variant 1)', en: 'Planed Rectangular (Variant 1)', de: 'Gehobelte Leisten (V1)', ro: 'Șipci rinduite (V1)' }, img: '/images/4sides1.jpg' },
+  { id: 'planed-rect-v2', name: { nl: 'Geschaafde latten (Variant 2)', en: 'Planed Rectangular (Variant 2)', de: 'Gehobelte Leisten (V2)', ro: 'Șipci rinduite (V2)' }, img: '/images/4sides2.jpg' },
+  { id: 'planed-rect-v3', name: { nl: 'Geschaafde latten (Variant 3)', en: 'Planed Rectangular (Variant 3)', de: 'Gehobelte Leisten (V3)', ro: 'Șipci rinduite (V3)' }, img: '/images/4sides3.jpg' },
+  { id: 'planed-rect-v4', name: { nl: 'Geschaafde latten (Variant 4)', en: 'Planed Rectangular (Variant 4)', de: 'Gehobelte Leisten (V4)', ro: 'Șipci rinduite (V4)' }, img: '/images/4sides4.jpg' },
+  { id: 'planed-sq-v1', name: { nl: 'Vierkante latten (Variant 1)', en: 'Planed Square (Variant 1)', de: 'Quadratische Leisten (V1)', ro: 'Șipci pătrate (V1)' }, img: '/images/4sides5.jpg' },
+  { id: 'planed-sq-v2', name: { nl: 'Vierkante latten (Variant 2)', en: 'Planed Square (Variant 2)', de: 'Quadratische Leisten (V2)', ro: 'Șipci pătrate (V2)' }, img: '/images/4sides6.jpg' },
+  { id: 'planed-rad3', name: { nl: 'Geschaafd met radius R3', en: 'Planed Elements with Radius 3', de: 'Gehobelte Elemente mit R3', ro: 'Elemente rinduite cu rază R3' }, img: '/images/4sides7.jpg' },
+  { id: 'planed-rad6', name: { nl: 'Geschaafd met radius R6', en: 'Planed Elements with Radius 6', de: 'Gehobelte Elemente mit R6', ro: 'Elemente rinduite cu rază R6' }, img: '/images/4sides8.jpg' },
 ];
 
 const t = {
@@ -1101,6 +1101,49 @@ export default function ChatbotConfigurator() {
           color: var(--color-primary);
           background: rgba(29, 58, 36, 0.02);
         }
+        .chip-button-subcat {
+          background: #ffffff;
+          border: 1.5px solid var(--color-border);
+          padding: 0.5rem;
+          border-radius: var(--border-radius-md);
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: var(--color-text-dark);
+          cursor: pointer;
+          transition: all 0.2s;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          min-height: 110px;
+          position: relative;
+          overflow: hidden;
+        }
+        .chip-button-subcat:hover {
+          border-color: var(--color-primary);
+          color: var(--color-primary);
+          background: rgba(29, 58, 36, 0.02);
+        }
+        .chip-subcat-img {
+          max-height: 52px;
+          max-width: 100%;
+          object-fit: contain;
+          margin-bottom: 0.5rem;
+          border-radius: 4px;
+          transition: transform 0.2s;
+        }
+        .chip-button-subcat:hover .chip-subcat-img {
+          transform: scale(1.05);
+        }
+        .chip-subcat-label {
+          font-size: 0.72rem;
+          line-height: 1.25;
+          width: 100%;
+          text-align: center;
+          margin-top: auto;
+          word-break: break-word;
+        }
         .slider-control-row {
           display: flex;
           align-items: center;
@@ -1411,16 +1454,28 @@ export default function ChatbotConfigurator() {
                   {activeStep.optionsType === 'subcategory' && (
                     <div className="chip-grid">
                       {category === 'dowels' && dowelSubcategories.map(s => (
-                        <button key={s.id} onClick={() => proceedToNextStep(s.id)} className="chip-button">{s.name[lang] || s.name.nl}</button>
+                        <button key={s.id} onClick={() => proceedToNextStep(s.id)} className="chip-button-subcat">
+                          {s.img && <img src={s.img} alt="" className="chip-subcat-img" />}
+                          <div className="chip-subcat-label">{s.name[lang] || s.name.nl}</div>
+                        </button>
                       ))}
                       {category === 'planed' && planedSubcategories.map(s => (
-                        <button key={s.id} onClick={() => proceedToNextStep(s.id)} className="chip-button">{s.name[lang] || s.name.nl}</button>
+                        <button key={s.id} onClick={() => proceedToNextStep(s.id)} className="chip-button-subcat">
+                          {s.img && <img src={s.img} alt="" className="chip-subcat-img" />}
+                          <div className="chip-subcat-label">{s.name[lang] || s.name.nl}</div>
+                        </button>
                       ))}
                       {category === 'profiles' && profileSubcategories.map(s => (
-                        <button key={s.id} onClick={() => proceedToNextStep(s.id)} className="chip-button">{s.name[lang] || s.name.nl}</button>
+                        <button key={s.id} onClick={() => proceedToNextStep(s.id)} className="chip-button-subcat">
+                          {s.img && <img src={s.img} alt="" className="chip-subcat-img" />}
+                          <div className="chip-subcat-label">{s.name[lang] || s.name.nl}</div>
+                        </button>
                       ))}
                       {category === 'specials' && specialsSubcategories.map(s => (
-                        <button key={s.id} onClick={() => proceedToNextStep(s.id)} className="chip-button">{s.name[lang] || s.name.nl}</button>
+                        <button key={s.id} onClick={() => proceedToNextStep(s.id)} className="chip-button-subcat">
+                          {s.img && <img src={s.img} alt="" className="chip-subcat-img" />}
+                          <div className="chip-subcat-label">{s.name[lang] || s.name.nl}</div>
+                        </button>
                       ))}
                     </div>
                   )}
