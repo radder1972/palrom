@@ -423,6 +423,112 @@ export default function ContactSection() {
     return t[key]?.[lang] || t[key]?.nl || '';
   };
 
+  const getDefaultMessage = (type, l) => {
+    const templates = {
+      careers: {
+        nl: `Beste Anca,
+
+Bij deze wil ik graag solliciteren naar een functie binnen PALROM Products.
+
+[Vertel hier kort over uw achtergrond, ervaring en motivatie...]
+
+Met vriendelijke groet,`,
+        en: `Dear Anca,
+
+I would like to apply for a position at PALROM Products.
+
+[Briefly describe your background, experience, and motivation here...]
+
+Best regards,`,
+        de: `Sehr geehrte Frau Anca Mihuț,
+
+hiermit möchte ich mich für eine Stelle bei PALROM Products bewerben.
+
+[Beschreiben Sie hier kurz Ihren Hintergrund, Ihre Erfahrung und Ihre Motivation...]
+
+Mit freundlichen Grüßen,`,
+        ro: `Stimată Anca,
+
+Doresc să candidez pentru un post în cadrul PALROM Products.
+
+[Descrieți pe scurt experiența, pregătirea și motivația dvs. aici...]
+
+Cu stimă,`
+      },
+      general: {
+        nl: `Beste PALROM Products team,
+
+Ik heb een algemene vraag of opmerking over uw diensten of houtinkoop:
+
+[Stel hier uw algemene vraag of opmerking...]
+
+Met vriendelijke groet,`,
+        en: `Dear PALROM Products team,
+
+I have a general question or inquiry regarding your services or timber sourcing:
+
+[Enter your general question or inquiry here...]
+
+Best regards,`,
+        de: `Sehr geehrtes PALROM Products Team,
+
+ich habe eine allgemeine Frage oder Anfrage zu Ihren Dienstleistungen oder Holzeinkauf:
+
+[Geben Sie hier Ihre allgemeine Frage oder Anfrage ein...]
+
+Mit freundlichen Grüßen,`,
+        ro: `Stimate domn/doamnă,
+
+Am o întrebare sau solicitare generală referitoare la serviciile dvs. sau achiziția de lemn:
+
+[Introduceți întrebarea sau solicitarea dvs. generală aici...]
+
+Cu stimă,`
+      }
+    };
+    return templates[type]?.[l] || templates[type]?.nl || '';
+  };
+
+  const handleProductTypeChange = (newType) => {
+    setProductType(newType);
+
+    const isMessageDefault = 
+      !message.trim() || 
+      ['nl', 'en', 'de', 'ro'].some(langKey => {
+        const cMsg = getDefaultMessage('careers', langKey);
+        const gMsg = getDefaultMessage('general', langKey);
+        return message.trim() === cMsg.trim() || message.trim() === gMsg.trim();
+      });
+
+    if (isMessageDefault) {
+      if (newType === 'careers') {
+        setMessage(getDefaultMessage('careers', lang));
+      } else if (newType === 'general') {
+        setMessage(getDefaultMessage('general', lang));
+      } else {
+        setMessage('');
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!productType) return;
+    
+    const prevDefaultCareers = ['nl', 'en', 'de', 'ro'].map(l => getDefaultMessage('careers', l));
+    const prevDefaultGeneral = ['nl', 'en', 'de', 'ro'].map(l => getDefaultMessage('general', l));
+    
+    const isCareersDefault = prevDefaultCareers.some(msg => message.trim() === msg.trim());
+    const isGeneralDefault = prevDefaultGeneral.some(msg => message.trim() === msg.trim());
+
+    if (productType === 'careers' && isGeneralDefault) {
+      setMessage(getDefaultMessage('careers', lang));
+    } else if (productType === 'general' && isCareersDefault) {
+      setMessage(getDefaultMessage('general', lang));
+    } else if (isCareersDefault || isGeneralDefault) {
+      setMessage(getDefaultMessage(productType, lang));
+    }
+  }, [lang, productType]);
+
   const getMessagePlaceholder = () => {
     if (productType === 'careers') {
       return getTranslation('messagePlaceholderCareers');
@@ -653,7 +759,7 @@ export default function ContactSection() {
                     <CustomSelect
                       id="form_product_type"
                       value={productType}
-                      onChange={(e) => setProductType(e.target.value)}
+                      onChange={(e) => handleProductTypeChange(e.target.value)}
                       options={[
                         { value: '', label: getTranslation('selectCategory') },
                         { value: 'blanks', label: getTranslation('interestBlanks') },
