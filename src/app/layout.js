@@ -1,4 +1,5 @@
 import { Inter, Outfit, Poppins } from "next/font/google";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./globals.css";
 import { InquiryProvider } from "@/components/InquiryContext";
 import Header from "@/components/Header";
@@ -35,9 +36,7 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${inter.variable} ${outfit.variable} ${poppins.variable}`}
     >
-      <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-      </head>
+      <head />
       <body>
         <InquiryProvider>
           <ScrollObserver />
