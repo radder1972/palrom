@@ -202,6 +202,10 @@ const t = {
   backToHub: { nl: 'Terug naar selectie', en: 'Back to selection', de: 'Zurück zur Auswahl', ro: 'Înapoi la selecție' },
   livePreview: { nl: 'Live preview', en: 'Live preview', de: 'Live-Vorschau', ro: 'Previzualizare live' },
   gradeRow: { nl: 'Kwaliteitsklasse', en: 'Quality Grade', de: 'Qualitätsklasse', ro: 'Clasă de kwaliteit' },
+  fscRow: { nl: 'FSC® Certificering', en: 'FSC® Certification', de: 'FSC®-Zertifizierung', ro: 'Certificare FSC®' },
+  gradeAValue: { nl: 'A (foutvrij, egaal van kleur)', en: 'A (defect-free, uniform color)', de: 'A (astfrei, gleichmäßige Farbe)', ro: 'A (fără defecte, culoare uniformă)' },
+  gradeBValue: { nl: 'B (foutvrij, gezond kleurverschil toegestaan)', en: 'B (defect-free, healthy color difference allowed)', de: 'B (astfrei, gesunde Farbabweichungen zulässig)', ro: 'B (fără defecte, diferențe de culoare admise)' },
+  gradeCValue: { nl: 'C (constructieve kwaliteit)', en: 'C (structural quality)', de: 'C (konstruktive Qualität)', ro: 'C (calitate constructivă)' },
   addSuccess: {
     nl: 'Product succesvol toegevoegd aan uw offerteaanvraag!',
     en: 'Product successfully added to your quote request!',
@@ -1366,22 +1370,81 @@ export default function ChatbotConfigurator() {
                             
                             <table className="chat-summary-table">
                               <tbody>
+                                {/* 1. Product */}
                                 <tr>
                                   <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('productRow')}</td>
                                   <td style={{ textAlign: 'right', fontWeight: 700 }}>{activeSelection.productName}</td>
                                 </tr>
+                                {/* 2. Wood Species */}
+                                <tr>
+                                  <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('woodSpeciesRow')}</td>
+                                  <td style={{ textAlign: 'right', fontWeight: 600 }}>
+                                    {category === 'brichete'
+                                      ? (lang === 'nl' ? 'Beuken (Surplus zaagsel)' : (lang === 'ro' ? 'Fag (Surplus de rumeguș)' : (lang === 'de' ? 'Buche (Sägemehl)' : 'Beechwood (Sawdust surplus)')))
+                                      : getTranslation('beechwoodValue')}
+                                  </td>
+                                </tr>
+                                {/* 3. Quality Grade */}
+                                {category !== 'brichete' && (
+                                  <tr>
+                                    <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('gradeRow')}</td>
+                                    <td style={{ textAlign: 'right', fontWeight: 600 }}>
+                                      {activeSelection.grade === 'A'
+                                        ? getTranslation('gradeAValue')
+                                        : activeSelection.grade === 'B'
+                                        ? getTranslation('gradeBValue')
+                                        : activeSelection.grade === 'C'
+                                        ? getTranslation('gradeCValue')
+                                        : activeSelection.grade}
+                                    </td>
+                                  </tr>
+                                )}
+                                {/* 4. Dimensions */}
                                 <tr>
                                   <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('dimensionsRow')}</td>
                                   <td style={{ textAlign: 'right', fontWeight: 700 }}>{activeSelection.dimensions}</td>
                                 </tr>
+                                {/* 5. Quantity */}
                                 <tr>
                                   <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('quantityRow')}</td>
                                   <td style={{ textAlign: 'right', fontWeight: 700 }}>{activeSelection.qtyText}</td>
                                 </tr>
+                                {/* 6. Finish */}
+                                <tr>
+                                  <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('finishRow')}</td>
+                                  <td style={{ textAlign: 'right', fontWeight: 600 }}>{activeSelection.finish}</td>
+                                </tr>
+                                {/* 7. Drying */}
                                 {category !== 'brichete' && (
                                   <tr>
-                                    <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('gradeRow')}</td>
-                                    <td style={{ textAlign: 'right', fontWeight: 600 }}>{grade}</td>
+                                    <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('dryingRow')}</td>
+                                    <td style={{ textAlign: 'right', fontWeight: 600 }}>
+                                      {activeSelection.drying === 'luchtdroog'
+                                        ? getTranslation('dryingValueAir')
+                                        : getTranslation('dryingValueKiln')}
+                                    </td>
+                                  </tr>
+                                )}
+                                {/* 8. Steamed */}
+                                {category !== 'brichete' && (
+                                  <tr>
+                                    <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('steamedRow')}</td>
+                                    <td style={{ textAlign: 'right', fontWeight: 600 }}>
+                                      {activeSelection.steamed === 'yes'
+                                        ? getTranslation('steamedValueYes')
+                                        : getTranslation('steamedValueNo')}
+                                    </td>
+                                  </tr>
+                                )}
+                                {/* 9. FSC */}
+                                {category !== 'brichete' && (
+                                  <tr>
+                                    <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('fscRow')}</td>
+                                    <td style={{ textAlign: 'right', fontWeight: 600 }}>
+                                      {activeSelection.fsc
+                                        ? 'FSC® 100%'
+                                        : getTranslation('fscLabelNonFsc')}
+                                    </td>
                                   </tr>
                                 )}
                                 {SHOW_PRICING && (
