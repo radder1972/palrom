@@ -1663,15 +1663,6 @@ export default function OpenChatConfigurator() {
 
     addToCart(cartItem);
 
-    setHistory(prev => [...prev, {
-      sender: 'bot',
-      text: `🎉 **${getTranslation('addedToCart')}**<br/><br/>
-             **${getTranslation('productRow')}**: ${displayName} ${currentSubcat ? `(${getSubcategoryName(category, currentSubcat)})` : ''}<br/>
-             **${getTranslation('dimensionsRow')}**: ${formatDims}<br/>
-             **${getTranslation('quantityRow')}**: ${quantity} ${category === 'brichete' ? 'pallets' : getTranslation('pieces')}<br/><br/>
-             *${getTranslation('configureAnother')} of klik op de knop om uw offerte aan te vragen.*`,
-      isAddedSuccess: true
-    }]);
     if (!isMuted) {
       speakText(`${getTranslation('addedToCart')}. ${displayName}.`);
     }
@@ -1680,6 +1671,61 @@ export default function OpenChatConfigurator() {
     setTimeout(() => {
       setNotification(null);
     }, 4000);
+
+    // Reset configuration states to zero/empty
+    setCategory('sawn');
+    setSubCategoryDowels('dowel-smooth');
+    setSubCategoryProfiles('profile-semiround');
+    setSubCategorySpecials('special-keeplat-spruce');
+    setSubCategoryPlaned('planed-rect-v1');
+    setWoodType('beech');
+    setSteamed('no');
+    setDrying('kd');
+    setFsc(true);
+    setGrade('A');
+    setThicknessType('custom');
+    setThickness(25);
+    setWidthType('custom');
+    setDiameter(50);
+    setLengthType('custom');
+    setLength(1000);
+    setAdditionalInfo('');
+    setQuantity(500);
+    setIsTyping(false);
+    setUserInput('');
+    setFilledFields({
+      category: false,
+      dimensions: false,
+      grade: false,
+      drying: false,
+      fsc: false,
+      quantity: false,
+      steamed: false
+    });
+    setDimensionFlags({
+      thickness: false,
+      width: false,
+      length: false
+    });
+
+    // Reset history to a single welcoming success message
+    setHistory([
+      {
+        sender: 'bot',
+        text: `🎉 **${getTranslation('addedToCart')}**<br/><br/>
+               **${getTranslation('productRow')}**: ${displayName} ${currentSubcat ? `(${getSubcategoryName(category, currentSubcat)})` : ''}<br/>
+               **${getTranslation('dimensionsRow')}**: ${formatDims}<br/>
+               **${getTranslation('quantityRow')}**: ${quantity} ${category === 'brichete' ? 'pallets' : getTranslation('pieces')}<br/><br/>
+               ${lang === 'nl' 
+                 ? 'U kunt nu direct nog een product configureren. Typ of spreek hieronder uw vraag of wensen in.' 
+                 : (lang === 'ro'
+                   ? 'Acum puteți configura un alt produs. Rostiți sau introduceți specificațiile mai jos pentru a începe.'
+                   : (lang === 'de'
+                     ? 'Sie können nun direkt ein weiteres Produkt konfigurieren. Geben Sie hier Ihre Wünsche ein oder sprechen Sie sie ein.'
+                     : 'You can now configure another product. Type or speak your wishes below to start.'))}`,
+        isAddedSuccess: true
+      }
+    ]);
   };
 
   // Visualizer Math variables
