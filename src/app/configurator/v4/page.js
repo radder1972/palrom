@@ -586,7 +586,7 @@ export default function OpenChatConfigurator() {
     if (cat === 'brichete') {
       return ['category', 'quantity'].every(k => fields[k]);
     }
-    return ['category', 'dimensions', 'grade', 'drying', 'quantity'].every(k => fields[k]);
+    return ['category', 'dimensions', 'grade', 'drying', 'fsc', 'quantity'].every(k => fields[k]);
   };
 
   const handleInputSuggestion = (text) => {
@@ -929,6 +929,13 @@ export default function OpenChatConfigurator() {
       updates.fsc = false;
     } else if (/(?:fsc|gecertificeerd|certified|certificare)/i.test(cleanText)) {
       updates.fsc = true;
+    } else if (activeCat !== 'brichete' && !filledFields.fsc && isConfigCompleteFor(activeCat, { ...filledFields, fsc: true })) {
+      // FSC is the only missing field!
+      if (/^(?:ja|yes|da|ja,?\s*graag|yes,?\s*please|si|oui|ok)/i.test(cleanText)) {
+        updates.fsc = true;
+      } else if (/^(?:nee|no|nu|nein|non|fara)/i.test(cleanText)) {
+        updates.fsc = false;
+      }
     }
 
     // 8. Quantity
@@ -1266,6 +1273,8 @@ export default function OpenChatConfigurator() {
             replyText += getTranslation('askGrade');
           } else if (!updatedFields.drying && !isBriquettes) {
             replyText += getTranslation('askDrying');
+          } else if (!updatedFields.fsc && !isBriquettes) {
+            replyText += getTranslation('askFsc');
           } else if (!updatedFields.quantity) {
             replyText += getTranslation('askQuantity');
           } else {
@@ -1475,6 +1484,7 @@ export default function OpenChatConfigurator() {
             else if (!updatedFields.dimensions) replyText += getTranslation('askDimensions');
             else if (!updatedFields.grade && !isBriquettes) replyText += getTranslation('askGrade');
             else if (!updatedFields.drying && !isBriquettes) replyText += getTranslation('askDrying');
+            else if (!updatedFields.fsc && !isBriquettes) replyText += getTranslation('askFsc');
             else if (!updatedFields.quantity) replyText += getTranslation('askQuantity');
             else replyText += getTranslation('everythingComplete');
           }

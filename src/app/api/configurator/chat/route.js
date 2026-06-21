@@ -72,9 +72,9 @@ Generate the 'reply_text' in the requested language ('lang'):
 - If the user is asking a question (e.g. "Welke subcategorieën beukenhouten profielen heb je?"), answer their question directly, listing the available subcategories/options, instead of asking for specifications.
 - Evaluate which required specifications are still missing for the active/new category:
   - Required for brichete: category, quantity.
-  - Required for dowels: category, dimensions (diameter, length), quantity.
-  - Required for sawn/planed/profiles/specials: category, dimensions (thickness, width/diameter, length), grade, drying, quantity.
-  - FSC and steamed are optional/defaulted.
+  - Required for dowels: category, dimensions (diameter, length), fsc, quantity.
+  - Required for sawn/planed/profiles/specials: category, dimensions (thickness, width/diameter, length), grade, drying, fsc, quantity.
+  - Steamed is optional/defaulted.
 - Ask for the next missing parameter in a friendly, conversational B2B sales tone.
 - If everything is complete, let the user know they can add the product to their quote request using the button or by replying "Ja".
 - Respond in the language 'lang' (Dutch, English, German, or Romanian).
