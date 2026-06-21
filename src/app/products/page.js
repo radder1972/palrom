@@ -392,6 +392,7 @@ export default function Products() {
                       alt={p.name[lang] || p.name.nl} 
                       width={400}
                       height={400}
+                      sizes="(max-width: 768px) 100vw, 400px"
                     />
                   </Link>
                   <span className="product-tag">{p.tag[lang] || p.tag.nl}</span>

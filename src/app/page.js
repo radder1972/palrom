@@ -318,7 +318,15 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section id="home" className="hero-section">
+      <section id="home" className="hero-section" style={{ overflow: 'hidden' }}>
+        <Image 
+          src="/images/hero_bg.webp"
+          alt="Aerial view of Palrom Products Brad sawmill facilities"
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: 'cover', objectPosition: 'center', zIndex: -3 }}
+        />
         <div className="hero-overlay"></div>
         <div className="hero-content container">
           <span className="hero-badge animate-fade-in">
@@ -398,11 +406,12 @@ export default function Home() {
             <div className="intro-image-column animate-on-scroll">
               <div className="image-wrapper-decorative">
                 <Image
-                  src="/images/sawmill.png"
+                  src="/images/sawmill.webp"
                   alt="Automated wood processing Palrom"
                   className="img-responsive rounded-lg shadow-lg"
                   width={945}
                   height={1024}
+                  sizes="(max-width: 768px) 100vw, 600px"
                 />
                 <div className="stats-badge">
                   <span className="stat-number">25+</span>
@@ -534,6 +543,7 @@ export default function Home() {
                       alt={p.name} 
                       width={400} 
                       height={400} 
+                      sizes="(max-width: 768px) 100vw, 400px"
                     />
                   </Link>
                   <span className="product-tag">{p.tag}</span>
