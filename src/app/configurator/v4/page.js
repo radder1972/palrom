@@ -117,14 +117,8 @@ const specialsSubcategories = [
 ];
 
 const planedSubcategories = [
-  { id: 'planed-rect-v1', name: { nl: 'Geschaafde latten (Variant 1)', en: 'Planed Rectangular (Variant 1)', de: 'Gehobelte Leisten (V1)', ro: 'Șipci rinduite (V1)' } },
-  { id: 'planed-rect-v2', name: { nl: 'Geschaafde latten (Variant 2)', en: 'Planed Rectangular (Variant 2)', de: 'Gehobelte Leisten (V2)', ro: 'Șipci rinduite (V2)' } },
-  { id: 'planed-rect-v3', name: { nl: 'Geschaafde latten (Variant 3)', en: 'Planed Rectangular (Variant 3)', de: 'Gehobelte Leisten (V3)', ro: 'Șipci rinduite (V3)' } },
-  { id: 'planed-rect-v4', name: { nl: 'Geschaafde latten (Variant 4)', en: 'Planed Rectangular (Variant 4)', de: 'Gehobelte Leisten (V4)', ro: 'Șipci rinduite (V4)' } },
-  { id: 'planed-sq-v1', name: { nl: 'Vierkante latten (Variant 1)', en: 'Planed Square (Variant 1)', de: 'Quadratische Leisten (V1)', ro: 'Șipci pătrate (V1)' } },
-  { id: 'planed-sq-v2', name: { nl: 'Vierkante latten (Variant 2)', en: 'Planed Square (Variant 2)', de: 'Quadratische Leisten (V2)', ro: 'Șipci pătrate (V2)' } },
-  { id: 'planed-rad3', name: { nl: 'Geschaafd met radius R3', en: 'Planed Elements with Radius 3', de: 'Gehobelte Elemente mit R3', ro: 'Elemente rinduite cu rază R3' } },
-  { id: 'planed-rad6', name: { nl: 'Geschaafd met radius R6', en: 'Planed Elements with Radius 6', de: 'Gehobelte Elemente mit R6', ro: 'Elemente rinduite cu rază R6' } },
+  { id: 'planed-rect', name: { nl: 'Geschaafd rechthoekig', en: 'Planed rectangular', de: 'Gehobelt rechteckig', ro: 'Rinduit rectangular' } },
+  { id: 'planed-radius', name: { nl: 'Geschaafd radius', en: 'Planed radius', de: 'Gehobelt Radius', ro: 'Rinduit rază' } },
 ];
 
 const translations = {
@@ -321,6 +315,7 @@ export default function OpenChatConfigurator() {
   const [length, setLength] = useState(1000);
   const [additionalInfo, setAdditionalInfo] = useState('');
   const [quantity, setQuantity] = useState(500);
+  const [radius, setRadius] = useState(null);
 
   const [notification, setNotification] = useState(null);
   const [isAddedToCart, setIsAddedToCart] = useState(false);
@@ -338,7 +333,8 @@ export default function OpenChatConfigurator() {
     drying: false,
     fsc: false,
     quantity: false,
-    steamed: false
+    steamed: false,
+    radius: false
   });
 
   const [dimensionFlags, setDimensionFlags] = useState({
@@ -410,7 +406,8 @@ export default function OpenChatConfigurator() {
     diameter,
     length,
     quantity,
-    additionalInfo
+    additionalInfo,
+    radius
   ]);
 
   // Initialize Speech Recognition on client
@@ -602,6 +599,9 @@ export default function OpenChatConfigurator() {
     if (cat === 'brichete') {
       return ['category', 'quantity'].every(k => fields[k]);
     }
+    if (cat === 'planed' && subCategoryPlaned === 'planed-radius') {
+      return ['category', 'dimensions', 'grade', 'drying', 'fsc', 'quantity', 'radius'].every(k => fields[k]);
+    }
     return ['category', 'dimensions', 'grade', 'drying', 'fsc', 'quantity'].every(k => fields[k]);
   };
 
@@ -763,6 +763,7 @@ export default function OpenChatConfigurator() {
     setLength(1000);
     setAdditionalInfo('');
     setQuantity(500);
+    setRadius(null);
     setIsTyping(false);
     setUserInput('');
     setFilledFields({
@@ -772,7 +773,8 @@ export default function OpenChatConfigurator() {
       drying: false,
       fsc: false,
       quantity: false,
-      steamed: false
+      steamed: false,
+      radius: false
     });
     setDimensionFlags({
       thickness: false,
@@ -876,23 +878,18 @@ export default function OpenChatConfigurator() {
         updates.subCategorySpecials = 'special-wood-iron';
       }
     } else if (targetCat === 'planed') {
-      if (/(?:geschaafde latten 1|planed rect 1)/i.test(cleanText)) {
-        updates.subCategoryPlaned = 'planed-rect-v1';
-      } else if (/(?:geschaafde latten 2|planed rect 2)/i.test(cleanText)) {
-        updates.subCategoryPlaned = 'planed-rect-v2';
-      } else if (/(?:geschaafde latten 3|planed rect 3)/i.test(cleanText)) {
-        updates.subCategoryPlaned = 'planed-rect-v3';
-      } else if (/(?:geschaafde latten 4|planed rect 4)/i.test(cleanText)) {
-        updates.subCategoryPlaned = 'planed-rect-v4';
-      } else if (/(?:vierkante latten 1|square 1)/i.test(cleanText)) {
-        updates.subCategoryPlaned = 'planed-sq-v1';
-      } else if (/(?:vierkante latten 2|square 2)/i.test(cleanText)) {
-        updates.subCategoryPlaned = 'planed-sq-v2';
-      } else if (/(?:radius 3|r3)/i.test(cleanText)) {
-        updates.subCategoryPlaned = 'planed-rad3';
-      } else if (/(?:radius 6|r6)/i.test(cleanText)) {
-        updates.subCategoryPlaned = 'planed-rad6';
+      if (/(?:radius|rad|ronde hoek|rounded|r3|r6|3mm|6mm)/i.test(cleanText)) {
+        updates.subCategoryPlaned = 'planed-radius';
+      } else if (/(?:rechthoek|rect|plat|vierkant|sq|s4s)/i.test(cleanText)) {
+        updates.subCategoryPlaned = 'planed-rect';
       }
+    }
+
+    // Detect Radius (general)
+    if (/(?:r3|radius 3|3mm|3 mm)/i.test(cleanText)) {
+      updates.radius = 'R3';
+    } else if (/(?:r6|radius 6|6mm|6 mm)/i.test(cleanText)) {
+      updates.radius = 'R6';
     }
 
     // 3. Dimensions parsing
@@ -985,13 +982,6 @@ export default function OpenChatConfigurator() {
       updates.fsc = false;
     } else if (/(?:fsc|gecertificeerd|certified|certificare)/i.test(cleanText)) {
       updates.fsc = true;
-    } else if (activeCat !== 'brichete' && !filledFields.fsc && isConfigCompleteFor(activeCat, { ...filledFields, fsc: true })) {
-      // FSC is the only missing field!
-      if (/^(?:ja|yes|da|ja,?\s*graag|yes,?\s*please|si|oui|ok)/i.test(cleanText)) {
-        updates.fsc = true;
-      } else if (/^(?:nee|no|nu|nein|non|fara)/i.test(cleanText)) {
-        updates.fsc = false;
-      }
     }
 
     // 8. Quantity
@@ -1198,6 +1188,7 @@ export default function OpenChatConfigurator() {
               if (dp.steamed) parsed.steamed = dp.steamed;
               if (dp.fsc !== null && dp.fsc !== undefined) parsed.fsc = dp.fsc;
               if (dp.quantity !== null && dp.quantity !== undefined) parsed.quantity = dp.quantity;
+              if (dp.radius) parsed.radius = dp.radius;
 
               replyText = formatMarkdownToHtml(data.reply_text);
             }
@@ -1229,6 +1220,7 @@ export default function OpenChatConfigurator() {
             updatedFields.grade = false;
             updatedFields.drying = false;
             updatedFields.quantity = false;
+            updatedFields.radius = false;
             updatedDimFlags.thickness = false;
             updatedDimFlags.width = false;
             updatedDimFlags.length = false;
@@ -1314,6 +1306,12 @@ export default function OpenChatConfigurator() {
           detectedFields.push(`✓ ${getTranslation('certificationLabel')}: **${getFscLabel(clamped.fsc)}**`);
         }
 
+        if (clamped.radius) {
+          setRadius(clamped.radius);
+          updatedFields.radius = true;
+          detectedFields.push(`✓ ${getTranslation('radiusRow')}: **${clamped.radius}**`);
+        }
+
         if (clamped.quantity !== undefined) {
           setQuantity(clamped.quantity);
           updatedFields.quantity = true;
@@ -1324,24 +1322,11 @@ export default function OpenChatConfigurator() {
         setDimensionFlags(updatedDimFlags);
         setFilledFields(updatedFields);
 
-        // If user typed "ja" or "yes" or similar, and everything was complete, add to cart
-        // If user typed "ja", "yes", "ik ben klaar", "voeg toe" or similar, and essential fields are complete
-        const isEssentialComplete = activeCat === 'brichete'
-          ? (updatedFields.category && updatedFields.quantity)
-          : (updatedFields.category && updatedFields.dimensions && updatedFields.quantity);
+        // Check if everything complete
+        const isEssentialComplete = isConfigCompleteFor(activeCat, updatedFields);
         const isAffirmative = /^(?:ja|yes|oui|da|ok|toevoegen|bestellen|offerte|in winkelwagen|add|submit|klaar|ready|finish)/i.test(cleanText) || cleanText.includes('voeg toe') || cleanText.includes('ben klaar') || cleanText.includes('ik ben klaar') || cleanText.includes('toevoegen');
         
         if (isEssentialComplete && isAffirmative) {
-          // Auto-fill any remaining fields so they render in the specifications table
-          const finalFields = { ...updatedFields };
-          if (activeCat !== 'brichete') {
-            finalFields.grade = true;
-            finalFields.drying = true;
-            finalFields.fsc = true;
-            finalFields.steamed = true;
-          }
-          setFilledFields(finalFields);
-
           setTimeout(() => {
             handleAddToCart();
           }, 100);
@@ -1361,6 +1346,8 @@ export default function OpenChatConfigurator() {
             replyText += getTranslation('askCategory');
           } else if (!updatedFields.dimensions) {
             replyText += getTranslation('askDimensions');
+          } else if (activeCat === 'planed' && (clamped.subCategoryPlaned || subCategoryPlaned) === 'planed-radius' && !updatedFields.radius) {
+            replyText += getTranslation('askRadius');
           } else if (!updatedFields.grade && !isBriquettes) {
             replyText += getTranslation('askGrade');
           } else if (!updatedFields.drying && !isBriquettes) {
@@ -1458,6 +1445,7 @@ export default function OpenChatConfigurator() {
                 if (dp.steamed) parsed.steamed = dp.steamed;
                 if (dp.fsc !== null && dp.fsc !== undefined) parsed.fsc = dp.fsc;
                 if (dp.quantity !== null && dp.quantity !== undefined) parsed.quantity = dp.quantity;
+                if (dp.radius) parsed.radius = dp.radius;
 
                 replyText = formatMarkdownToHtml(data.reply_text);
               }
@@ -1557,6 +1545,12 @@ export default function OpenChatConfigurator() {
             detectedFields.push(`✓ ${getTranslation('certificationLabel')}: **${getFscLabel(clamped.fsc)}**`);
           }
 
+          if (clamped.radius) {
+            setRadius(clamped.radius);
+            updatedFields.radius = true;
+            detectedFields.push(`✓ Radius: **${clamped.radius}**`);
+          }
+
           if (clamped.quantity !== undefined) {
             setQuantity(clamped.quantity);
             updatedFields.quantity = true;
@@ -1578,6 +1572,7 @@ export default function OpenChatConfigurator() {
             else if (!updatedFields.grade && !isBriquettes) replyText += getTranslation('askGrade');
             else if (!updatedFields.drying && !isBriquettes) replyText += getTranslation('askDrying');
             else if (!updatedFields.fsc && !isBriquettes) replyText += getTranslation('askFsc');
+            else if (activeCat === 'planed' && (clamped.subCategoryPlaned || subCategoryPlaned) === 'planed-radius' && !updatedFields.radius) replyText += getTranslation('askRadius');
             else if (!updatedFields.quantity) replyText += getTranslation('askQuantity');
             else replyText += getTranslation('everythingComplete');
           }
@@ -1641,16 +1636,10 @@ export default function OpenChatConfigurator() {
       subcatName = names[specificSubcat || subCategoryDowels] || 'Smooth Dowel Rods';
     } else if (cat === 'planed') {
       const names = {
-        'planed-rect-v1': 'Planed Rectangular (Variant 1)',
-        'planed-rect-v2': 'Planed Rectangular (Variant 2)',
-        'planed-rect-v3': 'Planed Rectangular (Variant 3)',
-        'planed-rect-v4': 'Planed Rectangular (Variant 4)',
-        'planed-sq-v1': 'Planed Square (Variant 1)',
-        'planed-sq-v2': 'Planed Square (Variant 2)',
-        'planed-rad3': 'Planed Elements with Radius 3',
-        'planed-rad6': 'Planed Elements with Radius 6',
+        'planed-rect': 'Planed Rectangular',
+        'planed-radius': 'Planed Radius',
       };
-      subcatName = names[specificSubcat || subCategoryPlaned] || 'Planed Rectangular (Variant 1)';
+      subcatName = names[specificSubcat || subCategoryPlaned] || 'Planed Rectangular';
     }
 
     if (cat === 'sawn') {
@@ -1733,6 +1722,8 @@ export default function OpenChatConfigurator() {
 
   // Add configured product to shopping cart
   const handleAddToCart = () => {
+    const currentSubcat = getActiveSubCategoryCode(category);
+
     // Auto-fill any remaining fields so they render in the specifications table
     const finalFields = { ...filledFields };
     finalFields.category = true;
@@ -1743,10 +1734,12 @@ export default function OpenChatConfigurator() {
       finalFields.drying = true;
       finalFields.fsc = true;
       finalFields.steamed = true;
+      if (category === 'planed' && currentSubcat === 'planed-radius') {
+        finalFields.radius = true;
+      }
     }
     setFilledFields(finalFields);
 
-    const currentSubcat = getActiveSubCategoryCode(category);
     const details = calculatePriceDetails(category, length, diameter, thickness, quantity, currentSubcat, grade, lengthType, drying);
     const calculatedBase = calculatePriceDetails(category, length, diameter, thickness, 1, currentSubcat, grade, lengthType, drying);
 
@@ -1799,6 +1792,7 @@ export default function OpenChatConfigurator() {
       discountPercent: details.discountPercent,
       finish: categoryData[category].finish[lang] || categoryData[category].finish.nl,
       subCategory: currentSubcat,
+      radius: (category === 'planed' && currentSubcat === 'planed-radius') ? radius : undefined,
     };
 
     addToCart(cartItem);
@@ -2643,6 +2637,14 @@ export default function OpenChatConfigurator() {
                         <tr>
                           <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('certificationLabel')}</td>
                           <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>{getFscLabel(fsc)}</td>
+                        </tr>
+                      )}
+
+                      {/* Radius */}
+                      {category === 'planed' && subCategoryPlaned === 'planed-radius' && radius && (
+                        <tr>
+                          <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>Radius</td>
+                          <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>{radius}</td>
                         </tr>
                       )}
                     </tbody>

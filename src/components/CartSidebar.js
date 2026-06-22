@@ -73,14 +73,8 @@ const profileSubcategories = [
 ];
 
 const planedSubcategories = [
-  { id: 'planed-rect-v1', name: { nl: 'Geschaafd rechthoekig (V1)', en: 'Planed Rectangular (V1)', de: 'Gehobelt Rechteckig (V1)', ro: 'Rinduit Rectangular (V1)' } },
-  { id: 'planed-rect-v2', name: { nl: 'Geschaafd rechthoekig (V2)', en: 'Planed Rectangular (V2)', de: 'Gehobelt Rechteckig (V2)', ro: 'Rinduit Rectangular (V2)' } },
-  { id: 'planed-rect-v3', name: { nl: 'Geschaafd rechthoekig (V3)', en: 'Planed Rectangular (V3)', de: 'Gehobelt Rechteckig (V3)', ro: 'Rinduit Rectangular (V3)' } },
-  { id: 'planed-rect-v4', name: { nl: 'Geschaafd rechthoekig (V4)', en: 'Planed Rectangular (V4)', de: 'Gehobelt Rechteckig (V4)', ro: 'Rinduit Rectangular (V4)' } },
-  { id: 'planed-sq-v1', name: { nl: 'Geschaafd vierkant (V1)', en: 'Planed Square (V1)', de: 'Gehobelt Quadratisch (V1)', ro: 'Rinduit Pătrat (V1)' } },
-  { id: 'planed-sq-v2', name: { nl: 'Geschaafd vierkant (V2)', en: 'Planed Square (V2)', de: 'Gehobelt Quadratisch (V2)', ro: 'Rinduit Pătrat (V2)' } },
-  { id: 'planed-rad3', name: { nl: 'Geschaafd Radius 3', en: 'Planed Radius 3', de: 'Gehobelt Radius 3', ro: 'Rinduit Rază 3' } },
-  { id: 'planed-rad6', name: { nl: 'Geschaafd Radius 6', en: 'Planed Radius 6', de: 'Gehobelt Radius 6', ro: 'Rinduit Rază 6' } },
+  { id: 'planed-rect', name: { nl: 'Geschaafd rechthoekig', en: 'Planed rectangular', de: 'Gehobelt rechteckig', ro: 'Rinduit rectangular' } },
+  { id: 'planed-radius', name: { nl: 'Geschaafd radius', en: 'Planed radius', de: 'Gehobelt Radius', ro: 'Rinduit rază' } },
 ];
 
 const specialsSubcategories = [
@@ -632,6 +626,13 @@ export default function CartSidebar() {
                             <div>
                               <strong>{lang === 'nl' ? 'FSC® Certificering' : (lang === 'de' ? 'FSC®-Zertifizierung' : (lang === 'ro' ? 'Certificare FSC®' : 'FSC® Certification'))}:</strong>{' '}
                               {item.fsc ? 'FSC® 100%' : (lang === 'nl' ? 'Geen FSC' : (lang === 'de' ? 'Kein FSC' : (lang === 'ro' ? 'Fără FSC' : 'No FSC')))}
+                            </div>
+                          )}
+                          {/* Radius (only for planed-radius) */}
+                          {item.categoryKey === 'planed' && item.subCategory === 'planed-radius' && item.radius && (
+                            <div>
+                              <strong>{lang === 'nl' ? 'Radius' : (lang === 'de' ? 'Radius' : (lang === 'ro' ? 'Rază' : 'Radius'))}:</strong>{' '}
+                              {item.radius}
                             </div>
                           )}
                           {/* 10. Additional Info */}

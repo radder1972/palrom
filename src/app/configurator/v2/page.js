@@ -127,14 +127,8 @@ const profileSubcategories = [
 ];
 
 const planedSubcategories = [
-  { id: 'planed-rect-v1', name: { nl: 'Geschaafd rechthoekig (V1)', en: 'Planed Rectangular (V1)', de: 'Gehobelt Rechteckig (V1)', ro: 'Rinduit Rectangular (V1)' }, img: '/images/4sides1.jpg' },
-  { id: 'planed-rect-v2', name: { nl: 'Geschaafd rechthoekig (V2)', en: 'Planed Rectangular (V2)', de: 'Gehobelt Rechteckig (V2)', ro: 'Rinduit Rectangular (V2)' }, img: '/images/4sides2.jpg' },
-  { id: 'planed-rect-v3', name: { nl: 'Geschaafd rechthoekig (V3)', en: 'Planed Rectangular (V3)', de: 'Gehobelt Rechteckig (V3)', ro: 'Rinduit Rectangular (V3)' }, img: '/images/4sides3.jpg' },
-  { id: 'planed-rect-v4', name: { nl: 'Geschaafd rechthoekig (V4)', en: 'Planed Rectangular (V4)', de: 'Gehobelt Rechteckig (V4)', ro: 'Rinduit Rectangular (V4)' }, img: '/images/4sides4.jpg' },
-  { id: 'planed-sq-v1', name: { nl: 'Geschaafd vierkant (V1)', en: 'Planed Square (V1)', de: 'Gehobelt Quadratisch (V1)', ro: 'Rinduit Pătrat (V1)' }, img: '/images/4sides5.jpg' },
-  { id: 'planed-sq-v2', name: { nl: 'Geschaafd vierkant (V2)', en: 'Planed Square (V2)', de: 'Gehobelt Quadratisch (V2)', ro: 'Rinduit Pătrat (V2)' }, img: '/images/4sides6.jpg' },
-  { id: 'planed-rad3', name: { nl: 'Geschaafd Radius 3', en: 'Planed Radius 3', de: 'Gehobelt Radius 3', ro: 'Rinduit Rază 3' }, img: '/images/4sides7.jpg' },
-  { id: 'planed-rad6', name: { nl: 'Geschaafd Radius 6', en: 'Planed Radius 6', de: 'Gehobelt Radius 6', ro: 'Rinduit Rază 6' }, img: '/images/4sides8.jpg' },
+  { id: 'planed-rect', name: { nl: 'Geschaafd rechthoekig', en: 'Planed rectangular', de: 'Gehobelt rechteckig', ro: 'Rinduit rectangular' }, img: '/images/4sides1.jpg' },
+  { id: 'planed-radius', name: { nl: 'Geschaafd radius', en: 'Planed radius', de: 'Gehobelt Radius', ro: 'Rinduit rază' }, img: '/images/4sides7.jpg' },
 ];
 
 const specialsSubcategories = [
@@ -562,6 +556,13 @@ function SelectionSummary({ selection, lang }) {
             </span>
           </div>
         )}
+        {/* Radius */}
+        {selection.radius && selection.category === 'planed' && (
+          <div style={{ borderBottom: '1px solid #f8fafc', paddingBottom: '3px' }}>
+            <span style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>Radius: </span>
+            <span style={{ fontWeight: 600 }}>{selection.radius}</span>
+          </div>
+        )}
         {SHOW_PRICING && selection.price !== undefined && (
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', borderTop: '1px solid #edf2f7', paddingTop: '4px', marginTop: '4px' }}>
             <span style={{ color: 'var(--color-text-muted)', fontWeight: 500, marginRight: '0.5rem' }}>{getVal(t, 'price')}: </span>
@@ -611,7 +612,8 @@ export default function Configurator() {
   const [subCategoryDowels, setSubCategoryDowels] = useState('dowel-smooth');
   const [subCategoryProfiles, setSubCategoryProfiles] = useState('profile-semiround');
   const [subCategorySpecials, setSubCategorySpecials] = useState('special-keeplat-spruce');
-  const [subCategoryPlaned, setSubCategoryPlaned] = useState('planed-rect-v1');
+  const [subCategoryPlaned, setSubCategoryPlaned] = useState('planed-rect');
+  const [radius, setRadius] = useState('R3');
   
   const [woodType, setWoodType] = useState('beech');
   const [steamed, setSteamed] = useState('no');
@@ -633,7 +635,8 @@ export default function Configurator() {
     setSubCategoryDowels('dowel-smooth');
     setSubCategoryProfiles('profile-semiround');
     setSubCategorySpecials('special-keeplat-spruce');
-    setSubCategoryPlaned('planed-rect-v1');
+    setSubCategoryPlaned('planed-rect');
+    setRadius('R3');
     setWoodType('beech');
     setSteamed('no');
     setDrying('kd');
@@ -841,16 +844,10 @@ export default function Configurator() {
       subcatName = names[specificSubcat || subCategoryDowels] || 'Smooth Dowel Rods';
     } else if (cat === 'planed') {
       const names = {
-        'planed-rect-v1': 'Planed Rectangular (Variant 1)',
-        'planed-rect-v2': 'Planed Rectangular (Variant 2)',
-        'planed-rect-v3': 'Planed Rectangular (Variant 3)',
-        'planed-rect-v4': 'Planed Rectangular (Variant 4)',
-        'planed-sq-v1': 'Planed Square (Variant 1)',
-        'planed-sq-v2': 'Planed Square (Variant 2)',
-        'planed-rad3': 'Planed Elements with Radius 3',
-        'planed-rad6': 'Planed Elements with Radius 6',
+        'planed-rect': 'Planed Rectangular',
+        'planed-radius': 'Planed Radius',
       };
-      subcatName = names[specificSubcat || subCategoryPlaned] || 'Planed Rectangular (Variant 1)';
+      subcatName = names[specificSubcat || subCategoryPlaned] || 'Planed Rectangular';
     }
 
     if (cat === 'sawn') {
@@ -1011,7 +1008,8 @@ export default function Configurator() {
       drying,
       additionalInfo,
       woodType,
-      steamed
+      steamed,
+      radius: (category === 'planed' && currentSubcat === 'planed-radius') ? radius : undefined
     };
   };
 
@@ -1097,6 +1095,7 @@ export default function Configurator() {
         length: liveDetails.length,
         diameter: liveDetails.diameter,
         thickness: liveDetails.thickness,
+        radius: liveDetails.radius,
       });
     } else if (currentStep === 3) {
       const liveDetails = getActiveSelectionDetails();
@@ -1119,14 +1118,16 @@ export default function Configurator() {
         unitPrice: liveDetails.unitPrice,
         discountPercent: liveDetails.discountPercent,
         additionalInfo: liveDetails.additionalInfo,
+        radius: liveDetails.radius,
       });
     }
-  }, [currentStep, category, subCategoryDowels, subCategoryProfiles, subCategorySpecials, subCategoryPlaned, woodType, grade, thickness, diameter, length, quantity, additionalInfo, fsc, drying, steamed, lang]);
+  }, [currentStep, category, subCategoryDowels, subCategoryProfiles, subCategorySpecials, subCategoryPlaned, radius, woodType, grade, thickness, diameter, length, quantity, additionalInfo, fsc, drying, steamed, lang]);
 
   const handleAddConfiguration = () => {
     const rawItem = {
       category,
       subCategory: category === 'dowels' ? subCategoryDowels : category === 'profiles' ? subCategoryProfiles : category === 'specials' ? subCategorySpecials : category === 'planed' ? subCategoryPlaned : '',
+      radius: (category === 'planed' && subCategoryPlaned === 'planed-radius') ? radius : undefined,
       length,
       diameter,
       thickness: categoryData[category].thickness ? thickness : 0,
@@ -1201,6 +1202,7 @@ export default function Configurator() {
     const currentItem = {
       category,
       subCategory: category === 'dowels' ? subCategoryDowels : category === 'profiles' ? subCategoryProfiles : category === 'specials' ? subCategorySpecials : category === 'planed' ? subCategoryPlaned : '',
+      radius: (category === 'planed' && subCategoryPlaned === 'planed-radius') ? radius : undefined,
       length,
       diameter,
       thickness: categoryData[category].thickness ? thickness : 0,
@@ -1249,6 +1251,7 @@ export default function Configurator() {
       steamed: currentItem.steamed || 'no',
       finish: resolvedDetails.finish,
       subCategory: currentItem.subCategory,
+      radius: currentItem.radius,
       length: currentItem.length,
       diameter: currentItem.diameter,
       thickness: currentItem.thickness,
@@ -1830,6 +1833,23 @@ export default function Configurator() {
                         <span style={{ color: 'var(--color-text-dark)', fontSize: '0.95rem' }}>mm</span>
                       </div>
                     </div>
+                  </div>
+                )}
+
+                {/* Radius Selection (only for planed-radius) */}
+                {category === 'planed' && subCategoryPlaned === 'planed-radius' && (
+                  <div className="control-group">
+                    <label htmlFor="dbRadius">Radius</label>
+                    <CustomSelect
+                      id="dbRadius"
+                      className="dashboard-select"
+                      value={radius}
+                      onChange={(e) => setRadius(e.target.value)}
+                      options={[
+                        { value: 'R3', label: 'R3 (3mm)' },
+                        { value: 'R6', label: 'R6 (6mm)' }
+                      ]}
+                    />
                   </div>
                 )}
 

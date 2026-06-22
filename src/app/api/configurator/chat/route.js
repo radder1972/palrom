@@ -8,14 +8,8 @@ PALROM Products specifications guidelines:
 1. Product categories and internal codes:
    - 'sawn' (Beukenhouten blanks / Beechwood blanks): thickness 5-200mm, width (diameter) 5-500mm, length 200-3000mm. Finish is 'Fijnbezaagd' (Fine-sawn).
    - 'planed' (Beukenhouten latten / Beechwood slats): has subcategories:
-     - 'planed-rect-v1' (Geschaafde latten 1): 20x50x1000mm, four-sides planed, round corners radius 3mm.
-     - 'planed-rect-v2' (Geschaafde latten 2): 20x50x1200mm, four-sides planed, round corners radius 3mm.
-     - 'planed-rect-v3' (Geschaafde latten 3): 25x50x1000mm, four-sides planed, round corners radius 3mm.
-     - 'planed-rect-v4' (Geschaafde latten 4): 25x50x1200mm, four-sides planed, round corners radius 3mm.
-     - 'planed-sq-v1' (Vierkante latten 1): 40x40x1000mm, four-sides planed, sharp corners.
-     - 'planed-sq-v2' (Vierkante latten 2): 45x45x1000mm, four-sides planed, sharp corners.
-     - 'planed-rad3' (Latten met radius 3mm): Custom size, four-sides planed, round corners radius 3mm.
-     - 'planed-rad6' (Latten met radius 6mm): Custom size, four-sides planed, round corners radius 6mm.
+     - 'planed-rect' (Geschaafd rechthoekig): Custom thickness, width, length. Four-sides planed, sharp corners.
+     - 'planed-radius' (Geschaafd radius): Custom thickness, width, length, and radius setting ('R3' or 'R6'). Four-sides planed, rounded corners.
    - 'dowels' (Beukenhouten stokken / Beechwood sticks/dowels): has subcategories:
      - 'dowel-smooth' (Glad): Custom size, smooth surfaced, diameter 3-60mm, length 200-3000mm.
      - 'dowel-rilled' (Gerild): Custom size, rilled surfaced, diameter 6-20mm, length 200-3000mm.
@@ -81,6 +75,7 @@ Generate the 'reply_text' in the requested language ('lang'):
   - Required for brichete: category, quantity.
   - Required for dowels: category, dimensions (diameter, length), fsc, quantity.
   - Required for sawn/planed/profiles/specials: category, dimensions (thickness, width/diameter, length), grade, drying, fsc, quantity.
+  - If category is 'planed' and subCategory is 'planed-radius', 'radius' is also required.
   - Steamed is optional/defaulted.
 - Ask for the next missing parameter in a friendly, conversational B2B sales tone.
 - If everything is complete, let the user know they can add the product to their quote request using the button or by replying "Ja".
@@ -98,7 +93,8 @@ You MUST output a valid JSON object matching this schema (do NOT wrap it in mark
     "drying": "kd" | "luchtdroog" | null,
     "steamed": "yes" | "no" | null,
     "fsc": boolean | null,
-    "quantity": number | null
+    "quantity": number | null,
+    "radius": "R3" | "R6" | null
   },
   "reply_text": string
 }

@@ -147,14 +147,8 @@ const specialsSubcategories = [
 ];
 
 const planedSubcategories = [
-  { id: 'planed-rect-v1', name: { nl: 'Geschaafde latten (Variant 1)', en: 'Planed Rectangular (Variant 1)', de: 'Gehobelte Leisten (V1)', ro: 'Șipci rinduite (V1)' }, img: '/images/4sides1.jpg' },
-  { id: 'planed-rect-v2', name: { nl: 'Geschaafde latten (Variant 2)', en: 'Planed Rectangular (Variant 2)', de: 'Gehobelte Leisten (V2)', ro: 'Șipci rinduite (V2)' }, img: '/images/4sides2.jpg' },
-  { id: 'planed-rect-v3', name: { nl: 'Geschaafde latten (Variant 3)', en: 'Planed Rectangular (Variant 3)', de: 'Gehobelte Leisten (V3)', ro: 'Șipci rinduite (V3)' }, img: '/images/4sides3.jpg' },
-  { id: 'planed-rect-v4', name: { nl: 'Geschaafde latten (Variant 4)', en: 'Planed Rectangular (Variant 4)', de: 'Gehobelte Leisten (V4)', ro: 'Șipci rinduite (V4)' }, img: '/images/4sides4.jpg' },
-  { id: 'planed-sq-v1', name: { nl: 'Vierkante latten (Variant 1)', en: 'Planed Square (Variant 1)', de: 'Quadratische Leisten (V1)', ro: 'Șipci pătrate (V1)' }, img: '/images/4sides5.jpg' },
-  { id: 'planed-sq-v2', name: { nl: 'Vierkante latten (Variant 2)', en: 'Planed Square (Variant 2)', de: 'Quadratische Leisten (V2)', ro: 'Șipci pătrate (V2)' }, img: '/images/4sides6.jpg' },
-  { id: 'planed-rad3', name: { nl: 'Geschaafd met radius R3', en: 'Planed Elements with Radius 3', de: 'Gehobelte Elemente mit R3', ro: 'Elemente rinduite cu rază R3' }, img: '/images/4sides7.jpg' },
-  { id: 'planed-rad6', name: { nl: 'Geschaafd met radius R6', en: 'Planed Elements with Radius 6', de: 'Gehobelte Elemente mit R6', ro: 'Elemente rinduite cu rază R6' }, img: '/images/4sides8.jpg' },
+  { id: 'planed-rect', name: { nl: 'Geschaafd rechthoekig', en: 'Planed rectangular', de: 'Gehobelt rechteckig', ro: 'Rinduit rectangular' }, img: '/images/4sides1.jpg' },
+  { id: 'planed-radius', name: { nl: 'Geschaafd radius', en: 'Planed radius', de: 'Gehobelt Radius', ro: 'Rinduit rază' }, img: '/images/4sides7.jpg' },
 ];
 
 const t = {
@@ -292,7 +286,8 @@ export default function ChatbotConfigurator() {
   const [subCategoryDowels, setSubCategoryDowels] = useState('dowel-smooth');
   const [subCategoryProfiles, setSubCategoryProfiles] = useState('profile-semiround');
   const [subCategorySpecials, setSubCategorySpecials] = useState('special-keeplat-spruce');
-  const [subCategoryPlaned, setSubCategoryPlaned] = useState('planed-rect-v1');
+  const [subCategoryPlaned, setSubCategoryPlaned] = useState('planed-rect');
+  const [radius, setRadius] = useState('R3');
   
   const [woodType, setWoodType] = useState('beech');
   const [steamed, setSteamed] = useState('no');
@@ -351,7 +346,8 @@ export default function ChatbotConfigurator() {
     setSubCategoryDowels('dowel-smooth');
     setSubCategoryProfiles('profile-semiround');
     setSubCategorySpecials('special-keeplat-spruce');
-    setSubCategoryPlaned('planed-rect-v1');
+    setSubCategoryPlaned('planed-rect');
+    setRadius('R3');
     setWoodType('beech');
     setSteamed('no');
     setDrying('kd');
@@ -461,16 +457,10 @@ export default function ChatbotConfigurator() {
       subcatName = names[specificSubcat || subCategoryDowels] || 'Smooth Dowel Rods';
     } else if (cat === 'planed') {
       const names = {
-        'planed-rect-v1': 'Planed Rectangular (Variant 1)',
-        'planed-rect-v2': 'Planed Rectangular (Variant 2)',
-        'planed-rect-v3': 'Planed Rectangular (Variant 3)',
-        'planed-rect-v4': 'Planed Rectangular (Variant 4)',
-        'planed-sq-v1': 'Planed Square (Variant 1)',
-        'planed-sq-v2': 'Planed Square (Variant 2)',
-        'planed-rad3': 'Planed Elements with Radius 3',
-        'planed-rad6': 'Planed Elements with Radius 6',
+        'planed-rect': 'Planed Rectangular',
+        'planed-radius': 'Planed Radius',
       };
-      subcatName = names[specificSubcat || subCategoryPlaned] || 'Planed Rectangular (Variant 1)';
+      subcatName = names[specificSubcat || subCategoryPlaned] || 'Planed Rectangular';
     }
 
     if (cat === 'sawn') {
@@ -600,7 +590,8 @@ export default function ChatbotConfigurator() {
       drying,
       additionalInfo,
       woodType,
-      steamed
+      steamed,
+      radius: (category === 'planed' && currentSubcat === 'planed-radius') ? radius : undefined
     };
   };
 
@@ -610,6 +601,7 @@ export default function ChatbotConfigurator() {
     const currentItem = {
       category,
       subCategory: category === 'dowels' ? subCategoryDowels : category === 'profiles' ? subCategoryProfiles : category === 'specials' ? subCategorySpecials : category === 'planed' ? subCategoryPlaned : '',
+      radius: (category === 'planed' && subCategoryPlaned === 'planed-radius') ? radius : undefined,
       length,
       diameter,
       thickness: categoryData[category].thickness ? thickness : 0,
@@ -654,6 +646,7 @@ export default function ChatbotConfigurator() {
       steamed: currentItem.steamed || 'no',
       finish: activeSelection.finish,
       subCategory: currentItem.subCategory,
+      radius: currentItem.radius,
       length: currentItem.length,
       diameter: currentItem.diameter,
       thickness: currentItem.thickness,
@@ -668,6 +661,7 @@ export default function ChatbotConfigurator() {
     const currentItem = {
       category,
       subCategory: category === 'dowels' ? subCategoryDowels : category === 'profiles' ? subCategoryProfiles : category === 'specials' ? subCategorySpecials : category === 'planed' ? subCategoryPlaned : '',
+      radius: (category === 'planed' && subCategoryPlaned === 'planed-radius') ? radius : undefined,
       length,
       diameter,
       thickness: categoryData[category].thickness ? thickness : 0,
@@ -712,6 +706,7 @@ export default function ChatbotConfigurator() {
       steamed: currentItem.steamed || 'no',
       finish: activeSelection.finish,
       subCategory: currentItem.subCategory,
+      radius: currentItem.radius,
       length: currentItem.length,
       diameter: currentItem.diameter,
       thickness: currentItem.thickness,
@@ -752,6 +747,11 @@ export default function ChatbotConfigurator() {
       case 'lengthType':
         return { step: 'length', botMsgKey: lenType === 'standard' ? 'chooseLengthStandard' : 'chooseLengthCustom', optionsType: 'length' };
       case 'length':
+        if (cat === 'planed' && subCategoryPlaned === 'planed-radius') {
+          return { step: 'radius', botMsgKey: 'chooseRadius', optionsType: 'radius' };
+        }
+        return { step: 'grade', botMsgKey: 'chooseGrade', optionsType: 'grade' };
+      case 'radius':
         return { step: 'grade', botMsgKey: 'chooseGrade', optionsType: 'grade' };
       case 'grade':
         return { step: 'fsc', botMsgKey: 'chooseFsc', optionsType: 'fsc' };
@@ -805,6 +805,8 @@ export default function ChatbotConfigurator() {
       setThickness(choiceValue);
     } else if (currentItem.step === 'length') {
       setLength(choiceValue);
+    } else if (currentItem.step === 'radius') {
+      setRadius(choiceValue);
     } else if (currentItem.step === 'grade') {
       setGrade(choiceValue);
     } else if (currentItem.step === 'fsc') {
@@ -905,6 +907,13 @@ export default function ChatbotConfigurator() {
           ? (lang === 'nl' ? `Selecteer een standaard lengte-range:` : (lang === 'ro' ? `Selectați o gamă standard de lungimi:` : (lang === 'de' ? `Wählen Sie einen Standardlängenbereich:` : `Select a standard length range:`)))
           : (lang === 'nl' ? `Voer de exacte lengte in (in mm):` : (lang === 'ro' ? `Introduceți lungimea exactă (în mm):` : (lang === 'de' ? `Geben Sie die genaue Länge ein (in mm):` : `Enter the exact length (in mm):`)));
           
+      case 'radius':
+        return lang === 'nl'
+          ? `Welke radius instelling heeft uw voorkeur voor de geschaafde radius latten?`
+          : (lang === 'ro' ? `Ce setare de rază preferați pentru șipcile cu rază rinduită?`
+          : (lang === 'de' ? `Welche Radiuseinstellung bevorzugen Sie für die gehobelten Radiusleisten?`
+          : `Which radius setting do you prefer for the planed radius slats?`));
+
       case 'grade':
         return lang === 'nl'
           ? `Welke kwaliteitsklasse wenst u? Klasse A is volledig noestvrij. Klasse B bevat gezonde noesten en is ideaal voor meubelbouw.`
@@ -968,6 +977,8 @@ export default function ChatbotConfigurator() {
       case 'thickness':
       case 'length':
         return `${val} mm`;
+      case 'radius':
+        return val;
       case 'grade':
         return `Klasse ${val}`;
       case 'fsc':
@@ -1735,6 +1746,18 @@ export default function ChatbotConfigurator() {
                           <button onClick={() => proceedToNextStep(localInputLength)} className="btn btn-primary btn-sm" style={{ padding: '0.5rem 1rem', height: '40px', borderRadius: 'var(--border-radius-md)' }}>Ok</button>
                         </div>
                       )}
+                    </div>
+                  )}
+
+                  {/* RADIUS WIDGET */}
+                  {activeStep.optionsType === 'radius' && (
+                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                      <button onClick={() => proceedToNextStep('R3')} className="btn btn-secondary" style={{ flex: 1 }}>
+                        R3 (3mm)
+                      </button>
+                      <button onClick={() => proceedToNextStep('R6')} className="btn btn-secondary" style={{ flex: 1 }}>
+                        R6 (6mm)
+                      </button>
                     </div>
                   )}
 
