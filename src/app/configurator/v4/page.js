@@ -2561,8 +2561,10 @@ export default function OpenChatConfigurator() {
                     )}
                   </svg>
                 ) : (
-                  <div style={{ textAlign: 'center', color: 'var(--color-text-muted)', fontSize: '0.85rem', padding: '1rem 0' }}>
-                    <i className="fa-solid fa-cubes" style={{ fontSize: '2.2rem', display: 'block', marginBottom: '0.75rem', color: '#cbd5e1' }}></i>
+                  <div style={{ textAlign: 'center', color: 'var(--color-text-muted)', fontSize: '0.85rem', padding: '1.25rem 0' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem' }}>
+                      <i className="fa-solid fa-cubes" style={{ fontSize: '2.4rem', color: '#ffd875' }}></i>
+                    </div>
                     {getTranslation('visualizerPlaceholder')}
                   </div>
                 )}
@@ -2572,7 +2574,9 @@ export default function OpenChatConfigurator() {
               <div className="specs-scroll-container">
                 {!hasAnyDetected ? (
                   <div style={{ textAlign: 'center', color: 'var(--color-text-muted)', padding: '2.5rem 1rem', border: '1px dashed var(--color-border)', borderRadius: 'var(--border-radius-md)', background: '#f8fafc', marginTop: '0.5rem' }}>
-                    <i className="fa-solid fa-list-check" style={{ fontSize: '2.2rem', display: 'block', marginBottom: '0.75rem', color: '#cbd5e1' }}></i>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem' }}>
+                      <i className="fa-solid fa-list-check" style={{ fontSize: '2.4rem', color: '#ffd875' }}></i>
+                    </div>
                     <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: '1.4' }}>{getTranslation('noSpecsDetected')}</p>
                   </div>
                 ) : (
