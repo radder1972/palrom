@@ -1991,14 +1991,18 @@ export default function OpenChatConfigurator() {
           color: var(--color-primary);
           border: 1px solid rgba(255, 255, 255, 0.2);
         }
+        .chat-header-info {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.15rem;
+        }
         .chat-header-info h3 {
           margin: 0;
           font-size: 1.05rem;
           font-weight: 700;
           color: #ffffff;
           line-height: 1.2;
-          display: flex;
-          align-items: center;
         }
         .badge-ai-status {
           font-size: 0.65rem;
@@ -2331,24 +2335,24 @@ export default function OpenChatConfigurator() {
                     <i className="fa-solid fa-robot"></i>
                   </div>
                   <div className="chat-header-info">
-                    <h3 style={{ display: 'flex', alignItems: 'center' }}>
+                    <h3 style={{ margin: 0 }}>
                       Willem (AI)
-                      {aiEngine === 'gemini' && (
-                        <span className="badge-ai-status gemini" title="Connected to Google Gemini AI Engine">
-                          {getTranslation('aiGemini')}
-                        </span>
-                      )}
-                      {aiEngine === 'fallback' && (
-                        <span className="badge-ai-status fallback" title="Connected to local Rule-Based NLP Parser">
-                          {getTranslation('aiFallback')}
-                        </span>
-                      )}
-                      {aiEngine === 'checking' && (
-                        <span className="badge-ai-status checking" title="Checking model status...">
-                          {getTranslation('aiChecking')}
-                        </span>
-                      )}
                     </h3>
+                    {aiEngine === 'gemini' && (
+                      <span className="badge-ai-status gemini" title="Connected to Google Gemini AI Engine" style={{ marginLeft: 0 }}>
+                        {getTranslation('aiGemini')}
+                      </span>
+                    )}
+                    {aiEngine === 'fallback' && (
+                      <span className="badge-ai-status fallback" title="Connected to local Rule-Based NLP Parser" style={{ marginLeft: 0 }}>
+                        {getTranslation('aiFallback')}
+                      </span>
+                    )}
+                    {aiEngine === 'checking' && (
+                      <span className="badge-ai-status checking" title="Checking model status..." style={{ marginLeft: 0 }}>
+                        {getTranslation('aiChecking')}
+                      </span>
+                    )}
                     <span><i className="fa-solid fa-circle" style={{ color: '#22c55e', fontSize: '0.55rem' }}></i> Online / Virtual Advisor</span>
                   </div>
                 </div>
