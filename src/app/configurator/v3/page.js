@@ -1674,7 +1674,6 @@ export default function ChatbotConfigurator() {
                             <div className="chip-subcat-popover">
                               <div style={{ position: 'relative', width: '100%', height: '100px', overflow: 'hidden', borderRadius: '6px' }}>
                                 <img src={s.img} alt="" style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover', margin: 0 }} />
-                                <ProfileDrawingOverlay subCategoryId={s.id} />
                               </div>
                             </div>
                           )}
@@ -1693,7 +1692,6 @@ export default function ChatbotConfigurator() {
                             <div className="chip-subcat-popover">
                               <div style={{ position: 'relative', width: '100%', height: '100px', overflow: 'hidden', borderRadius: '6px' }}>
                                 <img src={s.img} alt="" style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover', margin: 0 }} />
-                                <ProfileDrawingOverlay subCategoryId={s.id} />
                               </div>
                             </div>
                           )}
@@ -1712,7 +1710,6 @@ export default function ChatbotConfigurator() {
                             <div className="chip-subcat-popover">
                               <div style={{ position: 'relative', width: '100%', height: '100px', overflow: 'hidden', borderRadius: '6px' }}>
                                 <img src={s.img} alt="" style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover', margin: 0 }} />
-                                <ProfileDrawingOverlay subCategoryId={s.id} />
                               </div>
                             </div>
                           )}
@@ -1731,7 +1728,6 @@ export default function ChatbotConfigurator() {
                             <div className="chip-subcat-popover">
                               <div style={{ position: 'relative', width: '100%', height: '100px', overflow: 'hidden', borderRadius: '6px' }}>
                                 <img src={s.img} alt="" style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover', margin: 0 }} />
-                                <ProfileDrawingOverlay subCategoryId={s.id} />
                               </div>
                             </div>
                           )}
