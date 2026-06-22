@@ -249,10 +249,10 @@ const translations = {
     ro: 'Excelent, am strâns toate specificațiile necesare! Previzualizarea live și tabelul de specificații de mai jos sunt corecte? Faceți clic pe buton pentru a adăuga configurarea la solicitarea de ofertă.'
   },
   aiGemini: {
-    nl: 'Gemini AI Actief',
-    en: 'Gemini AI Active',
-    de: 'Gemini KI Aktiv',
-    ro: 'Gemini AI Activ'
+    nl: 'AI Actief',
+    en: 'AI Active',
+    de: 'KI Aktiv',
+    ro: 'AI Activ'
   },
   aiFallback: {
     nl: 'Lokale Fallback',
