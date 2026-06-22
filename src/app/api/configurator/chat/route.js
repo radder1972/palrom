@@ -57,6 +57,13 @@ PALROM Products specifications guidelines:
 5. Quantity restrictions:
    - MOQ (Minimum Order Quantity) is 500 stuks for custom wood products, 250 stuks for standard blanks, and 1 pallet for briquettes.
 
+6. Geofencing / Location Restrictions:
+   - Beechwood heating briquettes ('brichete') can ONLY be ordered from Romania and ONLY be delivered within Romania.
+   - If the visitor is NOT in Romania (Is Visitor In Romania / isRomania parameter is false):
+     - They cannot order or configure briquettes. If they ask about briquettes or try to set the category to 'brichete', politely explain that briquettes are exclusively sold and delivered in Romania, and guide them back to our custom B2B wood products (blanks, slats, sticks, profiles, specials) which are available internationally. Do not detect category 'brichete' in this case.
+   - If the visitor IS in Romania (Is Visitor In Romania / isRomania parameter is true):
+     - They can configure and order briquettes. However, you MUST explicitly remind/confirm with them during the conversation (e.g. when confirming quantity or finalizing specifications) that the delivery address must be within Romania.
+
 Task:
 You will receive the user's latest chat message, the active 'category', the 'lang' (language of client: 'nl', 'en', 'de', 'ro'), and the currently already 'filledFields' configuration state.
 
@@ -99,7 +106,7 @@ You MUST output a valid JSON object matching this schema (do NOT wrap it in mark
 
 export async function POST(request) {
   try {
-    const { message, category, filledFields, dimensionFlags, lang } = await request.json();
+    const { message, category, filledFields, dimensionFlags, lang, isRomania } = await request.json();
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
@@ -112,7 +119,7 @@ export async function POST(request) {
         {
           parts: [
             {
-              text: `User Message: "${message}"\nActive Category: "${category}"\nLanguage: "${lang}"\nFilled Fields: ${JSON.stringify(filledFields)}\nDimension Flags: ${JSON.stringify(dimensionFlags)}`
+              text: `User Message: "${message}"\nActive Category: "${category}"\nLanguage: "${lang}"\nFilled Fields: ${JSON.stringify(filledFields)}\nDimension Flags: ${JSON.stringify(dimensionFlags)}\nIs Visitor In Romania (isRomania): ${isRomania ? 'true' : 'false'}`
             }
           ]
         }

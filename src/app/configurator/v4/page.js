@@ -368,7 +368,7 @@ export default function OpenChatConfigurator() {
           const res = await fetch('/api/configurator/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'ping', category: 'sawn', filledFields: {}, lang: 'nl' })
+            body: JSON.stringify({ message: 'ping', category: 'sawn', filledFields: {}, lang: 'nl', isRomania })
           });
           if (res.ok) {
             const data = await res.json();
@@ -1121,7 +1121,8 @@ export default function OpenChatConfigurator() {
               category,
               filledFields,
               dimensionFlags,
-              lang
+              lang,
+              isRomania
             })
           });
 
@@ -1389,7 +1390,8 @@ export default function OpenChatConfigurator() {
                 category,
                 filledFields,
                 dimensionFlags,
-                lang
+                lang,
+                isRomania
               })
             });
 
