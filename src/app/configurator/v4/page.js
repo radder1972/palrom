@@ -1273,11 +1273,26 @@ export default function OpenChatConfigurator() {
         setFilledFields(updatedFields);
 
         // If user typed "ja" or "yes" or similar, and everything was complete, add to cart
-        const wasCompleteBeforeMsg = isConfigCompleteFor(category, filledFields);
-        const isAffirmative = /^(?:ja|yes|oui|da|ok|toevoegen|bestellen|offerte|in winkelwagen|add|submit)/i.test(cleanText);
+        // If user typed "ja", "yes", "ik ben klaar", "voeg toe" or similar, and essential fields are complete
+        const isEssentialComplete = activeCat === 'brichete'
+          ? (updatedFields.category && updatedFields.quantity)
+          : (updatedFields.category && updatedFields.dimensions && updatedFields.quantity);
+        const isAffirmative = /^(?:ja|yes|oui|da|ok|toevoegen|bestellen|offerte|in winkelwagen|add|submit|klaar|ready|finish)/i.test(cleanText) || cleanText.includes('voeg toe') || cleanText.includes('ben klaar') || cleanText.includes('ik ben klaar') || cleanText.includes('toevoegen');
         
-        if (wasCompleteBeforeMsg && isAffirmative) {
-          handleAddToCart();
+        if (isEssentialComplete && isAffirmative) {
+          // Auto-fill any remaining fields so they render in the specifications table
+          const finalFields = { ...updatedFields };
+          if (activeCat !== 'brichete') {
+            finalFields.grade = true;
+            finalFields.drying = true;
+            finalFields.fsc = true;
+            finalFields.steamed = true;
+          }
+          setFilledFields(finalFields);
+
+          setTimeout(() => {
+            handleAddToCart();
+          }, 100);
           return;
         }
 
@@ -1665,6 +1680,19 @@ export default function OpenChatConfigurator() {
 
   // Add configured product to shopping cart
   const handleAddToCart = () => {
+    // Auto-fill any remaining fields so they render in the specifications table
+    const finalFields = { ...filledFields };
+    finalFields.category = true;
+    finalFields.dimensions = true;
+    finalFields.quantity = true;
+    if (category !== 'brichete') {
+      finalFields.grade = true;
+      finalFields.drying = true;
+      finalFields.fsc = true;
+      finalFields.steamed = true;
+    }
+    setFilledFields(finalFields);
+
     const currentSubcat = getActiveSubCategoryCode(category);
     const details = calculatePriceDetails(category, length, diameter, thickness, quantity, currentSubcat, grade, lengthType, drying);
     const calculatedBase = calculatePriceDetails(category, length, diameter, thickness, 1, currentSubcat, grade, lengthType, drying);
@@ -1789,6 +1817,9 @@ export default function OpenChatConfigurator() {
   const woodColorEnd = '#b48154';
 
   const isConfigComplete = isConfigCompleteFor(category, filledFields);
+  const isEssentialComplete = category === 'brichete'
+    ? (filledFields.category && filledFields.quantity)
+    : (filledFields.category && filledFields.dimensions && filledFields.quantity);
   const hasAnyDetected = filledFields.category || filledFields.dimensions || filledFields.grade || filledFields.drying || filledFields.fsc || filledFields.quantity || filledFields.steamed;
 
   if (isLoading) {
@@ -2328,7 +2359,7 @@ export default function OpenChatConfigurator() {
                       </div>
                     )}
 
-                    {msg.sender === 'bot' && index === history.length - 1 && isConfigComplete && !msg.isAddedSuccess && (
+                    {msg.sender === 'bot' && index === history.length - 1 && isEssentialComplete && !msg.isAddedSuccess && (
                       <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                         <button
                           onClick={handleAddToCart}
@@ -2617,8 +2648,8 @@ export default function OpenChatConfigurator() {
                 )}
               </div>
 
-              {/* Add to Cart button in sidebar once everything is filled */}
-              {isConfigComplete && (
+              {/* Add to Cart button in sidebar once essentials are filled */}
+              {isEssentialComplete && (
                 <button
                   onClick={handleAddToCart}
                   disabled={isAddedToCart}
