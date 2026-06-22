@@ -1331,6 +1331,10 @@ ul {
 }
 
 /* 11. Contact Us Page Styles */
+.contact-section .grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .contact-details-list {
     margin-top: 3rem;
     display: flex;
@@ -1649,6 +1653,15 @@ ul {
 @media (max-width: 1024px) {
     .grid-3 {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .form-wrapper {
+        padding: 2rem;
+    }
+
+    .modern-form .form-group-row {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
     }
     
     .gallery-split-layout {
