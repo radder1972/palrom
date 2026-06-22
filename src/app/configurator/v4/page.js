@@ -2558,13 +2558,14 @@ export default function OpenChatConfigurator() {
                     <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: '1.4' }}>{getTranslation('noSpecsDetected')}</p>
                   </div>
                 ) : (
-                  <table className="sidebar-specs-table" style={{ animation: 'slideUp 0.3s ease-out' }}>
-                    <tbody>
-                      {/* 1. Product */}
-                      <tr>
-                        <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('productRow')}</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>{categoryData[category].name[lang] || categoryData[category].name.nl}</td>
-                      </tr>
+                  <>
+                    <table className="sidebar-specs-table" style={{ animation: 'slideUp 0.3s ease-out', marginBottom: '0.75rem' }}>
+                      <tbody>
+                        {/* 1. Product */}
+                        <tr>
+                          <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>{getTranslation('productRow')}</td>
+                          <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>{categoryData[category].name[lang] || categoryData[category].name.nl}</td>
+                        </tr>
                       
                       {/* 2. Subcategory */}
                       {category !== 'brichete' && getActiveSubCategoryCode(category) && (
@@ -2651,6 +2652,10 @@ export default function OpenChatConfigurator() {
                       )}
                     </tbody>
                   </table>
+                  <div style={{ padding: '0 0.5rem', marginBottom: '0.75rem' }}>
+                    <ConfigProfileDrawing category={category} subCategory={getActiveSubCategoryCode(category)} />
+                  </div>
+                  </>
                 )}
               </div>
 
@@ -2682,5 +2687,105 @@ export default function OpenChatConfigurator() {
         </div>
       </section>
     </>
+  );
+}
+
+function ConfigProfileDrawing({ category, subCategory }) {
+  const getShape = () => {
+    const subCat = subCategory || '';
+    switch (category) {
+      case 'brichete':
+        return (
+          <>
+            <rect x="25" y="30" width="50" height="40" rx="4" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />
+            <text x="50" y="55" textAnchor="middle" fill="var(--color-primary-dark)" fontWeight="800" fontSize="14" style={{ fontFamily: 'system-ui, sans-serif' }}>RUF</text>
+          </>
+        );
+      case 'dowels':
+        if (subCat === 'dowel-rilled') {
+          return (
+            <>
+              <circle cx="50" cy="50" r="28" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" strokeDasharray="3 2" />
+              <circle cx="50" cy="50" r="24" fill="none" stroke="var(--color-primary-dark)" strokeWidth="1" opacity="0.6" />
+            </>
+          );
+        }
+        return <circle cx="50" cy="50" r="28" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+      case 'planed':
+        if (subCat === 'planed-radius') {
+          return <rect x="20" y="32" width="60" height="36" rx="8" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+        }
+        return <rect x="20" y="32" width="60" height="36" rx="1" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+      case 'profiles':
+        switch (subCat) {
+          case 'profile-semiround':
+            return <path d="M 20 65 A 30 30 0 0 1 80 65 Z" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          case 'profile-strip':
+            return <rect x="15" y="40" width="70" height="20" rx="1" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          case 'profile-finish-v1':
+            return <path d="M 20 65 L 20 50 C 30 50 35 40 45 40 H 80 V 65 Z" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          case 'profile-quarter-v1':
+            return <path d="M 30 65 A 40 40 0 0 1 70 25 L 70 65 Z" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          case 'profile-finish-v2':
+            return <path d="M 20 65 V 55 C 30 55 35 40 45 40 H 80 V 65 Z" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          case 'profile-plinth-v1':
+            return <path d="M 35 75 V 25 C 45 25 55 35 55 45 V 75 Z" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          case 'profile-corner-v1':
+          case 'profile-corner-v2':
+            return <path d="M 25 25 H 42 V 60 H 75 V 75 H 25 Z" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          case 'profile-triangular':
+            return <path d="M 25 70 H 75 V 20 Z" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          case 'profile-quarter-v2':
+            return <path d="M 30 65 A 40 40 0 0 1 70 25 V 65 Z" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          case 'profile-thread':
+            return (
+              <>
+                <circle cx="50" cy="50" r="26" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />
+                <circle cx="50" cy="50" r="31" fill="none" stroke="var(--color-primary-dark)" strokeWidth="1" strokeDasharray="3 3" />
+              </>
+            );
+          case 'profile-calbat':
+            return <path d="M 20 65 V 35 H 35 L 40 45 H 60 L 65 35 H 80 V 65 Z" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          default:
+            return <rect x="20" y="35" width="60" height="30" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+        }
+      case 'specials':
+        switch (subCat) {
+          case 'special-keeplat-spruce':
+          case 'special-keeplat-beech':
+            return <path d="M 20 65 L 80 45 V 65 Z" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          case 'special-distancer-mix':
+            return <rect x="30" y="40" width="40" height="20" rx="1" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          case 'special-threshold':
+            return <path d="M 20 65 V 40 L 80 48 V 65 Z" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          case 'special-distancer-ind':
+            return <rect x="25" y="35" width="50" height="30" rx="2" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          case 'special-wood-iron':
+            return <rect x="15" y="32" width="70" height="36" rx="0" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+          default:
+            return <rect x="20" y="35" width="60" height="30" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+        }
+      default:
+        return <rect x="20" y="35" width="60" height="30" fill="rgba(231, 177, 36, 0.1)" stroke="var(--color-primary-dark)" strokeWidth="3.5" />;
+    }
+  };
+
+  return (
+    <div style={{
+      width: '100%',
+      height: '140px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#f8fafc',
+      border: '1px solid #edf2f7',
+      borderRadius: '6px',
+      padding: '0.5rem',
+      boxSizing: 'border-box'
+    }}>
+      <svg style={{ width: '100%', height: '100%' }} viewBox="0 0 100 100">
+        {getShape()}
+      </svg>
+    </div>
   );
 }
