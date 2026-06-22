@@ -2199,7 +2199,7 @@ export default function OpenChatConfigurator() {
           background: #ffffff;
           border: 1px solid var(--color-border);
           border-radius: var(--border-radius-lg);
-          padding: 1.5rem 1.5rem 1.25rem;
+          padding: 1.25rem 1.25rem 0.75rem;
           box-shadow: var(--shadow-md);
           position: sticky;
           top: 171px;
@@ -2211,13 +2211,13 @@ export default function OpenChatConfigurator() {
           background: #f8fafc;
           border: 1px solid var(--color-border);
           border-radius: var(--border-radius-md);
-          padding: 1rem;
+          padding: 0.75rem;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-bottom: 1rem;
+          margin-bottom: 0.5rem;
           position: relative;
-          min-height: 120px;
+          min-height: 100px;
         }
         .visualizer-badge-v4 {
           position: absolute;
@@ -2233,17 +2233,17 @@ export default function OpenChatConfigurator() {
         .sidebar-specs-table {
           width: 100%;
           border-collapse: collapse;
-          margin-top: 0.5rem;
+          margin-top: 0.25rem;
         }
         .sidebar-specs-table th, .sidebar-specs-table td {
-          padding: 0.45rem 0.75rem;
-          font-size: 0.9rem;
+          padding: 0.25rem 0.5rem;
+          font-size: 0.85rem;
           border-bottom: 1px solid #edf2f7;
         }
         .specs-scroll-container {
           flex: 1;
           overflow-y: auto;
-          margin-bottom: 1rem;
+          margin-bottom: 0.5rem;
         }
         .specs-scroll-container::-webkit-scrollbar {
           width: 4px;
@@ -2519,7 +2519,7 @@ export default function OpenChatConfigurator() {
 
             {/* Right: Live Preview Panel */}
             <div className="preview-sidebar-card">
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', borderBottom: '2px solid var(--color-primary)', paddingBottom: '0.5rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.75rem', borderBottom: '2px solid var(--color-primary)', paddingBottom: '0.35rem' }}>
                 {getTranslation('activeSelectionTitle')}
               </h3>
 
