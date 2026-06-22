@@ -333,28 +333,34 @@ export default function Profiles() {
       <section className="section-padding bg-light" style={{ paddingTop: '4rem' }}>
         <div className="container">
           <div className="grid grid-3 detail-grid">
-            {profileProducts.map((p) => (
-              <div className="detail-card animate-on-scroll" key={p.id}>
-                <div className="detail-img-wrapper">
-                  <Image 
-                    src={p.image} 
-                    alt={p.name[lang] || p.name.nl} 
-                    width={400}
-                    height={300}
-                  />
+            {[...profileProducts]
+              .sort((a, b) => {
+                const nameA = a.name[lang] || a.name.nl || '';
+                const nameB = b.name[lang] || b.name.nl || '';
+                return nameA.localeCompare(nameB, lang);
+              })
+              .map((p) => (
+                <div className="detail-card animate-on-scroll" key={p.id}>
+                  <div className="detail-img-wrapper">
+                    <Image 
+                      src={p.image} 
+                      alt={p.name[lang] || p.name.nl} 
+                      width={400}
+                      height={300}
+                    />
+                  </div>
+                  <div className="detail-info">
+                    <h3>{p.name[lang] || p.name.nl}</h3>
+                    <p>{p.description[lang] || p.description.nl}</p>
+                    <Link
+                      href="#contact"
+                      className="detail-cta add-to-inquiry-btn"
+                    >
+                      {getTranslation('requestQuoteBtn')} <i className="fa-solid fa-chevron-right icon-right"></i>
+                    </Link>
+                  </div>
                 </div>
-                <div className="detail-info">
-                  <h3>{p.name[lang] || p.name.nl}</h3>
-                  <p>{p.description[lang] || p.description.nl}</p>
-                  <Link
-                    href="#contact"
-                    className="detail-cta add-to-inquiry-btn"
-                  >
-                    {getTranslation('requestQuoteBtn')} <i className="fa-solid fa-chevron-right icon-right"></i>
-                  </Link>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </section>
