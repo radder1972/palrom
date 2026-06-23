@@ -129,15 +129,15 @@ const translations = {
     de: 'Buchenholzbriketts werden ausschließlich in Rumänien verkauft. Außerhalb Rumäniens liefern wir nur unsere B2B-Holzprodukte (Zuschnitte, Leisten, Stäbe, Profile und Sonderanfertigungen).',
     ro: 'Brichetele din lemn de fag sunt vândute exclusiv în România. În afara României, furnizăm doar produsele noastre din lemn B2B (piese brute, șipci, tije, profile și piese speciale).'
   },
-  v4PortalTitle: { nl: 'Willem AI - Beveiligde Toegang', en: 'Willem AI - Secured Access', de: 'Willem AI - Gesicherter Zugriff', ro: 'Willem AI - Acces Securizat' },
-  v4PortalLead: { nl: 'Voer het aanvullende wachtwoord in om toegang te krijgen tot de Willem AI configurator.', en: 'Enter the additional password to access the Willem AI configurator.', de: 'Geben Sie das zusätzliche Passwort ein, um auf den Willem AI-Konfigurator zuzugreifen.', ro: 'Introduceți parola suplimentară pentru a accesa configuratorul Willem AI.' },
-  v4PasswordLabel: { nl: 'Wachtwoord Willem AI *', en: 'Willem AI Password *', de: 'Willem AI Passwort *', ro: 'Parolă Willem AI *' },
-  v4PasswordError: { nl: 'Ongeldig wachtwoord voor Willem AI. Probeer het opnieuw.', en: 'Invalid password for Willem AI. Please try again.', de: 'Ungültiges Passwort für Willem AI. Bitte versuchen Sie es erneut.', ro: 'Parolă invalidă pentru Willem AI. Vă rugăm să încercați din nou.' },
+  v4PortalTitle: { nl: 'PAL AI - Beveiligde Toegang', en: 'PAL AI - Secured Access', de: 'PAL AI - Gesicherter Zugriff', ro: 'PAL AI - Acces Securizat' },
+  v4PortalLead: { nl: 'Voer het aanvullende wachtwoord in om toegang te krijgen tot de PAL AI configurator.', en: 'Enter the additional password to access the PAL AI configurator.', de: 'Geben Sie das zusätzliche Passwort ein, um auf den PAL AI-Konfigurator zuzugreifen.', ro: 'Introduceți parola suplimentară pentru a accesa configuratorul PAL AI.' },
+  v4PasswordLabel: { nl: 'Wachtwoord PAL AI *', en: 'PAL AI Password *', de: 'PAL AI Passwort *', ro: 'Parolă PAL AI *' },
+  v4PasswordError: { nl: 'Ongeldig wachtwoord voor PAL AI. Probeer het opnieuw.', en: 'Invalid password for PAL AI. Please try again.', de: 'Ungültiges Passwort für PAL AI. Bitte versuchen Sie es erneut.', ro: 'Parolă invalidă pentru PAL AI. Vă rugăm să încercați din nou.' },
   v4UnlockButton: { nl: 'Toegang Ontgrendelen', en: 'Unlock Access', de: 'Zugang entsperren', ro: 'Deblochează Accesul' },
   v4ShowPasswordAria: { nl: 'Wachtwoord tonen/verbergen', en: 'Show/hide password', de: 'Passwort anzeigen/ausblenden', ro: 'Afișează/ascunde parola' },
   heroBreadcrumb: { nl: 'Palrom Offerte Configurator', en: 'Palrom Quote Configurator', de: 'Palrom Angebotskonfigurator', ro: 'Configurator de Oferte Palrom' },
-  heroTitle: { nl: 'Willem AI - Open Chatbot', en: 'Willem AI - Open Chatbot', de: 'Willem AI - Offener Chatbot', ro: 'Willem AI - Chatbot Deschis' },
-  heroSubtitle: { nl: 'Configureer uw B2B houtproducten door eenvoudig te chatten in vrije tekst met onze virtuele salesadviseur Willem.', en: 'Configure your B2B wood products by simply chatting in free text with our virtual sales advisor Willem.', de: 'Konfigurieren Sie Ihre B2B-Holzprodukte, indem Sie einfach im Freitext mit unserem virtuellen Verkaufsberater Willem chatten.', ro: 'Configurați-vă produsele din lemn B2B pur și simplu discutând în text liber cu consilierul nostru de vânzări virtual Willem.' },
+  heroTitle: { nl: 'PAL AI - Open Chatbot', en: 'PAL AI - Open Chatbot', de: 'PAL AI - Offener Chatbot', ro: 'PAL AI - Chatbot Deschis' },
+  heroSubtitle: { nl: 'Configureer uw B2B houtproducten door eenvoudig te chatten in vrije tekst met onze virtuele salesadviseur PAL.', en: 'Configure your B2B wood products by simply chatting in free text with our virtual sales advisor PAL.', de: 'Konfigurieren Sie Ihre B2B-Holzprodukte, indem Sie einfach im Freitext mit unserem virtuellen Verkaufsberater PAL chatten.', ro: 'Configurați-vă produsele din lemn B2B pur și simplu discutând în text liber cu consilierul nostru de vânzări virtual PAL.' },
   
   // Specs table rows
   productRow: { nl: 'Product', en: 'Product', de: 'Produkt', ro: 'Produs' },
@@ -193,12 +193,12 @@ const translations = {
   activeSelectionTitle: { nl: 'Gedetecteerde Specificaties', en: 'Detected Specifications', de: 'Erkannte Spezifikationen', ro: 'Specificații Detectate' },
   visualizerTitle: { nl: 'Live voorbeeld', en: 'Live preview', de: 'Live-Vorschau', ro: 'Previzualizare live' },
 
-  // Willem replies
+  // PAL replies
   welcomeMessage: {
-    nl: 'Hallo! Ik ben **Willem**, uw virtuele B2B salesadviseur. Typ hieronder in uw eigen woorden wat u zoekt of spreek in!<br/>Bijvoorbeeld: *"Ik ben op zoek naar 1500 beukenhouten blanks met afmetingen van 25x75x1200 mm in klasse A, kamerdroog."* of geef uw wensen stap voor stap door.',
-    en: 'Hello! I am **Willem**, your virtual B2B sales advisor. Tell me in your own words what you are looking for or speak it!<br/>For example: *"I am looking for 1500 beechwood blanks with dimensions of 25x75x1200 mm in class A, kiln dried."* or describe your requirements step by step.',
-    de: 'Hallo! Ich bin **Willem**, Ihr virtueller B2B-Verkaufsberater. Schreiben Sie mir in eigenen Worten, was Sie suchen, oder sprechen Sie es ein!<br/>Zum Beispiel: *"Ich suche 1500 Buchenholz-Blanks mit den Maßen 25x75x1200 mm in Klasse A, kammergetrocknet."* oder teilen Sie mir Ihre Wünsche Schritt für Schritt mit.',
-    ro: 'Bună! Sunt **Willem**, consilierul dvs. virtual de vânzări B2B. Scrieți-mi în propriile cuvinte ceea ce căutați sau rostiți cerințele!<br/>De exemplu: *"Caut 1500 piese brute din fag cu dimensiunile de 25x75x1200 mm, clasa A, uscate în cameră."* sau descrieți specificațiile dorite pas cu pas.'
+    nl: 'Hallo! Ik ben **PAL**, uw virtuele B2B salesadviseur. Typ hieronder in uw eigen woorden wat u zoekt of spreek in!<br/>Bijvoorbeeld: *"Ik ben op zoek naar 1500 beukenhouten blanks met afmetingen van 25x75x1200 mm in klasse A, kamerdroog."* of geef uw wensen stap voor stap door.',
+    en: 'Hello! I am **PAL**, your virtual B2B sales advisor. Tell me in your own words what you are looking for or speak it!<br/>For example: *"I am looking for 1500 beechwood blanks with dimensions of 25x75x1200 mm in class A, kiln dried."* or describe your requirements step by step.',
+    de: 'Hallo! Ich bin **PAL**, Ihr virtueller B2B-Verkaufsberater. Schreiben Sie mir in eigenen Worten, was Sie suchen, oder sprechen Sie es ein!<br/>Zum Beispiel: *"Ich suche 1500 Buchenholz-Blanks mit den Maßen 25x75x1200 mm in Klasse A, kammergetrocknet."* oder teilen Sie mir Ihre Wünsche Schritt für Schritt mit.',
+    ro: 'Bună! Sunt **PAL**, consilierul dvs. virtual de vânzări B2B. Scrieți-mi în propriile cuvinte ceea ce căutați sau rostiți cerințele!<br/>De exemplu: *"Caut 1500 piese brute din fag cu dimensiunile de 25x75x1200 mm, clasa A, uscate în cameră."* sau descrieți specificațiile dorite pas cu pas.'
   },
   understandConfirmation: {
     nl: 'Ik heb de volgende specificaties gedetecteerd en bijgewerkt:',
@@ -658,7 +658,7 @@ export default function OpenChatConfigurator() {
   const handleV4PasswordSubmit = (e) => {
     e.preventDefault();
     const cleanPw = v4Password.trim().toLowerCase();
-    if (cleanPw === 'willem2026' || cleanPw === 'willemai2026' || cleanPw === 'palromv4') {
+    if (['willem2026', 'willemai2026', 'palromv4', 'pal2026', 'palai2026'].includes(cleanPw)) {
       sessionStorage.setItem('palrom_configurator_v4_auth', 'true');
       setIsV4Authenticated(true);
       setV4AuthError(false);
@@ -1364,7 +1364,7 @@ export default function OpenChatConfigurator() {
         setHistory(prev => [...prev, { sender: 'bot', text: replyText }]);
         if (!isMuted) speakText(replyText);
       } catch (err) {
-        console.error("Willem AI error: ", err);
+        console.error("PAL AI error: ", err);
         setHistory(prev => [...prev, { 
           sender: 'bot', 
           text: lang === 'nl' ? 'Er is een fout opgetreden bij het verwerken. Probeer het opnieuw.' : 'An error occurred while processing. Please try again.' 
@@ -1580,7 +1580,7 @@ export default function OpenChatConfigurator() {
           setHistory(prev => [...prev, { sender: 'bot', text: replyText }]);
           if (!isMuted) speakText(replyText);
         } catch (err) {
-          console.error("Willem AI error (chip click): ", err);
+          console.error("PAL AI error (chip click): ", err);
           setHistory(prev => [...prev, { 
             sender: 'bot', 
             text: lang === 'nl' ? 'Er is een fout opgetreden bij het verwerken. Probeer het opnieuw.' : 'An error occurred while processing. Please try again.' 
@@ -2308,7 +2308,7 @@ export default function OpenChatConfigurator() {
       <section className="product-detail-hero" style={{ padding: '8.5rem 0 3.5rem' }}>
         <div className="container">
           <div className="breadcrumb">
-            <Link href="/">{lang === 'nl' ? 'Home' : 'Home'}</Link> / <Link href="/configurator">{getTranslation('heroBreadcrumb')}</Link> / <span>Willem AI</span>
+            <Link href="/">{lang === 'nl' ? 'Home' : 'Home'}</Link> / <Link href="/configurator">{getTranslation('heroBreadcrumb')}</Link> / <span>PAL AI</span>
           </div>
           <h1 style={{ marginTop: '1.5rem' }}>{getTranslation('heroTitle')}</h1>
           <p>{getTranslation('heroSubtitle')}</p>
@@ -2336,7 +2336,7 @@ export default function OpenChatConfigurator() {
                   </div>
                   <div className="chat-header-info">
                     <h3 style={{ margin: 0 }}>
-                      Willem (AI)
+                      PAL (AI)
                     </h3>
                     {aiEngine === 'gemini' && (
                       <span className="badge-ai-status gemini" title="Connected to Google Gemini AI Engine" style={{ marginLeft: 0 }}>
@@ -2717,7 +2717,7 @@ export default function OpenChatConfigurator() {
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '4rem', color: '#9ca3af', fontSize: '0.8rem', opacity: 0.8 }}>
-            Configurator v4.0.0 (Willem AI)
+            Configurator v4.0.0 (PAL AI)
           </div>
 
         </div>

@@ -197,7 +197,7 @@ const t = {
   showPasswordAria: { nl: 'Wachtwoord tonen/verbergen', en: 'Show/hide password', de: 'Passwort anzeigen/ausblenden', ro: 'Afișează/ascunde parola' },
   heroBreadcrumb: { nl: 'Palrom Offerte Configurator', en: 'Palrom Quote Configurator', de: 'Palrom Angebotskonfigurator', ro: 'Configurator de Oferte Palrom' },
   heroTitle: { nl: 'Palrom Chatbot Assistent', en: 'Palrom Chatbot Assistant', de: 'Palrom Chatbot-Assistent', ro: 'Asistent Chatbot Palrom' },
-  heroSubtitle: { nl: 'Configureer stapsgewijs uw aanvraag in een persoonlijk gesprek met Willem.', en: 'Configure your request step-by-step in a personal conversation with Willem.', de: 'Konfigurieren Sie Ihre Anfrage Schritt für Schritt in einem persönlichen Gespräch mit Willem.', ro: 'Configurați cererea dvs. pas cu pas într-o conversație personală cu Willem.' },
+  heroSubtitle: { nl: 'Configureer stapsgewijs uw aanvraag in een persoonlijk gesprek met PAL.', en: 'Configure your request step-by-step in a personal conversation with PAL.', de: 'Konfigurieren Sie Ihre Anfrage Schritt für Schritt in einem persönlichen Gespräch mit PAL.', ro: 'Configurați cererea dvs. pas cu pas într-o conversație personală cu PAL.' },
   categoryLabel: { nl: 'Productcategorie', en: 'Product Category', de: 'Produktkategorie', ro: 'Categorie Produs' },
   quantityLabel: { nl: 'Oplage (stuks)', en: 'Quantity (pieces)', de: 'Auflage (Stück)', ro: 'Cantitate (bucăți)' },
   pieces: { nl: 'stuks', en: 'pieces', de: 'Stück', ro: 'bucăți' },
@@ -889,10 +889,10 @@ export default function ChatbotConfigurator() {
     switch (stepObj.step) {
       case 'category':
         return lang === 'nl' 
-          ? `Hallo B2B partner! Ik ben **Willem**, uw virtuele PALROM adviseur. Samen gaan we stapsgewijs uw houtproduct configureren. Welke productcategorie wilt u samenstellen?`
-          : (lang === 'ro' ? `Bună ziua! Sunt **Willem**, consilierul virtual PALROM. Împreună vom configura pas cu pas produsul dvs. Ce categorie de produse doriți să asamblați?`
-          : (lang === 'de' ? `Hallo B2B-Partner! Ich bin **Willem**, Ihr virtueller PALROM-Berater. Gemeinsam konfigurieren wir Schritt für Schritt Ihr Holzprodukt. Welche Produktkategorie möchten Sie zusammenstellen?`
-          : `Hello B2B partner! I am **Willem**, your virtual PALROM advisor. Together we will configure your wood product step-by-step. Which product category would you like to assemble?`));
+          ? `Hallo B2B partner! Ik ben **PAL**, uw virtuele PALROM adviseur. Samen gaan we stapsgewijs uw houtproduct configureren. Welke productcategorie wilt u samenstellen?`
+          : (lang === 'ro' ? `Bună ziua! Sunt **PAL**, consilierul virtual PALROM. Împreună vom configura pas cu pas produsul dvs. Ce categorie de produse doriți să asamblați?`
+          : (lang === 'de' ? `Hallo B2B-Partner! Ich bin **PAL**, Ihr virtueller PALROM-Berater. Gemeinsam konfigurieren wir Schritt für Schritt Ihr Holzprodukt. Welche Produktkategorie möchten Sie zusammenstellen?`
+          : `Hello B2B partner! I am **PAL**, your virtual PALROM advisor. Together we will configure your wood product step-by-step. Which product category would you like to assemble?`));
       
       case 'subcategory':
         return lang === 'nl'
@@ -1409,7 +1409,7 @@ export default function ChatbotConfigurator() {
                   <i className="fa-solid fa-robot"></i>
                 </div>
                 <div>
-                  <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#ffffff' }}>Willem</h3>
+                  <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#ffffff' }}>PAL</h3>
                   <span style={{ fontSize: '0.75rem', color: '#cbd5e1', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     <span style={{ width: '6px', height: '6px', background: '#10b981', borderRadius: '50%' }}></span>
                     Online B2B Adviseur

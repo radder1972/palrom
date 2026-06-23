@@ -25,11 +25,11 @@ const t = {
   v2Badge: { nl: 'Nieuw', en: 'New', de: 'Neu', ro: 'Nou' },
   
   v3Title: { nl: 'V3: Chatbot Assistent', en: 'V3: Chatbot Assistant', de: 'V3: Chatbot-Assistent', ro: 'V3: Asistent Chatbot' },
-  v3Desc: { nl: 'Configureer uw aanvraag in gesprek met onze virtuele adviseur Willem. Stapsgewijze begeleiding met interactieve invoer en live chatpreviews.', en: 'Configure your request in conversation with our virtual advisor Willem. Step-by-step guidance with interactive input and live chat previews.', de: 'Konfigurieren Sie Ihre Anfrage im Gespräch mit unserem virtuellen Berater Willem. Schritt-für-Schritt-Anleitung mit interaktiver Eingabe und Live-Chat-Vorschauen.', ro: 'Configurați-vă solicitarea în conversație cu consilierul nostru de vânzări virtual Willem. Ghidare pas cu pas cu introducere interactivă și previzualizări live pe chat.' },
+  v3Desc: { nl: 'Configureer uw aanvraag in gesprek met onze virtuele adviseur PAL. Stapsgewijze begeleiding met interactieve invoer en live chatpreviews.', en: 'Configure your request in conversation with our virtual advisor PAL. Step-by-step guidance with interactive input and live chat previews.', de: 'Konfigurieren Sie Ihre Anfrage im Gespräch mit unserem virtuellen Berater PAL. Schritt-für-Schritt-Anleitung mit interaktiver Eingabe und Live-Chat-Vorschauen.', ro: 'Configurați-vă solicitarea în conversație cu consilierul nostru de vânzări virtual PAL. Ghidare pas cu pas cu introducere interactivă și previzualizări live pe chat.' },
   v3Badge: { nl: 'Chatbot', en: 'Chatbot', de: 'Chatbot', ro: 'Chatbot' },
   
   v4Title: { nl: 'V4: Open Chatbot (AI)', en: 'V4: Open Chatbot (AI)', de: 'V4: Offener Chatbot (KI)', ro: 'V4: Chatbot deschis (AI)' },
-  v4Desc: { nl: 'Configureer uw aanvraag door vrijuit te chatten met Willem. Typ uw wensen in eigen woorden en de slimme assistent stelt uw offerte samen.', en: 'Configure your request by chatting freely with Willem. Type your wishes in your own words and our smart assistant will compile your quote.', de: 'Konfigurieren Sie Ihre Anfrage, indem Sie sich frei mit Willem unterhalten. Schreiben Sie Ihre Wünsche in eigenen Worten und der Assistent erstellt Ihr Angebot.', ro: 'Configurați-vă solicitarea discutând liber cu Willem. Scrieți cerințele dvs. în propriile cuvinte și asistentul inteligent vă va crea oferta.' },
+  v4Desc: { nl: 'Configureer uw aanvraag door vrijuit te chatten met PAL. Typ uw wensen in eigen woorden en de slimme assistent stelt uw offerte samen.', en: 'Configure your request by chatting freely with PAL. Type your wishes in your own words and our smart assistant will compile your quote.', de: 'Konfigurieren Sie Ihre Anfrage, indem Sie sich frei mit PAL unterhalten. Schreiben Sie Ihre Wünsche in eigenen Worten und der Assistent erstellt Ihr Angebot.', ro: 'Configurați-vă solicitarea discutând liber cu PAL. Scrieți cerințele dvs. în propriile cuvinte și asistentul inteligent vă va crea oferta.' },
   v4Badge: { nl: 'Open Chat', en: 'Open Chat', de: 'Offener Chat', ro: 'Chat deschis' },
   
   testButton: { nl: 'Configurator Starten', en: 'Start Configurator', de: 'Konfigurator starten', ro: 'Pornește configuratorul' },
@@ -54,7 +54,8 @@ export default function ConfiguratorSelector() {
 
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
-    if (password === 'palrom2026') {
+    const validPasscodes = ['palrom2026', 'pal2026', 'palai2026'];
+    if (validPasscodes.includes(password)) {
       sessionStorage.setItem('palrom_configurator_auth', 'true');
       setIsAuthenticated(true);
       setAuthError(false);

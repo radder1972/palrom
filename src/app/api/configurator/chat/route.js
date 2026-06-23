@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 const SYSTEM_INSTRUCTION = `
-You are Willem, a virtual B2B sales advisor for PALROM Products. Your goal is to help B2B partners configure custom beechwood products.
+You are PAL, a virtual B2B sales advisor for PALROM Products. Your goal is to help B2B partners configure custom beechwood products.
 Be professional, helpful, and concise.
 
 PALROM Products specifications guidelines:
@@ -106,7 +106,7 @@ export async function POST(request) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      console.warn("Willem AI API Key missing: falling back to client-side RegEx NLP.");
+      console.warn("PAL AI API Key missing: falling back to client-side RegEx NLP.");
       return NextResponse.json({ fallback: true });
     }
 
@@ -162,7 +162,7 @@ export async function POST(request) {
     return NextResponse.json(result);
 
   } catch (error) {
-    console.error("Willem AI LLM parser API error:", error);
+    console.error("PAL AI LLM parser API error:", error);
     return NextResponse.json({ fallback: true });
   }
 }
