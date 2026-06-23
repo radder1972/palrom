@@ -8,6 +8,7 @@ import CartSidebar from "@/components/CartSidebar";
 import FloatingWidget from "@/components/FloatingWidget";
 import CookieConsent from "@/components/CookieConsent";
 import ScrollObserver from "@/components/ScrollObserver";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -52,6 +53,9 @@ export default function RootLayout({ children }) {
           <CookieConsent />
           <Footer />
         </InquiryProvider>
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        )}
       </body>
     </html>
   );

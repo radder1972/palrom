@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useInquiry } from '@/components/InquiryContext';
 import CustomSelect from '@/components/CustomSelect';
+import { sendGAEvent } from "@next/third-parties/google";
 
 function ApplyFormContent() {
   const { lang } = useInquiry();
@@ -294,6 +295,11 @@ function ApplyFormContent() {
         if (!response.ok) {
           throw new Error('Application submission failed');
         }
+
+        sendGAEvent({
+          event: 'job_application_submission',
+          value: position,
+        });
 
         const jobNames = {
           planing_operator: {

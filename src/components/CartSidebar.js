@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useInquiry } from './InquiryContext';
+import { sendGAEvent } from "@next/third-parties/google";
 
 function formatEuro(val, decimals = 2) {
   return new Intl.NumberFormat('nl-NL', {
@@ -389,6 +390,11 @@ export default function CartSidebar() {
       if (!response.ok) {
         throw new Error('Inquiry submission failed');
       }
+
+      sendGAEvent({
+        event: 'quote_inquiry_submission',
+        value: cartItems.length,
+      });
 
       // Format items for success alert
       const itemsList = cartItems

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useInquiry } from './InquiryContext';
 import CustomSelect from './CustomSelect';
+import { sendGAEvent } from "@next/third-parties/google";
 
 const teamMemberData = {
   gabriela: {
@@ -570,6 +571,11 @@ Cu stimă,`
       if (!response.ok) {
         throw new Error('Contact submission failed');
       }
+
+      sendGAEvent({
+        event: 'contact_submission',
+        value: productType,
+      });
 
       let feedbackMsg = '';
       const feedbackMsgs = {
