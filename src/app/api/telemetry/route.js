@@ -504,6 +504,108 @@ function aggregateStats(pageViews, configuratorEvents, chatbotConversations, quo
     quotesByStatus[status] = (quotesByStatus[status] || 0) + 1;
   });
 
+  // 5. User Navigation Path Analysis
+  const sessions = {};
+  pageViews.forEach(pv => {
+    const sId = pv.session_id;
+    if (!sId) return;
+    if (!sessions[sId]) {
+      sessions[sId] = [];
+    }
+    sessions[sId].push({
+      path: pv.page_path ? pv.page_path.split('?')[0] : '/',
+      createdAt: pv.created_at || ''
+    });
+  });
+
+  const stages = [
+    { step: 1, nodes: {}, links: [] },
+    { step: 2, nodes: {}, links: [] },
+    { step: 3, nodes: {}, links: [] },
+    { step: 4, nodes: {}, links: [] }
+  ];
+  const topJourneysMap = {};
+
+  Object.values(sessions).forEach(views => {
+    views.sort((a, b) => {
+      if (!a.createdAt) return 1;
+      if (!b.createdAt) return -1;
+      return new Date(a.createdAt) - new Date(b.createdAt);
+    });
+
+    const seq = [];
+    views.forEach(v => {
+      if (seq.length === 0 || seq[seq.length - 1] !== v.path) {
+        seq.push(v.path);
+      }
+    });
+
+    if (seq.length === 0) return;
+
+    const journeyKey = seq.slice(0, 4).join(' → ');
+    topJourneysMap[journeyKey] = (topJourneysMap[journeyKey] || 0) + 1;
+
+    const maxSteps = Math.min(seq.length, 4);
+
+    for (let i = 0; i < maxSteps; i++) {
+      const page = seq[i];
+      const stage = stages[i];
+      
+      stage.nodes[page] = (stage.nodes[page] || 0) + 1;
+
+      if (i > 0) {
+        const prevPage = seq[i - 1];
+        const prevStage = stages[i - 1];
+        
+        let link = prevStage.links.find(l => l.source === prevPage && l.target === page);
+        if (link) {
+          link.value++;
+        } else {
+          prevStage.links.push({ source: prevPage, target: page, value: 1 });
+        }
+      }
+    }
+
+    if (maxSteps < 4) {
+      const lastPage = seq[maxSteps - 1];
+      const exitStage = stages[maxSteps];
+      exitStage.nodes['EXIT'] = (exitStage.nodes['EXIT'] || 0) + 1;
+      
+      let link = stages[maxSteps - 1].links.find(l => l.source === lastPage && l.target === 'EXIT');
+      if (link) {
+        link.value++;
+      } else {
+        stages[maxSteps - 1].links.push({ source: lastPage, target: 'EXIT', value: 1 });
+      }
+    }
+  });
+
+  const formattedStages = stages.map((stage, idx) => {
+    const nodesArray = Object.entries(stage.nodes).map(([name, count]) => ({
+      name,
+      count
+    })).sort((a, b) => b.count - a.count);
+
+    return {
+      step: stage.step,
+      nodes: nodesArray,
+      links: stage.links.sort((a, b) => b.value - a.value)
+    };
+  });
+
+  const topJourneys = Object.entries(topJourneysMap)
+    .map(([pathStr, count]) => ({
+      path: pathStr.split(' → '),
+      count
+    }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
+
+  const userFlow = {
+    stages: formattedStages,
+    topJourneys
+  };
+
   return {
     traffic: {
       totalViews,
@@ -542,6 +644,7 @@ function aggregateStats(pageViews, configuratorEvents, chatbotConversations, quo
       totalQuotes,
       totalValue: Math.round(totalQuotesValue),
       byStatus: quotesByStatus
-    }
+    },
+    userFlow
   };
 }

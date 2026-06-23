@@ -1970,6 +1970,34 @@ export default function AdminPortal() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Visitor Path Analysis Visualizer */}
+                  <div style={{
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #edf2f7',
+                    borderRadius: '16px',
+                    padding: '2rem',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.03)',
+                    marginTop: '1.5rem',
+                    fontFamily: 'Inter, sans-serif'
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+                      <div>
+                        <h4 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: 'var(--color-forest-dark)' }}>
+                          {consoleLang === 'ro' ? 'Analiză Cale Vizitatori (Sankey)' : consoleLang === 'nl' ? 'Bezoekers Padanalyse (User Flow)' : 'Visitor Path Analysis (User Flow)'}
+                        </h4>
+                        <p style={{ margin: '0.25rem 0 0', fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>
+                          {consoleLang === 'ro' 
+                            ? 'Urmăriți modul în care vizitatorii navighează între pagini în primele 4 interacțiuni.' 
+                            : consoleLang === 'nl' 
+                            ? 'Bekijk hoe bezoekers door de website navigeren gedurende de eerste 4 stappen van hun sessie.' 
+                            : 'Visualize how visitors navigate page-to-page through the first 4 interactions of their session.'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <UserFlowDiagram userFlow={stats.userFlow} consoleLang={consoleLang} />
+                  </div>
                 </>
               )}
             </div>
@@ -2565,5 +2593,500 @@ export default function AdminPortal() {
         </div>
       )}
     </>
+  );
+}
+
+function UserFlowDiagram({ userFlow, consoleLang }) {
+  const [hoveredNode, setHoveredNode] = useState(null); // 'colIndex_nodeName'
+  const [hoveredLink, setHoveredLink] = useState(null); // 'colIndex_source_target'
+  const [tooltip, setTooltip] = useState(null);
+
+  if (!userFlow || !userFlow.stages) return null;
+
+  const { stages, topJourneys } = userFlow;
+
+  // Render variables
+  const width = 1000;
+  const height = 400;
+  const colWidth = 140;
+  const nodeHeight = 36;
+  const startY = 30;
+  const endY = 370;
+  const availableHeight = endY - startY;
+
+  // Column X coordinates (centers)
+  const colXs = [110, 370, 630, 890];
+
+  // Map nodes to their Y positions
+  const nodePositions = {}; // 'colIndex_nodeName' -> { x, y, width, height }
+  const nodeOutgoingTotal = {};
+  const nodeIncomingTotal = {};
+
+  // Compute incoming and outgoing totals for scaling and offset spacing
+  stages.forEach((stage, colIndex) => {
+    if (colIndex < 3) {
+      (stage.links || []).forEach(link => {
+        const sourceKey = `${colIndex}_${link.source}`;
+        const targetKey = `${colIndex + 1}_${link.target}`;
+        nodeOutgoingTotal[sourceKey] = (nodeOutgoingTotal[sourceKey] || 0) + link.value;
+        nodeIncomingTotal[targetKey] = (nodeIncomingTotal[targetKey] || 0) + link.value;
+      });
+    }
+  });
+
+  // Calculate layout of nodes
+  stages.forEach((stage, colIndex) => {
+    const nodes = stage.nodes || [];
+    const N = nodes.length;
+    if (N === 0) return;
+
+    const x = colXs[colIndex] - colWidth / 2;
+
+    nodes.forEach((node, nodeIndex) => {
+      let y;
+      if (N === 1) {
+        y = startY + availableHeight / 2 - nodeHeight / 2;
+      } else {
+        const spacing = (availableHeight - N * nodeHeight) / (N - 1);
+        y = startY + nodeIndex * (nodeHeight + spacing);
+      }
+
+      nodePositions[`${colIndex}_${node.name}`] = {
+        x,
+        y,
+        width: colWidth,
+        height: nodeHeight,
+        name: node.name,
+        count: node.count
+      };
+    });
+  });
+
+  // Scale flow path thickness
+  const allLinks = stages.flatMap(s => s.links || []);
+  const maxLinkValue = allLinks.length > 0 ? Math.max(...allLinks.map(l => l.value), 1) : 1;
+  const scale = Math.min(18 / maxLinkValue, 3); // Max path thickness 18px
+
+  // Tracking offsets for stacked Sankey links
+  const outgoingOffsets = {};
+  const incomingOffsets = {};
+
+  // Generate Bezier curves
+  const linksToRender = [];
+  stages.forEach((stage, colIndex) => {
+    if (colIndex >= 3) return;
+
+    (stage.links || []).forEach(link => {
+      const sourceKey = `${colIndex}_${link.source}`;
+      const targetKey = `${colIndex + 1}_${link.target}`;
+
+      const sourcePos = nodePositions[sourceKey];
+      const targetPos = nodePositions[targetKey];
+
+      if (sourcePos && targetPos) {
+        const strokeWidth = Math.max(1.5, link.value * scale);
+
+        // Initialize stack offsets centered vertically on node edge
+        if (outgoingOffsets[sourceKey] === undefined) {
+          const totalStackHeight = (nodeOutgoingTotal[sourceKey] || 0) * scale;
+          outgoingOffsets[sourceKey] = Math.max(2, (sourcePos.height - totalStackHeight) / 2);
+        }
+        if (incomingOffsets[targetKey] === undefined) {
+          const totalStackHeight = (nodeIncomingTotal[targetKey] || 0) * scale;
+          incomingOffsets[targetKey] = Math.max(2, (targetPos.height - totalStackHeight) / 2);
+        }
+
+        const x1 = sourcePos.x + sourcePos.width;
+        const y1 = sourcePos.y + outgoingOffsets[sourceKey] + strokeWidth / 2;
+        const x2 = targetPos.x;
+        const y2 = targetPos.y + incomingOffsets[targetKey] + strokeWidth / 2;
+
+        // Advance offsets
+        outgoingOffsets[sourceKey] += strokeWidth;
+        incomingOffsets[targetKey] += strokeWidth;
+
+        // Check highlights
+        let isHighlighted = false;
+        let isDimmed = false;
+
+        const isNodeHovered = hoveredNode !== null;
+        const isLinkHovered = hoveredLink !== null;
+
+        const currentLinkKey = `${colIndex}_${link.source}_${link.target}`;
+
+        if (isLinkHovered) {
+          isHighlighted = hoveredLink === currentLinkKey;
+          isDimmed = !isHighlighted;
+        } else if (isNodeHovered) {
+          const [hoveredCol, hoveredName] = hoveredNode.split('_');
+          const hColIdx = parseInt(hoveredCol, 10);
+          
+          const matchesSource = hColIdx === colIndex && hoveredName === link.source;
+          const matchesTarget = hColIdx === colIndex + 1 && hoveredName === link.target;
+          
+          isHighlighted = matchesSource || matchesTarget;
+          isDimmed = !isHighlighted;
+        }
+
+        linksToRender.push({
+          key: currentLinkKey,
+          x1,
+          y1,
+          x2,
+          y2,
+          strokeWidth,
+          value: link.value,
+          source: link.source,
+          target: link.target,
+          colIndex,
+          isHighlighted,
+          isDimmed
+        });
+      }
+    });
+  });
+
+  const handleMouseMove = (e, content) => {
+    const svgEl = e.currentTarget.ownerSVGElement || e.currentTarget;
+    const rect = svgEl.getBoundingClientRect();
+    setTooltip({
+      x: e.clientX - rect.left + 15,
+      y: e.clientY - rect.top - 15,
+      content
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setTooltip(null);
+    setHoveredNode(null);
+    setHoveredLink(null);
+  };
+
+  const stepTitles = {
+    nl: ['Stap 1: Entree', 'Stap 2: Vervolg', 'Stap 3: Vervolg', 'Stap 4: Vervolg'],
+    en: ['Step 1: Entry', 'Step 2: Flow', 'Step 3: Flow', 'Step 4: Flow'],
+    ro: ['Pasul 1: Intrare', 'Pasul 2: Continuare', 'Pasul 3: Continuare', 'Pasul 4: Continuare']
+  }[consoleLang] || ['Step 1: Entry', 'Step 2: Flow', 'Step 3: Flow', 'Step 4: Flow'];
+
+  return (
+    <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      
+      {/* Column Headers */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 20px', textAlign: 'center' }}>
+        {stepTitles.map((title, idx) => (
+          <div key={idx} style={{ 
+            width: `${colWidth}px`, 
+            fontWeight: 800, 
+            fontSize: '0.8rem', 
+            color: 'var(--color-primary-dark)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px'
+          }}>
+            {title}
+          </div>
+        ))}
+      </div>
+
+      {/* SVG Canvas */}
+      <div style={{ backgroundColor: '#fafbfc', border: '1px solid #f1f5f9', borderRadius: '12px', overflow: 'hidden' }}>
+        <svg 
+          viewBox={`0 0 ${width} ${height}`} 
+          width="100%" 
+          height="100%" 
+          style={{ display: 'block', overflow: 'visible' }}
+        >
+          {/* DEFINITIONS FOR GRADIENTS AND FILTERS */}
+          <defs>
+            <linearGradient id="flow-gradient-active" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.8" />
+              <stop offset="50%" stopColor="var(--color-primary-dark)" stopOpacity="0.85" />
+              <stop offset="100%" stopColor="var(--color-forest-dark)" stopOpacity="0.8" />
+            </linearGradient>
+            <linearGradient id="flow-gradient-normal" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#cbd5e1" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="#94a3b8" stopOpacity="0.35" />
+            </linearGradient>
+            <filter id="glow" x="-10%" y="-10%" width="120%" height="120%">
+              <feDropShadow dx="0" dy="0" stdDeviation="3" floodColor="var(--color-primary)" floodOpacity="0.4" />
+            </filter>
+          </defs>
+
+          {/* 1. DRAW LINKS */}
+          <g>
+            {linksToRender.map(link => {
+              // Cubic bezier control points for beautiful S-curves
+              const cp1x = link.x1 + (link.x2 - link.x1) * 0.45;
+              const cp2x = link.x1 + (link.x2 - link.x1) * 0.55;
+              const d = `M ${link.x1} ${link.y1} C ${cp1x} ${link.y1}, ${cp2x} ${link.y2}, ${link.x2} ${link.y2}`;
+
+              const isExit = link.target === 'EXIT';
+              const defaultColor = isExit ? '#fca5a5' : '#cbd5e1';
+              const strokeColor = link.isHighlighted 
+                ? 'url(#flow-gradient-active)' 
+                : defaultColor;
+
+              const opacity = link.isHighlighted 
+                ? 0.9 
+                : link.isDimmed 
+                ? 0.08 
+                : isExit 
+                ? 0.28
+                : 0.38;
+
+              const tooltipText = consoleLang === 'ro' 
+                ? `${link.value} sesiuni: ${link.source} → ${link.target}` 
+                : consoleLang === 'nl'
+                ? `${link.value} sessies: ${link.source} → ${link.target}`
+                : `${link.value} sessions: ${link.source} → ${link.target}`;
+
+              return (
+                <path
+                  key={link.key}
+                  d={d}
+                  fill="none"
+                  stroke={strokeColor}
+                  strokeWidth={link.strokeWidth}
+                  strokeOpacity={opacity}
+                  style={{ 
+                    cursor: 'pointer',
+                    transition: 'stroke-opacity 0.2s, stroke 0.2s',
+                    filter: link.isHighlighted ? 'url(#glow)' : 'none'
+                  }}
+                  onMouseEnter={() => setHoveredLink(link.key)}
+                  onMouseLeave={handleMouseLeave}
+                  onMouseMove={(e) => handleMouseMove(e, tooltipText)}
+                />
+              );
+            })}
+          </g>
+
+          {/* 2. DRAW FLOW ANIMATIONS (GLOWING BUBBLES ALONG HIGHLIGHTED PATHS) */}
+          <g style={{ pointerEvents: 'none' }}>
+            {linksToRender.map(link => {
+              if (!link.isHighlighted) return null;
+              
+              const cp1x = link.x1 + (link.x2 - link.x1) * 0.45;
+              const cp2x = link.x1 + (link.x2 - link.x1) * 0.55;
+              const d = `M ${link.x1} ${link.y1} C ${cp1x} ${link.y1}, ${cp2x} ${link.y2}, ${link.x2} ${link.y2}`;
+
+              return (
+                <path
+                  key={`anim_${link.key}`}
+                  d={d}
+                  fill="none"
+                  stroke="#ffffff"
+                  strokeWidth={Math.min(3, link.strokeWidth * 0.5)}
+                  strokeOpacity="0.8"
+                  strokeDasharray="10 30"
+                  style={{
+                    animation: 'dashflow 1.5s linear infinite'
+                  }}
+                />
+              );
+            })}
+          </g>
+
+          {/* 3. DRAW NODES */}
+          <g>
+            {Object.entries(nodePositions).map(([key, pos]) => {
+              const colIndex = parseInt(key.split('_')[0], 10);
+              const isExitNode = pos.name === 'EXIT';
+              
+              const isNodeHovered = hoveredNode !== null;
+              const isSelfHovered = hoveredNode === key;
+
+              let isTargetedByHover = false;
+              if (isNodeHovered && !isSelfHovered) {
+                // Check if any link connects hoveredNode to this node
+                const [hoveredCol, hoveredName] = hoveredNode.split('_');
+                const hColIdx = parseInt(hoveredCol, 10);
+                
+                const stageIndex = Math.min(colIndex, hColIdx);
+                if (Math.abs(colIndex - hColIdx) === 1) {
+                  const matchingLink = stages[stageIndex]?.links?.some(l => 
+                    (hColIdx < colIndex && l.source === hoveredName && l.target === pos.name) ||
+                    (hColIdx > colIndex && l.source === pos.name && l.target === hoveredName)
+                  );
+                  isTargetedByHover = !!matchingLink;
+                }
+              }
+
+              const opacity = (isNodeHovered && !isSelfHovered && !isTargetedByHover) ? 0.35 : 1;
+
+              // Node styling
+              const bgColor = isExitNode 
+                ? '#fff5f5' 
+                : isSelfHovered 
+                ? 'var(--color-primary-light)' 
+                : '#f0fdf4';
+
+              const strokeColor = isExitNode 
+                ? '#f87171' 
+                : isSelfHovered || isTargetedByHover
+                ? 'var(--color-forest-dark)' 
+                : 'var(--color-primary)';
+
+              const strokeWidth = isSelfHovered ? 2.5 : isTargetedByHover ? 2 : 1;
+              const textColor = isExitNode ? '#991b1b' : 'var(--color-forest-dark)';
+              
+              const totalColViews = stages[colIndex].nodes.reduce((acc, curr) => acc + curr.count, 0) || 1;
+              const percentage = Math.round((pos.count / totalColViews) * 100);
+
+              const tooltipText = isExitNode
+                ? consoleLang === 'ro' 
+                  ? `${pos.count} vizitatori au părăsit site-ul în acest pas (${percentage}%)`
+                  : consoleLang === 'nl'
+                  ? `${pos.count} bezoekers verlieten de site bij deze stap (${percentage}%)`
+                  : `${pos.count} visitors exited the site at this step (${percentage}%)`
+                : consoleLang === 'ro'
+                ? `${pos.count} vizualizări pe ${pos.name} (${percentage}% din acest pas)`
+                : consoleLang === 'nl'
+                ? `${pos.count} weergaven op ${pos.name} (${percentage}% van deze stap)`
+                : `${pos.count} views on ${pos.name} (${percentage}% of this step)`;
+
+              // Format name to display (shorten long paths)
+              let displayName = pos.name;
+              if (displayName.length > 15) {
+                displayName = displayName.substring(0, 14) + '...';
+              }
+
+              return (
+                <g 
+                  key={key}
+                  transform={`translate(${pos.x}, ${pos.y})`}
+                  style={{ cursor: 'pointer', opacity, transition: 'opacity 0.2s' }}
+                  onMouseEnter={() => setHoveredNode(key)}
+                  onMouseLeave={handleMouseLeave}
+                  onMouseMove={(e) => handleMouseMove(e, tooltipText)}
+                >
+                  {/* Background rect */}
+                  <rect
+                    width={pos.width}
+                    height={pos.height}
+                    rx={6}
+                    ry={6}
+                    fill={bgColor}
+                    stroke={strokeColor}
+                    strokeWidth={strokeWidth}
+                    style={{ transition: 'fill 0.2s, stroke 0.2s' }}
+                  />
+
+                  {/* Node label text */}
+                  <text
+                    x={8}
+                    y={15}
+                    fill={textColor}
+                    style={{ fontSize: '0.72rem', fontWeight: 700, fontFamily: 'monospace' }}
+                  >
+                    {displayName}
+                  </text>
+
+                  {/* Node subtext (views / count) */}
+                  <text
+                    x={8}
+                    y={28}
+                    fill={isExitNode ? '#dc2626' : 'var(--color-text-muted)'}
+                    style={{ fontSize: '0.66rem', fontWeight: 600 }}
+                  >
+                    {pos.count} {consoleLang === 'nl' ? 'sessies' : 'sessions'} ({percentage}%)
+                  </text>
+                </g>
+              );
+            })}
+          </g>
+        </svg>
+
+        {/* Global Styles for Flow Animation */}
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes dashflow {
+            to {
+              stroke-dashoffset: -40;
+            }
+          }
+        `}} />
+      </div>
+
+      {/* Floating Interactive Tooltip */}
+      {tooltip && (
+        <div style={{
+          position: 'absolute',
+          left: `${tooltip.x}px`,
+          top: `${tooltip.y}px`,
+          backgroundColor: 'rgba(15, 23, 42, 0.95)',
+          color: '#ffffff',
+          padding: '0.5rem 0.75rem',
+          borderRadius: '6px',
+          fontSize: '0.78rem',
+          fontWeight: 600,
+          zIndex: 1000,
+          pointerEvents: 'none',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          whiteSpace: 'nowrap',
+          border: '1px solid rgba(255,255,255,0.15)',
+          backdropFilter: 'blur(4px)'
+        }}>
+          {tooltip.content}
+        </div>
+      )}
+
+      {/* Top Journeys List */}
+      <div style={{ borderTop: '1px solid #edf2f7', paddingTop: '1.5rem' }}>
+        <h5 style={{ margin: '0 0 1rem', fontSize: '0.9rem', fontWeight: 700, color: 'var(--color-forest-dark)' }}>
+          {consoleLang === 'ro' ? 'Top Căi de Navigare (Sesiuni)' : consoleLang === 'nl' ? 'Meest Voorkomende Bezoekerspaden' : 'Top Navigational Paths (Sessions)'}
+        </h5>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          {(topJourneys || []).map((journey, idx) => (
+            <div key={idx} style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
+              padding: '0.65rem 1rem', 
+              backgroundColor: '#f8fafc', 
+              borderRadius: '8px',
+              fontSize: '0.8rem',
+              border: '1px solid #edf2f7'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <span style={{ 
+                  backgroundColor: 'var(--color-primary)', 
+                  color: 'var(--color-forest-dark)', 
+                  fontWeight: 800, 
+                  borderRadius: '50px', 
+                  width: '20px', 
+                  height: '20px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  fontSize: '0.72rem'
+                }}>
+                  {idx + 1}
+                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+                  {journey.path.map((pathStr, pIdx) => (
+                    <React.Fragment key={pIdx}>
+                      {pIdx > 0 && <i className="fa-solid fa-arrow-right" style={{ color: '#94a3b8', fontSize: '0.7rem' }}></i>}
+                      <code style={{ 
+                        backgroundColor: '#ffffff', 
+                        padding: '2px 6px', 
+                        borderRadius: '4px', 
+                        border: '1px solid #e2e8f0',
+                        color: '#334155',
+                        fontWeight: 600
+                      }}>
+                        {pathStr}
+                      </code>
+                    </React.Fragment>
+                  ))}
+                </div>
+              </div>
+              <strong style={{ color: 'var(--color-forest-dark)', fontSize: '0.85rem' }}>
+                {journey.count} {consoleLang === 'nl' ? 'sessies' : 'sessions'}
+              </strong>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
   );
 }
