@@ -2671,7 +2671,7 @@ export default function OpenChatConfigurator() {
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '4rem', color: '#9ca3af', fontSize: '0.8rem', opacity: 0.8 }}>
-            Configurator v4.1.3 (PAL AI)
+            Configurator v4.1.4 (PAL AI)
           </div>
 
         </div>
