@@ -1,5 +1,6 @@
 [
   {
+    "id": "test-9543",
     "tag": {
       "nl": "Kwaliteit",
       "en": "Quality",
@@ -14,27 +15,26 @@
     },
     "author": "Digital Team",
     "title": {
-      "nl": "Test",
-      "en": "Test",
-      "de": "",
-      "ro": ""
+      "nl": "Onze nieuwe website is live",
+      "en": "Our new website is live",
+      "de": "Unsere neue Website ist live",
+      "ro": "Noul nostru site web este live"
     },
     "content": {
-      "nl": "Test artikel",
-      "en": "",
-      "de": "",
-      "ro": ""
+      "nl": "Vanaf nu is onze nieuwe website live. ",
+      "en": "From now on, our new website is live.",
+      "de": "Ab sofort ist unsere neue Website live.",
+      "ro": "De acum înainte, noul nostru site web este live."
     },
     "linkUrl": "/configurator",
     "linkText": {
       "nl": "Ontdek meer",
-      "en": "Discover more",
+      "en": "Find out more",
       "de": "Mehr erfahren",
       "ro": "Află mai multe"
     },
     "image": "/images/hero_bg.jpg",
-    "isRomaniaOnly": false,
-    "id": "test-9543"
+    "isRomaniaOnly": false
   },
   {
     "id": "fsc-commitment",

@@ -2,8 +2,108 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { useInquiry } from '@/components/InquiryContext';
+
+const t = {
+  portalTitle: { nl: 'PALROM Website Console', en: 'PALROM Website Console', ro: 'Consolă Website PALROM' },
+  authRequired: { 
+    nl: 'Verificatie vereist voor het beheer van vacatures en nieuwsberichten.', 
+    en: 'Authentication required to manage vacancies and news articles.', 
+    ro: 'Autentificare necesară pentru gestionarea locurilor de muncă și a știrilor.' 
+  },
+  invalidPasscode: { nl: 'Ongeldige toegangscode. Probeer het opnieuw.', en: 'Invalid passcode. Please try again.', ro: 'Cod de acces nevalid. Vă rugăm să încercați din nou.' },
+  adminPasscode: { nl: 'Beheerder Toegangscode', en: 'Admin Passcode', ro: 'Cod de Acces Administrator' },
+  placeholderPasscode: { nl: 'Voer de toegangscode in', en: 'Enter administrator passcode', ro: 'Introduceți codul de acces' },
+  authenticate: { nl: 'Aanmelden', en: 'Authenticate', ro: 'Autentificare' },
+  verifying: { nl: 'Controleren...', en: 'Verifying...', ro: 'Se verifică...' },
+  
+  // Dashboard Header
+  consoleTitle: { nl: 'Beheersconsole Website', en: 'Website Management Console', ro: 'Consolă Administrare Website' },
+  viewLive: { nl: 'Bekijk Live Site', en: 'View Live Site', ro: 'Vezi Site-ul Live' },
+  logout: { nl: 'Uitloggen', en: 'Logout', ro: 'Deconectare' },
+  
+  // Tabs
+  vacanciesTab: { nl: 'Vacatures', en: 'Vacancies', ro: 'Locuri de muncă' },
+  newsTab: { nl: 'Nieuws & Artikelen', en: 'News & Articles', ro: 'Știri și Articole' },
+  
+  // Vacancies Table
+  activeOpenings: { nl: 'Actieve Vacatures', en: 'Active Career Openings', ro: 'Locuri de Muncă Active' },
+  addVacancy: { nl: 'Vacature Toevoegen', en: 'Add Vacancy', ro: 'Adaugă Job' },
+  noVacancies: { nl: 'Geen actieve vacatures gevonden. Klik op "Vacature Toevoegen" om er een te maken.', en: 'No active openings found. Click "Add Vacancy" to create one.', ro: 'Nu au fost găsite locuri de muncă active. Faceți clic pe "Adaugă Job" pentru a crea unul.' },
+  idCode: { nl: 'ID / Code', en: 'ID / Code', ro: 'ID / Cod' },
+  titleNl: { nl: 'Titel (NL)', en: 'Title (NL)', ro: 'Titlu (NL)' },
+  titleEn: { nl: 'Titel (EN)', en: 'Title (EN)', ro: 'Titlu (EN)' },
+  departmentCol: { nl: 'Afdeling', en: 'Department', ro: 'Departament' },
+  typeCol: { nl: 'Type', en: 'Type', ro: 'Tip' },
+  actionsCol: { nl: 'Acties', en: 'Actions', ro: 'Acțiuni' },
+  editBtn: { nl: 'Bewerken', en: 'Edit', ro: 'Editează' },
+  deleteBtn: { nl: 'Verwijderen', en: 'Delete', ro: 'Șterge' },
+  
+  // News Table
+  publishedNews: { nl: 'Gepubliceerd Nieuws & Updates', en: 'Published News & Updates', ro: 'Știri și Noutăți Publicate' },
+  addArticle: { nl: 'Artikel Toevoegen', en: 'Add Article', ro: 'Adaugă Articol' },
+  noNews: { nl: 'Geen nieuwsartikelen gevonden. Klik op "Artikel Toevoegen" om er een te publiceren.', en: 'No news articles found. Click "Add Article" to publish one.', ro: 'Nu au fost găsite articole de știri. Faceți clic pe "Adaugă Articol" pentru a publica unul.' },
+  thumbnail: { nl: 'Miniatuur', en: 'Thumbnail', ro: 'Miniatură' },
+  tagDate: { nl: 'Tag / Datum (NL)', en: 'Tag / Date (NL)', ro: 'Etichetă / Dată (NL)' },
+  titleNlCol: { nl: 'Titel (NL)', en: 'Title (NL)', ro: 'Titlu (NL)' },
+  authorCol: { nl: 'Auteur', en: 'Author', ro: 'Autor' },
+  targetLink: { nl: 'Doel Link', en: 'Target Link', ro: 'Link Destinație' },
+  targeting: { nl: 'Doelgroep', en: 'Targeting', ro: 'Targetare' },
+  romaniaOnly: { nl: 'Alleen Roemenië', en: 'Romania Only', ro: 'Doar România' },
+  globalTarget: { nl: 'Wereldwijd', en: 'Global', ro: 'Global' },
+  
+  // Modals
+  editVacancyTitle: { nl: 'Vacature Bewerken', en: 'Edit Vacancy', ro: 'Editează Locul de Muncă' },
+  addNewVacancyTitle: { nl: 'Nieuwe Vacature Toevoegen', en: 'Add New Vacancy', ro: 'Adaugă un Nou Loc de Muncă' },
+  editNewsTitle: { nl: 'Nieuwsartikel Bewerken', en: 'Edit News Article', ro: 'Editează Articolul de Știri' },
+  addNewNewsTitle: { nl: 'Nieuw Artikel Toevoegen', en: 'Add New News Article', ro: 'Adaugă un Nou Articol' },
+  translatingLabel: { nl: 'Vertalen:', en: 'Translating:', ro: 'Se traduce:' },
+  autoTranslateBtn: { nl: 'Automatisch vertalen naar alle tabbladen', en: 'Auto-translate to all tabs', ro: 'Traducere automată în toate taburile' },
+  translatingStatus: { nl: 'Vertalen...', en: 'Translating...', ro: 'Se traduce...' },
+  cancelBtn: { nl: 'Annuleren', en: 'Cancel', ro: 'Anulează' },
+  saveVacancyBtn: { nl: 'Vacature Opslaan', en: 'Save Vacancy', ro: 'Salvează Jobul' },
+  savingStatus: { nl: 'Opslaan...', en: 'Saving...', ro: 'Se salvează...' },
+  publishArticleBtn: { nl: 'Artikel Publiceren', en: 'Publish Article', ro: 'Publică Articolul' },
+  publishingStatus: { nl: 'Publiceren...', en: 'Publishing...', ro: 'Se publică...' },
+  
+  // Vacancy Fields
+  localizedInfo: { nl: 'Gelokaliseerde Info', en: 'Localized Info', ro: 'Informații Localizate' },
+  jobTitleLabel: { nl: 'Functietitel', en: 'Job Title', ro: 'Titlul Jobului' },
+  departmentLabel: { nl: 'Afdeling', en: 'Department', ro: 'Departament' },
+  jobTypeLabel: { nl: 'Dienstverband', en: 'Job Type', ro: 'Tip Job' },
+  salaryLabel: { nl: 'Salarisindicatie', en: 'Salary Rate', ro: 'Salariul' },
+  descriptionLabel: { nl: 'Omschrijving', en: 'Description', ro: 'Descriere' },
+  requirementsLabel: { nl: 'Functie-eisen Lijst', en: 'Job Requirements List', ro: 'Lista de Cerințe a Jobului' },
+  newReqPlaceholder: { nl: 'Voeg nieuwe eis toe...', en: 'Add new requirement line...', ro: 'Adaugă o nouă cerință...' },
+  addReqBtn: { nl: 'Toevoegen', en: 'Add', ro: 'Adaugă' },
+  locationLabel: { nl: 'Fabriek Locatie (Globaal)', en: 'Factory Location (Global)', ro: 'Locație Fabrică (Global)' },
+  identifierLabel: { nl: 'Unieke Identifier / Slug (Globaal)', en: 'Custom Identifier / Slug (Global)', ro: 'Identificator Unic / Slug (Global)' },
+  slugNote: { nl: 'Automatisch gegenereerd indien leeg', en: 'Auto-generated if empty', ro: 'Generat automat dacă este gol' },
+  
+  // News Fields
+  articleTitleLabel: { nl: 'Titel van het Artikel', en: 'Article Title', ro: 'Titlul Articolului' },
+  categoryTagLabel: { nl: 'Categorie Etikette (Tag)', en: 'Category Tag', ro: 'Etichetă Categorie' },
+  displayDateLabel: { nl: 'Weergavedatum', en: 'Display Date', ro: 'Data Afișată' },
+  articleContentLabel: { nl: 'Inhoud van het Artikel', en: 'Article Content', ro: 'Conținutul Articolului' },
+  redirectLinkLabel: { nl: 'Knop Link Tekst', en: 'Redirect Link Text', ro: 'Text Link Buton' },
+  authorLabel: { nl: 'Auteur (Globaal)', en: 'Author (Global)', ro: 'Autor (Global)' },
+  redirectUrlLabel: { nl: 'Link Doorverwijzings-URL (Globaal)', en: 'Link Redirect URL (Global)', ro: 'URL Redirecționare Buton (Global)' },
+  imageLabel: { nl: 'Artikel Afbeelding (Globaal)', en: 'Article Image (Global)', ro: 'Imagine Articol (Global)' },
+  uploadImageBtn: { nl: 'Upload Nieuw Afbeelding Bestand', en: 'Upload New Image File', ro: 'Încarcă un Fișier de Imagine Nou' },
+  uploadingStatus: { nl: 'Uploaden...', en: 'Uploading...', ro: 'Se încarcă...' },
+  romaniaOnlyCheckbox: { nl: 'Beperk artikel alleen tot Roemeense gebruikers', en: 'Limit article to Romanian users only', ro: 'Limitează articolul doar la utilizatorii din România' }
+};
 
 export default function AdminPortal() {
+  const { lang } = useInquiry();
+  const [consoleLang, setConsoleLang] = useState('en');
+
+  useEffect(() => {
+    if (lang && ['nl', 'en', 'ro'].includes(lang)) {
+      setConsoleLang(lang);
+    }
+  }, [lang]);
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [authError, setAuthError] = useState(false);
@@ -696,7 +796,7 @@ export default function AdminPortal() {
               PALROM Website Portal
             </h2>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '0.88rem', lineHeight: 1.5, marginBottom: '2rem' }}>
-              Authentication required to manage vacancies, careers data, and news items.
+              {t.authRequired[consoleLang]}
             </p>
 
             {authError && (
@@ -712,18 +812,18 @@ export default function AdminPortal() {
                 textAlign: 'left'
               }}>
                 <i className="fa-solid fa-triangle-exclamation" style={{ marginRight: '0.5rem' }}></i>
-                Invalid passcode. Please try again.
+                {t.invalidPasscode[consoleLang]}
               </div>
             )}
 
             <form onSubmit={handlePasswordSubmit}>
               <div style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
                 <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-forest-dark)', marginBottom: '0.5rem', letterSpacing: '0.5px' }}>
-                  Admin Passcode
+                  {t.adminPasscode[consoleLang]}
                 </label>
                 <input
                   type="password"
-                  placeholder="Enter administrator passcode"
+                  placeholder={t.placeholderPasscode[consoleLang]}
                   value={passcode}
                   onChange={(e) => setPasscode(e.target.value)}
                   required
@@ -762,11 +862,11 @@ export default function AdminPortal() {
               >
                 {loadingData ? (
                   <>
-                    <i className="fa-solid fa-spinner fa-spin"></i> Verifying...
+                    <i className="fa-solid fa-spinner fa-spin"></i> {t.verifying[consoleLang]}
                   </>
                 ) : (
                   <>
-                    <i className="fa-solid fa-key"></i> Authenticate
+                    <i className="fa-solid fa-key"></i> {t.authenticate[consoleLang]}
                   </>
                 )}
               </button>
@@ -833,10 +933,35 @@ export default function AdminPortal() {
                 PALROM Products SRL
               </span>
               <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--color-forest-dark)', margin: '4px 0 0', letterSpacing: '-0.5px' }}>
-                Website Management Console
+                {t.consoleTitle[consoleLang]}
               </h1>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+              {/* Console Language Switcher */}
+              <div style={{ display: 'flex', gap: '0.2rem', backgroundColor: '#edf2f7', padding: '0.2rem', borderRadius: '6px', border: '1px solid #edf2f7' }}>
+                {['nl', 'en', 'ro'].map(l => (
+                  <button
+                    key={l}
+                    type="button"
+                    onClick={() => setConsoleLang(l)}
+                    style={{
+                      padding: '0.25rem 0.5rem',
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      border: 'none',
+                      borderRadius: '4px',
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      backgroundColor: consoleLang === l ? '#ffffff' : 'transparent',
+                      color: consoleLang === l ? 'var(--color-forest-dark)' : 'var(--color-text-muted)',
+                      boxShadow: consoleLang === l ? '0 1px 3px rgba(0,0,0,0.05)' : 'none'
+                    }}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
+
               <Link href="/" target="_blank" style={{
                 fontSize: '0.85rem',
                 fontWeight: 600,
@@ -846,7 +971,7 @@ export default function AdminPortal() {
                 borderRadius: '6px',
                 backgroundColor: '#ffffff'
               }}>
-                <i className="fa-solid fa-up-right-from-square" style={{ marginRight: '0.4rem' }}></i> View Live Site
+                <i className="fa-solid fa-up-right-from-square" style={{ marginRight: '0.4rem' }}></i> {t.viewLive[consoleLang]}
               </Link>
               <button
                 onClick={handleLogout}
@@ -864,7 +989,7 @@ export default function AdminPortal() {
                   gap: '0.4rem'
                 }}
               >
-                <i className="fa-solid fa-power-off"></i> Logout
+                <i className="fa-solid fa-power-off"></i> {t.logout[consoleLang]}
               </button>
             </div>
           </div>
@@ -894,7 +1019,7 @@ export default function AdminPortal() {
                 gap: '0.5rem'
               }}
             >
-              <i className="fa-solid fa-briefcase"></i> Vacancies ({vacancies.length})
+              <i className="fa-solid fa-briefcase"></i> {t.vacanciesTab[consoleLang]} ({vacancies.length})
             </button>
             <button
               onClick={() => setActiveTab('news')}
@@ -913,7 +1038,7 @@ export default function AdminPortal() {
                 gap: '0.5rem'
               }}
             >
-              <i className="fa-regular fa-newspaper"></i> News & Articles ({newsItems.length})
+              <i className="fa-regular fa-newspaper"></i> {t.newsTab[consoleLang]} ({newsItems.length})
             </button>
           </div>
 
@@ -936,7 +1061,7 @@ export default function AdminPortal() {
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                 <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-forest-dark)' }}>
-                  Active Career Openings
+                  {t.activeOpenings[consoleLang]}
                 </h3>
                 <button
                   onClick={() => openVacancyEdit(null)}
@@ -954,14 +1079,14 @@ export default function AdminPortal() {
                     gap: '0.4rem'
                   }}
                 >
-                  <i className="fa-solid fa-plus"></i> Add Vacancy
+                  <i className="fa-solid fa-plus"></i> {t.addVacancy[consoleLang]}
                 </button>
               </div>
 
               {vacancies.length === 0 ? (
                 <div style={{ padding: '4rem 0', textCenter: 'center', color: 'var(--color-text-muted)', textAlign: 'center' }}>
                   <i className="fa-solid fa-folder-open fa-3x" style={{ opacity: 0.2, marginBottom: '1rem' }}></i>
-                  <p>No active openings found. Click "Add Vacancy" to create one.</p>
+                  <p>{t.noVacancies[consoleLang]}</p>
                 </div>
               ) : (
                 <div style={{ overflowX: 'auto' }}>
@@ -969,11 +1094,11 @@ export default function AdminPortal() {
                     <thead>
                       <tr style={{ borderBottom: '2px solid #edf2f7', color: 'var(--color-forest-dark)', fontWeight: 700 }}>
                         <th style={{ padding: '12px 10px' }}>ID / Code</th>
-                        <th style={{ padding: '12px 10px' }}>Title (NL)</th>
-                        <th style={{ padding: '12px 10px' }}>Title (EN)</th>
+                        <th style={{ padding: '12px 10px' }}>{t.titleNl[consoleLang]}</th>
+                        <th style={{ padding: '12px 10px' }}>{t.titleEn[consoleLang]}</th>
                         <th style={{ padding: '12px 10px' }}>Department</th>
                         <th style={{ padding: '12px 10px' }}>Type</th>
-                        <th style={{ padding: '12px 10px', textAlign: 'right' }}>Actions</th>
+                        <th style={{ padding: '12px 10px', textAlign: 'right' }}>{t.actionsCol[consoleLang]}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1003,7 +1128,7 @@ export default function AdminPortal() {
                                   cursor: 'pointer'
                                 }}
                               >
-                                <i className="fa-solid fa-pen"></i> Edit
+                                <i className="fa-solid fa-pen"></i> {t.editBtn[consoleLang]}
                               </button>
                               <button
                                 onClick={() => handleVacancyDelete(vac.id)}
@@ -1018,7 +1143,7 @@ export default function AdminPortal() {
                                   cursor: 'pointer'
                                 }}
                               >
-                                <i className="fa-solid fa-trash"></i> Delete
+                                <i className="fa-solid fa-trash"></i> {t.deleteBtn[consoleLang]}
                               </button>
                             </div>
                           </td>
@@ -1042,7 +1167,7 @@ export default function AdminPortal() {
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                 <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-forest-dark)' }}>
-                  Published News & Updates
+                  {t.publishedNews[consoleLang]}
                 </h3>
                 <button
                   onClick={() => openNewsEdit(null)}
@@ -1060,14 +1185,14 @@ export default function AdminPortal() {
                     gap: '0.4rem'
                   }}
                 >
-                  <i className="fa-solid fa-plus"></i> Add Article
+                  <i className="fa-solid fa-plus"></i> {t.addArticle[consoleLang]}
                 </button>
               </div>
 
               {newsItems.length === 0 ? (
                 <div style={{ padding: '4rem 0', textAlign: 'center', color: 'var(--color-text-muted)' }}>
                   <i className="fa-solid fa-folder-open fa-3x" style={{ opacity: 0.2, marginBottom: '1rem' }}></i>
-                  <p>No news articles found. Click "Add Article" to publish one.</p>
+                  <p>{t.noNews[consoleLang]}</p>
                 </div>
               ) : (
                 <div style={{ overflowX: 'auto' }}>
@@ -1075,7 +1200,7 @@ export default function AdminPortal() {
                     <thead>
                       <tr style={{ borderBottom: '2px solid #edf2f7', color: 'var(--color-forest-dark)', fontWeight: 700 }}>
                         <th style={{ padding: '12px 10px' }}>Thumbnail</th>
-                        <th style={{ padding: '12px 10px' }}>Tag / Date (NL)</th>
+                        <th style={{ padding: '12px 10px' }}>{t.tagDate[consoleLang]}</th>
                         <th style={{ padding: '12px 10px' }}>Title (NL)</th>
                         <th style={{ padding: '12px 10px' }}>Author</th>
                         <th style={{ padding: '12px 10px' }}>Target Link</th>
@@ -1105,11 +1230,11 @@ export default function AdminPortal() {
                           <td style={{ padding: '14px 10px' }}>
                             {item.isRomaniaOnly ? (
                               <span style={{ fontSize: '0.75rem', fontWeight: 600, padding: '0.2rem 0.5rem', backgroundColor: '#fee2e2', color: '#b91c1c', borderRadius: '4px' }}>
-                                Romania Only
+                                {t.romaniaOnly[consoleLang]}
                               </span>
                             ) : (
                               <span style={{ fontSize: '0.75rem', fontWeight: 600, padding: '0.2rem 0.5rem', backgroundColor: '#e2e8f0', color: '#475569', borderRadius: '4px' }}>
-                                Global
+                                {t.globalTarget[consoleLang]}
                               </span>
                             )}
                           </td>
@@ -1128,7 +1253,7 @@ export default function AdminPortal() {
                                   cursor: 'pointer'
                                 }}
                               >
-                                <i className="fa-solid fa-pen"></i> Edit
+                                <i className="fa-solid fa-pen"></i> {t.editBtn[consoleLang]}
                               </button>
                               <button
                                 onClick={() => handleNewsDelete(item.id)}
@@ -1143,7 +1268,7 @@ export default function AdminPortal() {
                                   cursor: 'pointer'
                                 }}
                               >
-                                <i className="fa-solid fa-trash"></i> Delete
+                                <i className="fa-solid fa-trash"></i> {t.deleteBtn[consoleLang]}
                               </button>
                             </div>
                           </td>
@@ -1199,8 +1324,8 @@ export default function AdminPortal() {
             }}>
               <h3 style={{ margin: 0, fontSize: '1.15rem', color: '#ffffff', fontWeight: 800 }}>
                 {editingId 
-                  ? `Edit ${modalType === 'vacancy' ? 'Vacancy' : 'News Article'} (${editingId})` 
-                  : `Add New ${modalType === 'vacancy' ? 'Vacancy' : 'News Article'}`
+                  ? (modalType === 'vacancy' ? `${t.editVacancyTitle[consoleLang]} (${editingId})` : `${t.editNewsTitle[consoleLang]} (${editingId})`)
+                  : (modalType === 'vacancy' ? t.addNewVacancyTitle[consoleLang] : t.addNewNewsTitle[consoleLang])
                 }
               </h3>
               <button
@@ -1234,7 +1359,7 @@ export default function AdminPortal() {
               }}>
                 <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
                   <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-text-muted)', display: 'inline-flex', alignItems: 'center', marginRight: '0.75rem' }}>
-                    <i className="fa-solid fa-globe" style={{ marginRight: '0.3rem' }}></i> Translating:
+                    <i className="fa-solid fa-globe" style={{ marginRight: '0.3rem' }}></i> {t.translatingLabel[consoleLang]}
                   </span>
                   {['nl', 'en', 'de', 'ro'].map(langKey => (
                     <button
@@ -1279,11 +1404,11 @@ export default function AdminPortal() {
                   >
                     {isTranslating ? (
                       <>
-                        <i className="fa-solid fa-spinner fa-spin"></i> Translating...
+                        <i className="fa-solid fa-spinner fa-spin"></i> {t.translatingStatus[consoleLang]}
                       </>
                     ) : (
                       <>
-                        <i className="fa-solid fa-language"></i> Auto-translate to all tabs
+                        <i className="fa-solid fa-language"></i> {t.autoTranslateBtn[consoleLang]}
                       </>
                     )}
                   </button>
@@ -1297,11 +1422,11 @@ export default function AdminPortal() {
                   {/* LOCALIZED FIELDS */}
                   <div style={{ backgroundColor: '#fcfdfd', border: '1px solid #edf2f7', borderRadius: '8px', padding: '1.25rem', marginBottom: '1.5rem' }}>
                     <h4 style={{ fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--color-primary-dark)', marginBottom: '1rem', letterSpacing: '0.5px' }}>
-                      Localized Info ({activeFormLang.toUpperCase()})
+                      {t.localizedInfo[consoleLang]} ({activeFormLang.toUpperCase()})
                     </h4>
                     
                     <div style={{ marginBottom: '1rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Job Title ({activeFormLang}) *</label>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.jobTitleLabel[consoleLang]} ({activeFormLang}) *</label>
                       <input
                         type="text"
                         value={vacTitle[activeFormLang] || ''}
@@ -1314,7 +1439,7 @@ export default function AdminPortal() {
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
                       <div>
-                        <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Department ({activeFormLang})</label>
+                        <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.departmentLabel[consoleLang]} ({activeFormLang})</label>
                         <input
                           type="text"
                           value={vacDept[activeFormLang] || ''}
@@ -1324,7 +1449,7 @@ export default function AdminPortal() {
                         />
                       </div>
                       <div>
-                        <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Job Type ({activeFormLang})</label>
+                        <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.jobTypeLabel[consoleLang]} ({activeFormLang})</label>
                         <input
                           type="text"
                           value={vacType[activeFormLang] || ''}
@@ -1336,7 +1461,7 @@ export default function AdminPortal() {
                     </div>
 
                     <div style={{ marginBottom: '1rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Salary Rate ({activeFormLang})</label>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.salaryLabel[consoleLang]} ({activeFormLang})</label>
                       <input
                         type="text"
                         value={vacSalary[activeFormLang] || ''}
@@ -1347,7 +1472,7 @@ export default function AdminPortal() {
                     </div>
 
                     <div style={{ marginBottom: '1rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Description ({activeFormLang})</label>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.descriptionLabel[consoleLang]} ({activeFormLang})</label>
                       <textarea
                         rows="4"
                         value={vacDesc[activeFormLang] || ''}
@@ -1359,14 +1484,14 @@ export default function AdminPortal() {
 
                     {/* REQUIREMENTS ARRAY LIST MANAGER */}
                     <div style={{ marginBottom: '0.5rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Job Requirements List ({activeFormLang})</label>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.requirementsLabel[consoleLang]} ({activeFormLang})</label>
                       
                       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
                         <input
                           type="text"
                           value={newReqText[activeFormLang]}
                           onChange={(e) => setNewReqText(prev => ({ ...prev, [activeFormLang]: e.target.value }))}
-                          placeholder="Add new requirement line..."
+                          placeholder={t.newReqPlaceholder[consoleLang]}
                           style={{ flex: 1, padding: '0.55rem', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '0.88rem' }}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
@@ -1389,7 +1514,7 @@ export default function AdminPortal() {
                             fontSize: '0.85rem'
                           }}
                         >
-                          <i className="fa-solid fa-plus"></i> Add
+                          <i className="fa-solid fa-plus"></i> {t.addReqBtn[consoleLang]}
                         </button>
                       </div>
 
@@ -1430,7 +1555,7 @@ export default function AdminPortal() {
                   {/* GLOBAL FIELDS */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Factory Location (Global)</label>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.locationLabel[consoleLang]}</label>
                       <input
                         type="text"
                         value={vacLoc}
@@ -1441,13 +1566,13 @@ export default function AdminPortal() {
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Custom Identifier / Slug (Global)</label>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.identifierLabel[consoleLang]}</label>
                       <input
                         type="text"
                         value={vacId}
                         onChange={(e) => setVacId(e.target.value)}
                         disabled={!!editingId}
-                        placeholder="e.g. planing-operator (Auto-generated if empty)"
+                        placeholder={t.slugNote[consoleLang]}
                         style={{ width: '100%', padding: '0.65rem', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '0.9rem', backgroundColor: editingId ? '#f1f5f9' : '#ffffff' }}
                       />
                     </div>
@@ -1469,7 +1594,7 @@ export default function AdminPortal() {
                         fontSize: '0.88rem'
                       }}
                     >
-                      Cancel
+                      {t.cancelBtn[consoleLang]}
                     </button>
                     <button
                       type="submit"
@@ -1490,11 +1615,11 @@ export default function AdminPortal() {
                     >
                       {loadingData ? (
                         <>
-                          <i className="fa-solid fa-spinner fa-spin"></i> Saving...
+                          <i className="fa-solid fa-spinner fa-spin"></i> {t.savingStatus[consoleLang]}
                         </>
                       ) : (
                         <>
-                          <i className="fa-solid fa-floppy-disk"></i> Save Vacancy
+                          <i className="fa-solid fa-floppy-disk"></i> {t.saveVacancyBtn[consoleLang]}
                         </>
                       )}
                     </button>
@@ -1513,7 +1638,7 @@ export default function AdminPortal() {
                     </h4>
                     
                     <div style={{ marginBottom: '1rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Article Title ({activeFormLang}) *</label>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.articleTitleLabel[consoleLang]} ({activeFormLang}) *</label>
                       <input
                         type="text"
                         value={newsTitle[activeFormLang] || ''}
@@ -1526,7 +1651,7 @@ export default function AdminPortal() {
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
                       <div>
-                        <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Category Tag ({activeFormLang})</label>
+                        <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.categoryTagLabel[consoleLang]} ({activeFormLang})</label>
                         <input
                           type="text"
                           value={newsTag[activeFormLang] || ''}
@@ -1536,7 +1661,7 @@ export default function AdminPortal() {
                         />
                       </div>
                       <div>
-                        <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Display Date ({activeFormLang})</label>
+                        <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.displayDateLabel[consoleLang]} ({activeFormLang})</label>
                         <input
                           type="text"
                           value={newsDate[activeFormLang] || ''}
@@ -1548,7 +1673,7 @@ export default function AdminPortal() {
                     </div>
 
                     <div style={{ marginBottom: '1rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Article Content ({activeFormLang})</label>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.articleContentLabel[consoleLang]} ({activeFormLang})</label>
                       <textarea
                         rows="5"
                         value={newsContent[activeFormLang] || ''}
@@ -1559,7 +1684,7 @@ export default function AdminPortal() {
                     </div>
 
                     <div style={{ marginBottom: '0.5rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Redirect Link Text ({activeFormLang})</label>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.redirectLinkLabel[consoleLang]} ({activeFormLang})</label>
                       <input
                         type="text"
                         value={newsLinkText[activeFormLang] || ''}
@@ -1574,7 +1699,7 @@ export default function AdminPortal() {
                   {/* GLOBAL FIELDS */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Author (Global)</label>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.authorLabel[consoleLang]}</label>
                       <input
                         type="text"
                         value={newsAuthor}
@@ -1585,7 +1710,7 @@ export default function AdminPortal() {
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Link Redirect URL (Global)</label>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.redirectUrlLabel[consoleLang]}</label>
                       <input
                         type="text"
                         value={newsLinkUrl}
@@ -1606,7 +1731,7 @@ export default function AdminPortal() {
                       />
                     </div>
                     <div style={{ flex: 1 }}>
-                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>Article Image (Global)</label>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem' }}>{t.imageLabel[consoleLang]}</label>
                       <input
                         type="text"
                         value={newsImage}
@@ -1641,11 +1766,11 @@ export default function AdminPortal() {
                       >
                         {uploadingImage ? (
                           <>
-                            <i className="fa-solid fa-spinner fa-spin"></i> Uploading...
+                            <i className="fa-solid fa-spinner fa-spin"></i> {t.uploadingStatus[consoleLang]}
                           </>
                         ) : (
                           <>
-                            <i className="fa-solid fa-cloud-arrow-up"></i> Upload New Image File
+                            <i className="fa-solid fa-cloud-arrow-up"></i> {t.uploadImageBtn[consoleLang]}
                           </>
                         )}
                       </button>
@@ -1663,7 +1788,7 @@ export default function AdminPortal() {
                         style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                       />
                       <label htmlFor="newsIsRomOnly" style={{ fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', userSelect: 'none' }}>
-                        Limit article to Romanian users only (isRomaniaOnly)
+                        {t.romaniaOnlyCheckbox[consoleLang]}
                       </label>
                     </div>
                     <div>
@@ -1695,7 +1820,7 @@ export default function AdminPortal() {
                         fontSize: '0.88rem'
                       }}
                     >
-                      Cancel
+                      {t.cancelBtn[consoleLang]}
                     </button>
                     <button
                       type="submit"
@@ -1716,11 +1841,11 @@ export default function AdminPortal() {
                     >
                       {loadingData ? (
                         <>
-                          <i className="fa-solid fa-spinner fa-spin"></i> Publishing...
+                          <i className="fa-solid fa-spinner fa-spin"></i> {t.publishingStatus[consoleLang]}
                         </>
                       ) : (
                         <>
-                          <i className="fa-solid fa-floppy-disk"></i> Publish Article
+                          <i className="fa-solid fa-floppy-disk"></i> {t.publishArticleBtn[consoleLang]}
                         </>
                       )}
                     </button>
