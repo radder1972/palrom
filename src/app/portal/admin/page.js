@@ -22,6 +22,7 @@ const t = {
   consoleTitle: { nl: 'Beheersconsole Website', en: 'Website Management Console', ro: 'Consolă Administrare Website' },
   viewLive: { nl: 'Bekijk Live Site', en: 'View Live Site', ro: 'Vezi Site-ul Live' },
   logout: { nl: 'Uitloggen', en: 'Logout', ro: 'Deconectare' },
+  syncDbBtn: { nl: 'Sync Database', en: 'Sync Database', ro: 'Sincronizare DB' },
   
   // Tabs
   vacanciesTab: { nl: 'Vacatures', en: 'Vacancies', ro: 'Locuri de muncă' },
@@ -1045,7 +1046,7 @@ export default function AdminPortal() {
                   gap: '0.4rem'
                 }}
               >
-                <i className="fa-solid fa-arrows-rotate"></i> {lang === 'ro' ? 'Sincronizează DB' : lang === 'nl' ? 'Sync Database' : 'Sync Database'}
+                <i className="fa-solid fa-arrows-rotate"></i> {t.syncDbBtn[consoleLang]}
               </button>
 
               <Link href="/" target="_blank" style={{
