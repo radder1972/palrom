@@ -266,6 +266,36 @@ const translations = {
     de: 'Prüfen...',
     ro: 'Verificare...'
   },
+  aiOffline: {
+    nl: 'Geen verbinding',
+    en: 'No connection',
+    de: 'Keine Verbindung',
+    ro: 'Fără conexiune'
+  },
+  statusOnline: {
+    nl: 'Online / Virtuele Adviseur',
+    en: 'Online / Virtual Advisor',
+    de: 'Online / Virtueller Berater',
+    ro: 'Online / Consilier Virtual'
+  },
+  statusLocal: {
+    nl: 'Fallback / Lokale modus',
+    en: 'Fallback / Local mode',
+    de: 'Fallback / Lokaler Modus',
+    ro: 'Fallback / Mod local'
+  },
+  statusOffline: {
+    nl: 'Offline / Geen verbinding',
+    en: 'Offline / No connection',
+    de: 'Offline / Keine Verbindung',
+    ro: 'Offline / Fără conexiune'
+  },
+  statusChecking: {
+    nl: 'Controleren / Verbinding maken',
+    en: 'Checking / Connecting',
+    de: 'Prüfen / Verbinden',
+    ro: 'Verificare / Conectare'
+  },
   notYetDetected: {
     nl: 'Nog niet gedetecteerd',
     en: 'Not yet detected',
@@ -354,13 +384,17 @@ export default function OpenChatConfigurator() {
   const initialUserInputRef = useRef('');
   const userInputRef = useRef('');
   const ignoreSpeechResultsRef = useRef(false);
-  const [aiEngine, setAiEngine] = useState('checking'); // 'checking' | 'gemini' | 'fallback'
+  const [aiEngine, setAiEngine] = useState('checking'); // 'checking' | 'gemini' | 'fallback' | 'offline'
 
   // Ping backend to check if Gemini is active or falling back
   useEffect(() => {
     if (isV4Authenticated) {
       const checkEngine = async () => {
         try {
+          if (typeof window !== 'undefined' && !window.navigator.onLine) {
+            setAiEngine('offline');
+            return;
+          }
           const res = await fetch('/api/configurator/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -374,15 +408,15 @@ export default function OpenChatConfigurator() {
               setAiEngine('gemini');
             }
           } else {
-            setAiEngine('fallback');
+            setAiEngine('offline');
           }
         } catch (err) {
-          setAiEngine('fallback');
+          setAiEngine('offline');
         }
       };
       checkEngine();
     }
-  }, [isV4Authenticated]);
+  }, [isV4Authenticated, isRomania]);
 
   useEffect(() => {
     userInputRef.current = userInput;
@@ -1143,7 +1177,7 @@ export default function OpenChatConfigurator() {
 
           if (!res.ok) {
             useFallback = true;
-            setAiEngine('fallback');
+            setAiEngine('offline');
           } else {
             const data = await res.json();
             if (data.fallback) {
@@ -1196,7 +1230,7 @@ export default function OpenChatConfigurator() {
         } catch (apiErr) {
           console.error("Gemini API request failed, falling back to local NLP parser:", apiErr);
           useFallback = true;
-          setAiEngine('fallback');
+          setAiEngine('offline');
         }
 
         if (useFallback) {
@@ -1409,7 +1443,7 @@ export default function OpenChatConfigurator() {
 
             if (!res.ok) {
               useFallback = true;
-              setAiEngine('fallback');
+              setAiEngine('offline');
             } else {
               const data = await res.json();
               if (data.fallback) {
@@ -1453,7 +1487,7 @@ export default function OpenChatConfigurator() {
           } catch (apiErr) {
             console.error("Gemini API request failed, falling back to local NLP parser:", apiErr);
             useFallback = true;
-            setAiEngine('fallback');
+            setAiEngine('offline');
           }
 
           if (useFallback) {
@@ -2031,6 +2065,11 @@ export default function OpenChatConfigurator() {
           color: #cbd5e1;
           border: 1px solid rgba(255, 255, 255, 0.2);
         }
+        .badge-ai-status.offline {
+          background: rgba(239, 68, 68, 0.15);
+          color: #f87171;
+          border: 1px solid rgba(239, 68, 68, 0.3);
+        }
         .chat-header-info span {
           font-size: 0.75rem;
           color: #a0aec0;
@@ -2348,12 +2387,28 @@ export default function OpenChatConfigurator() {
                         {getTranslation('aiFallback')}
                       </span>
                     )}
+                    {aiEngine === 'offline' && (
+                      <span className="badge-ai-status offline" title="No connection to API" style={{ marginLeft: 0 }}>
+                        {getTranslation('aiOffline')}
+                      </span>
+                    )}
                     {aiEngine === 'checking' && (
                       <span className="badge-ai-status checking" title="Checking model status..." style={{ marginLeft: 0 }}>
                         {getTranslation('aiChecking')}
                       </span>
                     )}
-                    <span><i className="fa-solid fa-circle" style={{ color: '#22c55e', fontSize: '0.55rem' }}></i> Online / Virtual Advisor</span>
+                    {aiEngine === 'gemini' && (
+                      <span><i className="fa-solid fa-circle" style={{ color: '#22c55e', fontSize: '0.55rem' }}></i> {getTranslation('statusOnline')}</span>
+                    )}
+                    {aiEngine === 'fallback' && (
+                      <span><i className="fa-solid fa-circle" style={{ color: '#f59e0b', fontSize: '0.55rem' }}></i> {getTranslation('statusLocal')}</span>
+                    )}
+                    {aiEngine === 'offline' && (
+                      <span><i className="fa-solid fa-circle" style={{ color: '#ef4444', fontSize: '0.55rem' }}></i> {getTranslation('statusOffline')}</span>
+                    )}
+                    {aiEngine === 'checking' && (
+                      <span><i className="fa-solid fa-circle" style={{ color: '#94a3b8', fontSize: '0.55rem' }}></i> {getTranslation('statusChecking')}</span>
+                    )}
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
