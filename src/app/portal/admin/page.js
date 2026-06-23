@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useInquiry } from '@/components/InquiryContext';
+import { version as packageVersion } from '../../../../package.json';
 
 const t = {
   portalTitle: { nl: 'PALROM Website Console', en: 'PALROM Website Console', ro: 'Consolă Website PALROM' },
@@ -1280,6 +1281,17 @@ export default function AdminPortal() {
               )}
             </div>
           )}
+          {/* Console Footer with Version */}
+          <div style={{
+            marginTop: '3rem',
+            borderTop: '1px solid #edf2f7',
+            paddingTop: '1.5rem',
+            textAlign: 'center',
+            fontSize: '0.8rem',
+            color: 'var(--color-text-muted)'
+          }}>
+            <span>Console Version {packageVersion} • PALROM Products SRL © {new Date().getFullYear()}</span>
+          </div>
         </div>
       </div>
 
