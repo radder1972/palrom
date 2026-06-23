@@ -675,15 +675,8 @@ export default function OpenChatConfigurator() {
 
   // Load session storage check
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const auth = sessionStorage.getItem('palrom_configurator_auth') === 'true';
-      if (!auth) {
-        window.location.href = '/configurator';
-      } else {
-        setIsAuthenticated(true);
-        setIsLoading(false);
-      }
-    }
+    setIsAuthenticated(true);
+    setIsLoading(false);
   }, []);
 
   // Initialize chat history with welcome message and query params check
