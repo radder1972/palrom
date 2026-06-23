@@ -2378,26 +2378,6 @@ export default function OpenChatConfigurator() {
                       PAL (AI)
                     </h3>
                     {aiEngine === 'gemini' && (
-                      <span className="badge-ai-status gemini" title="Connected to Google Gemini AI Engine" style={{ marginLeft: 0 }}>
-                        {getTranslation('aiGemini')}
-                      </span>
-                    )}
-                    {aiEngine === 'fallback' && (
-                      <span className="badge-ai-status fallback" title="Connected to local Rule-Based NLP Parser" style={{ marginLeft: 0 }}>
-                        {getTranslation('aiFallback')}
-                      </span>
-                    )}
-                    {aiEngine === 'offline' && (
-                      <span className="badge-ai-status offline" title="No connection to API" style={{ marginLeft: 0 }}>
-                        {getTranslation('aiOffline')}
-                      </span>
-                    )}
-                    {aiEngine === 'checking' && (
-                      <span className="badge-ai-status checking" title="Checking model status..." style={{ marginLeft: 0 }}>
-                        {getTranslation('aiChecking')}
-                      </span>
-                    )}
-                    {aiEngine === 'gemini' && (
                       <span><i className="fa-solid fa-circle" style={{ color: '#22c55e', fontSize: '0.55rem' }}></i> {getTranslation('statusOnline')}</span>
                     )}
                     {aiEngine === 'fallback' && (
