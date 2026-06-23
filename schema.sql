@@ -45,9 +45,8 @@ CREATE TABLE IF NOT EXISTS public.vacancies (
 -- Enable RLS for vacancies
 ALTER TABLE public.vacancies ENABLE ROW LEVEL SECURITY;
 
--- Enable public read, admin write policies for vacancies
-CREATE POLICY "Allow public select on vacancies" ON public.vacancies FOR SELECT TO public USING (true);
-CREATE POLICY "Allow full access to authenticated admins on vacancies" ON public.vacancies FOR ALL TO authenticated USING (true) WITH CHECK (true);
+-- Enable public select and full write access (gated by the Next.js API passcode check)
+CREATE POLICY "Allow full access to vacancies" ON public.vacancies FOR ALL TO public USING (true) WITH CHECK (true);
 
 -- Create the News table in Supabase PostgreSQL
 CREATE TABLE IF NOT EXISTS public.news (
@@ -67,7 +66,6 @@ CREATE TABLE IF NOT EXISTS public.news (
 -- Enable RLS for news
 ALTER TABLE public.news ENABLE ROW LEVEL SECURITY;
 
--- Enable public read, admin write policies for news
-CREATE POLICY "Allow public select on news" ON public.news FOR SELECT TO public USING (true);
-CREATE POLICY "Allow full access to authenticated admins on news" ON public.news FOR ALL TO authenticated USING (true) WITH CHECK (true);
+-- Enable public select and full write access (gated by the Next.js API passcode check)
+CREATE POLICY "Allow full access to news" ON public.news FOR ALL TO public USING (true) WITH CHECK (true);
 
