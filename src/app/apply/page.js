@@ -142,10 +142,10 @@ function ApplyFormContent() {
       ro: 'Trageți și plasați CV-ul aici sau faceți clic pentru a răsfoi'
     },
     dropzoneSubtext: {
-      nl: 'Geaccepteerde formaten: PDF, DOC, DOCX (Max grootte: 5MB)',
-      en: 'Accepted formats: PDF, DOC, DOCX (Max size: 5MB)',
-      de: 'Akzeptierte Formate: PDF, DOC, DOCX (Max. Größe: 5MB)',
-      ro: 'Formate acceptate: PDF, DOC, DOCX (Dimensiune maximă: 5MB)'
+      nl: 'Geaccepteerde formaten: PDF, DOC, DOCX (Max grootte: 4MB)',
+      en: 'Accepted formats: PDF, DOC, DOCX (Max size: 4MB)',
+      de: 'Akzeptierte Formate: PDF, DOC, DOCX (Max. Größe: 4MB)',
+      ro: 'Formate acceptate: PDF, DOC, DOCX (Dimensiune maximă: 4MB)'
     },
     labelMessage: {
       nl: 'Sollicitatiebrief / Details *',
@@ -190,10 +190,10 @@ function ApplyFormContent() {
       ro: 'Tip de fișier invalid. Vă rugăm să încărcați un document PDF, DOC sau DOCX.'
     },
     fileLimit: {
-      nl: 'Bestandsgrootte overschrijdt de limiet van 5MB.',
-      en: 'File size exceeds the 5MB limit.',
-      de: 'Dateigröße überschreitet das Limit von 5MB.',
-      ro: 'Dimensiunea fișierului depășește limita de 5MB.'
+      nl: 'Bestandsgrootte overschrijdt de limiet van 4MB.',
+      en: 'File size exceeds the 4MB limit.',
+      de: 'Dateigröße überschreitet das Limit von 4MB.',
+      ro: 'Dimensiunea fișierului depășește limita de 4MB.'
     }
   };
 
@@ -207,7 +207,7 @@ function ApplyFormContent() {
       'application/msword',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     ];
-    const maxSizeBytes = 5 * 1024 * 1024; // 5MB
+    const maxSizeBytes = 4 * 1024 * 1024; // 4MB
     const ext = file.name.split('.').pop().toLowerCase();
     const isAllowedExt = ['pdf', 'doc', 'docx'].includes(ext);
 
@@ -270,75 +270,123 @@ function ApplyFormContent() {
       return;
     }
 
-
-
     setIsSubmitting(true);
     setFeedback(null);
 
-    // Simulate upload / submit (1.8s)
-    setTimeout(() => {
-      setIsSubmitting(false);
+    const submitData = async (base64Str) => {
+      try {
+        const response = await fetch('/api/apply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            position: position,
+            message: message.trim(),
+            lang,
+            cvBase64: base64Str || null,
+            cvFilename: selectedFile ? selectedFile.name : null,
+            cvFileType: selectedFile ? selectedFile.type : null,
+          }),
+        });
 
-      const jobNames = {
-        planing_operator: {
-          nl: 'Operator Schaafmachine',
-          en: 'Planing Machine Operator',
-          de: 'Hobelmaschinenführer',
-          ro: 'Operator Rindele'
-        },
-        quality_inspector: {
-          nl: 'Inspecteur Kwaliteitscontrole & Sortering',
-          en: 'Quality & Defect Inspector',
-          de: 'Qualitäts- und Mängelprüfer',
-          ro: 'Inspector Calitate & Defecte'
-        },
-        maintenance_mechanic: {
-          nl: 'Onderhoudsmonteur / Werktuigbouwkundige',
-          en: 'Maintenance Mechanic / Millwright',
-          de: 'Wartungsmechaniker / Maschinenschlosser',
-          ro: 'Mecanic Întreținere'
-        },
-        general_application: {
-          nl: 'Open Sollicitatie',
-          en: 'General Job Application',
-          de: 'Initiativbewerbung',
-          ro: 'Candidatură Spontană'
-        },
+        if (!response.ok) {
+          throw new Error('Application submission failed');
+        }
+
+        const jobNames = {
+          planing_operator: {
+            nl: 'Operator Schaafmachine',
+            en: 'Planing Machine Operator',
+            de: 'Hobelmaschinenführer',
+            ro: 'Operator Rindele'
+          },
+          quality_inspector: {
+            nl: 'Inspecteur Kwaliteitscontrole & Sortering',
+            en: 'Quality & Defect Inspector',
+            de: 'Qualitäts- und Mängelprüfer',
+            ro: 'Inspector Calitate & Defecte'
+          },
+          maintenance_mechanic: {
+            nl: 'Onderhoudsmonteur / Werktuigbouwkundige',
+            en: 'Maintenance Mechanic / Millwright',
+            de: 'Wartungsmechaniker / Maschinenschlosser',
+            ro: 'Mecanic Întreținere'
+          },
+          general_application: {
+            nl: 'Open Sollicitatie',
+            en: 'General Job Application',
+            de: 'Initiativbewerbung',
+            ro: 'Candidatură Spontană'
+          },
+        };
+        
+        const formattedJobName = jobNames[position]?.[lang] || jobNames[position]?.nl || position;
+
+        let successMsg = '';
+        const cvText = selectedFile ? ` en uw cv (${selectedFile.name})` : '';
+        if (lang === 'nl') {
+          successMsg = `Bedankt, ${name}! Uw sollicitatie voor de functie "${formattedJobName}"${cvText} zijn succesvol ontvangen door Anca Mihuț. We zullen deze beoordelen en binnen 2 werkdagen contact met u opnemen via ${email} of ${phone}.`;
+        } else if (lang === 'de') {
+          const cvTextDe = selectedFile ? ` und Ihr Lebenslauf (${selectedFile.name})` : '';
+          successMsg = `Vielen Dank, ${name}! Ihre Bewerbung für die Position "${formattedJobName}"${cvTextDe} sind erfolgreich bei Anca Mihuț eingegangen. Wir werden sie prüfen und uns innerhalb von 2 Werktagen unter ${email} oder ${phone} bei Ihnen melden.`;
+        } else if (lang === 'ro') {
+          const cvTextRo = selectedFile ? ` și CV-ul dvs. (${selectedFile.name})` : '';
+          successMsg = `Vă mulțumim, ${name}! Candidatura dvs. pentru funcția "${formattedJobName}"${cvTextRo} au fost primite cu succes de Anca Mihuț. O vom examina și vă vom contacta la ${email} sau ${phone} în termen de 2 zile lucrătoare.`;
+        } else {
+          const cvTextEn = selectedFile ? ` and your resume (${selectedFile.name})` : '';
+          successMsg = `Thank you, ${name}! Your application for the "${formattedJobName}" position${cvTextEn} have been successfully received by Anca Mihuț. We will review it and contact you at ${email} or ${phone} within 2 days.`;
+        }
+
+        setFeedback({
+          text: successMsg,
+          type: 'success',
+        });
+
+        // Clear states
+        setName('');
+        setEmail('');
+        setPhone('');
+        setPosition('');
+        setMessage('');
+        setSelectedFile(null);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+      } catch (err) {
+        console.error(err);
+        const errorMsgs = {
+          nl: 'Er is een fout opgetreden bij het verzenden van uw sollicitatie. Probeer het later opnieuw.',
+          en: 'An error occurred while submitting your application. Please try again later.',
+          de: 'Beim Senden Ihrer Bewerbung ist ein Fehler aufgetreten. Bitte versuchen Sie es später noch einmal.',
+          ro: 'A apărut o eroare la trimiterea candidaturii. Vă rugăm să încercați din nou mai târziu.'
+        };
+        setFeedback({
+          text: errorMsgs[lang] || errorMsgs.nl,
+          type: 'error'
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
+
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        submitData(reader.result);
       };
-      
-      const formattedJobName = jobNames[position]?.[lang] || jobNames[position]?.nl || position;
-
-      let successMsg = '';
-      const cvText = selectedFile ? ` en uw cv (${selectedFile.name})` : '';
-      if (lang === 'nl') {
-        successMsg = `Bedankt, ${name}! Uw sollicitatie voor de functie "${formattedJobName}"${cvText} zijn succesvol ontvangen door Anca Mihuț. We zullen deze beoordelen en binnen 2 werkdagen contact met u opnemen via ${email} of ${phone}.`;
-      } else if (lang === 'de') {
-        const cvTextDe = selectedFile ? ` und Ihr Lebenslauf (${selectedFile.name})` : '';
-        successMsg = `Vielen Dank, ${name}! Ihre Bewerbung für die Position "${formattedJobName}"${cvTextDe} sind erfolgreich bei Anca Mihuț eingegangen. Wir werden sie prüfen und uns innerhalb von 2 Werktagen unter ${email} oder ${phone} bei Ihnen melden.`;
-      } else if (lang === 'ro') {
-        const cvTextRo = selectedFile ? ` și CV-ul dvs. (${selectedFile.name})` : '';
-        successMsg = `Vă mulțumim, ${name}! Candidatura dvs. pentru funcția "${formattedJobName}"${cvTextRo} au fost primite cu succes de Anca Mihuț. O vom examina și vă vom contacta la ${email} sau ${phone} în termen de 2 zile lucrătoare.`;
-      } else {
-        const cvTextEn = selectedFile ? ` and your resume (${selectedFile.name})` : '';
-        successMsg = `Thank you, ${name}! Your application for the "${formattedJobName}" position${cvTextEn} have been successfully received by Anca Mihuț. We will review it and contact you at ${email} or ${phone} within 2 days.`;
-      }
-
-      setFeedback({
-        text: successMsg,
-        type: 'success',
-      });
-
-      // Clear states
-      setName('');
-      setEmail('');
-      setPhone('');
-      setPosition('');
-      setMessage('');
-      setSelectedFile(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    }, 1800);
+      reader.onerror = () => {
+        setFeedback({
+          text: lang === 'nl' ? 'Fout bij het lezen van het cv-bestand.' : 'Error reading the CV file.',
+          type: 'error'
+        });
+        setIsSubmitting(false);
+      };
+      reader.readAsDataURL(selectedFile);
+    } else {
+      submitData(null);
+    }
   };
 
   const getChatPrefilledText = () => {
