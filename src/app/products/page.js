@@ -145,7 +145,7 @@ export default function Products() {
       specs: [
         {
           label: { nl: 'Vormen', en: 'Shapes', de: 'Formen', ro: 'Forme' },
-          value: { nl: 'Halfgrond, Kwartrond, Plint', en: 'Semiround, Quarter round, Plinth', de: 'Halbrunnd, Viertelrund, Sockelleiste', ro: 'Semirotund, Sfert de cerc, Plintă' }
+          value: { nl: 'Halfrond, Kwartrond, Plint', en: 'Semiround, Quarter round, Plinth', de: 'Halbrund, Viertelrund, Sockelleiste', ro: 'Semirotund, Sfert de cerc, Plintă' }
         },
         {
           label: { nl: 'Maatwerk', en: 'Customization', de: 'Anpassung', ro: 'Personalizare' },
