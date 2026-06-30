@@ -57,6 +57,66 @@
     }
   },
   {
+    "id": "sawmill",
+    "title": {
+      "nl": "Zagerij Operator / Houtbewerker",
+      "en": "Sawmill Operator / Woodworker",
+      "de": "Sägewerksführer / Holzbearbeiter",
+      "ro": "Operator Gater / Muncitor Debitator"
+    },
+    "department": {
+      "nl": "Productie",
+      "en": "Production",
+      "de": "Produktion",
+      "ro": "Producție"
+    },
+    "location": "Brad, RO",
+    "type": {
+      "nl": "Fulltime",
+      "en": "Full-Time",
+      "de": "Vollzeit",
+      "ro": "Normă Întreagă"
+    },
+    "description": {
+      "nl": "Verantwoordelijk voor het bedienen van de primaire zaaglijnen en gaters om ruwe beukenstammen te verwerken tot planken en blanks. Je bewaakt de maatvoering en zorgt voor een constante aanvoer van kwalitatief beukenhout voor de schaverij.",
+      "en": "Responsible for operating primary sawing lines and log breakdown systems to process raw beechwood logs into boards and blanks. You monitor dimensions and ensure a steady flow of quality timber for the planing mill.",
+      "de": "Verantwortlich für die Bedienung primärer Sägelinien und Blockbandsägen zur Verarbeitung von Buchenrundholz zu Brettern und Blanks. Sie überwachen die Maßhaltigkeit und sichern den Materialfluss für das Hobelwerk.",
+      "ro": "Responsabil pentru operarea liniilor primare de tăiere și a gaterelor pentru a procesa buștenii de fag brut în scânduri și piese brute. Monitorizați dimensiunile și asigurați un flux constant de cherestea de calitate pentru fabrica de rindeluire."
+    },
+    "requirements": {
+      "nl": [
+        "Voorafgaande ervaring met het bedienen van zagerijmachines (zoals lintzagen of gaters) is een pré.",
+        "Fysiek sterk en in staat om in een actieve productieomgeving te werken.",
+        "Aandacht voor veiligheidsvoorschriften en nauwkeurige maatvoering.",
+        "Teamspeler die flexibel kan schakelen tussen verschillende werkstations."
+      ],
+      "en": [
+        "Prior experience operating sawmill machinery (such as band saws or log breakdowns) is highly valued.",
+        "Physically fit and able to work in an active manufacturing environment.",
+        "Strict adherence to industrial safety protocols and dimensional accuracy.",
+        "Team player who can flexibly switch between different sawing workstations."
+      ],
+      "de": [
+        "Vorherige Erfahrung in der Bedienung von Sägewerksmaschinen (wie Bandsägen oder Blockbandsägen) ist erwünscht.",
+        "Körperlich belastbar und bereit für die Arbeit in einem aktiven Produktionsbetrieb.",
+        "Strikte Einhaltung von Sicherheitsvorschriften und Fokus auf Maßhaltigkeit.",
+        "Teamplayer, der flexibel zwischen verschiedenen Sägestationen wechseln kann."
+      ],
+      "ro": [
+        "Experiența anterioară în operarea utilajelor de gater (cum ar fi ferăstraie cu bandă / băncuțe) este foarte apreciată.",
+        "Capacitate fizică bună și rezistență la lucru în mediu de producție activ.",
+        "Atenție deosebită la normele de protecție a muncii și la precizia debitării.",
+        "Abilitatea de a lucra în echipă și de a fi flexibil în atribuțiile zilnice."
+      ]
+    },
+    "salary": {
+      "nl": "Concurrerend salaris + Overuren",
+      "en": "Competitive Pay + Overtime",
+      "de": "Wettbewerbsfähiges Gehalt + Überstunden",
+      "ro": "Salariu Competitiv + Ore Suplimentare"
+    }
+  },
+  {
     "id": "quality",
     "title": {
       "nl": "Inspecteur Kwaliteitscontrole & Sortering",
