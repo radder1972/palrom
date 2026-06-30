@@ -341,17 +341,18 @@ export default function Home() {
         />
         <div className="hero-overlay"></div>
         <div className="hero-content container">
-          <div className="hero-fsc-logo animate-fade-in" style={{ marginBottom: '1rem' }}>
+          <div className="hero-fsc-logo animate-fade-in" style={{ marginBottom: '1.25rem' }}>
             <Image 
               src="/images/fsc_logo.png" 
               alt="FSC Logo" 
-              width={50} 
-              height={62} 
+              width={76} 
+              height={95} 
               style={{
-                height: '62px',
+                height: '95px',
                 width: 'auto',
                 objectFit: 'contain',
-                display: 'block'
+                display: 'block',
+                filter: 'brightness(0) invert(1)'
               }}
             />
           </div>
