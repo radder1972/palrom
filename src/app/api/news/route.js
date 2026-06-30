@@ -17,7 +17,7 @@ function verifyAuth(request) {
 
 // Load Supabase environment variables if present
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 let supabase = null;
 if (supabaseUrl && supabaseKey) {
@@ -158,21 +158,6 @@ export async function GET() {
         .select('*');
 
       if (!error && data) {
-        // Auto-seed: If database is connected but empty, insert local seed data
-        if (data.length === 0) {
-          const localNews = readNews();
-          if (localNews.length > 0) {
-            console.log('Supabase news table is empty. Seeding local news...');
-            const dbRecords = localNews.map(mapNewsToDb);
-            const { error: seedErr } = await supabase
-              .from('news')
-              .upsert(dbRecords);
-            if (!seedErr) {
-              return NextResponse.json({ success: true, news: sortNewsItems(localNews) });
-            }
-            console.error('Failed to seed news to Supabase:', seedErr);
-          }
-        }
         const mappedNews = data.map(mapNewsFromDb);
         return NextResponse.json({ success: true, news: sortNewsItems(mappedNews) });
       }
