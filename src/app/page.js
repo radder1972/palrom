@@ -317,18 +317,6 @@ export default function Home() {
 
   return (
     <>
-      {/* Floating Decorative Wood Mosaic */}
-      <div className="hero-floating-wrapper animate-fade-in-delay">
-        <Image 
-          src="/images/floating_wood.png" 
-          alt="Decorative beechwood circular mosaic" 
-          className="hero-floating-graphic" 
-          width={220}
-          height={220}
-          priority
-        />
-      </div>
-
       {/* Hero Section */}
       <section id="home" className="hero-section" style={{ overflow: 'hidden' }}>
         <Image 
