@@ -333,7 +333,7 @@ function WoodVisualizer({ selection, lang }) {
           <i className="fa-solid fa-eye"></i> {t.livePreview?.[lang] || t.livePreview?.nl || 'Live preview'}
         </span>
       </div>
-      <div className="visualizer-body" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '130px', background: '#fdfbf7', border: '1px solid #edf2f7', borderRadius: '8px', padding: '10px', position: 'relative' }}>
+      <div className="visualizer-body" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '130px', background: '#fdfbf7', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '10px', position: 'relative' }}>
         <svg viewBox={`0 0 ${svgW} ${svgH}`} width="100%" height="100%" style={{ overflow: 'visible' }}>
           <defs>
             <linearGradient id="cylinderGrad" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -507,21 +507,21 @@ function SelectionSummary({ selection, lang }) {
           {/* 1. Product */}
           {selection.productName && (
             <tr>
-              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #edf2f7' }}>{getVal(t, 'product')}</td>
-              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #edf2f7' }}>{selection.productName}</td>
+              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #cbd5e1' }}>{getVal(t, 'product')}</td>
+              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #cbd5e1' }}>{selection.productName}</td>
             </tr>
           )}
           {/* 2. Subcategory */}
           {selection.category !== 'brichete' && selection.subCategory && (
             <tr>
-              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #edf2f7' }}>{getVal(t, 'subCategory')}</td>
-              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #edf2f7' }}>{getSubcategoryName(selection.category, selection.subCategory)}</td>
+              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #cbd5e1' }}>{getVal(t, 'subCategory')}</td>
+              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #cbd5e1' }}>{getSubcategoryName(selection.category, selection.subCategory)}</td>
             </tr>
           )}
           {/* 3. Houtsoort */}
           <tr>
-            <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #edf2f7' }}>{getVal(t, 'woodSpecies')}</td>
-            <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #edf2f7' }}>
+            <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #cbd5e1' }}>{getVal(t, 'woodSpecies')}</td>
+            <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #cbd5e1' }}>
               {selection.category === 'brichete'
                 ? (lang === 'nl' ? 'Beuken (Surplus zaagsel)' : (lang === 'ro' ? 'Fag (Surplus de rumeguș)' : (lang === 'de' ? 'Buche (Sägemehl)' : 'Beechwood (Sawdust surplus)')))
                 : getVal(t, 'beechwood')}
@@ -530,43 +530,43 @@ function SelectionSummary({ selection, lang }) {
           {/* 4. Kwaliteitsklasse */}
           {selection.grade && selection.category !== 'brichete' && (
             <tr>
-              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #edf2f7' }}>{getVal(t, 'grade')}</td>
-              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #edf2f7' }}>{gradeNames[lang]?.[selection.grade] || selection.grade}</td>
+              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #cbd5e1' }}>{getVal(t, 'grade')}</td>
+              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #cbd5e1' }}>{gradeNames[lang]?.[selection.grade] || selection.grade}</td>
             </tr>
           )}
           {/* 5. Afmetingen */}
           {selection.dimensions && (
             <tr>
-              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #edf2f7' }}>{getVal(t, 'dimensions')}</td>
-              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #edf2f7' }}>{selection.dimensions}</td>
+              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #cbd5e1' }}>{getVal(t, 'dimensions')}</td>
+              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #cbd5e1' }}>{selection.dimensions}</td>
             </tr>
           )}
           {/* Radius */}
           {selection.radius && selection.category === 'planed' && (
             <tr>
-              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #edf2f7' }}>Radius</td>
-              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #edf2f7' }}>{selection.radius}</td>
+              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #cbd5e1' }}>Radius</td>
+              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #cbd5e1' }}>{selection.radius}</td>
             </tr>
           )}
           {/* 6. Oplage */}
           {selection.qtyText && (
             <tr>
-              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #edf2f7' }}>{getVal(t, 'qty')}</td>
-              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-forest-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #edf2f7' }}>{selection.qtyText}</td>
+              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #cbd5e1' }}>{getVal(t, 'qty')}</td>
+              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-forest-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #cbd5e1' }}>{selection.qtyText}</td>
             </tr>
           )}
           {/* 7. Afwerking */}
           {selection.finish && (
             <tr>
-              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #edf2f7' }}>{getVal(t, 'finish')}</td>
-              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #edf2f7' }}>{selection.finish}</td>
+              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #cbd5e1' }}>{getVal(t, 'finish')}</td>
+              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #cbd5e1' }}>{selection.finish}</td>
             </tr>
           )}
           {/* 8. Droging */}
           {selection.drying && selection.category !== 'brichete' && (
             <tr>
-              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #edf2f7' }}>{getVal(t, 'drying')}</td>
-              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #edf2f7' }}>
+              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #cbd5e1' }}>{getVal(t, 'drying')}</td>
+              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #cbd5e1' }}>
                 {dryingValues[selection.drying]?.[lang] || dryingValues.kd[lang]}
               </td>
             </tr>
@@ -574,8 +574,8 @@ function SelectionSummary({ selection, lang }) {
           {/* 9. Gestoomd */}
           {selection.steamed && selection.category !== 'brichete' && (
             <tr>
-              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #edf2f7' }}>{getVal(t, 'steamed')}</td>
-              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #edf2f7' }}>
+              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #cbd5e1' }}>{getVal(t, 'steamed')}</td>
+              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #cbd5e1' }}>
                 {selection.steamed === 'yes' ? getVal(t, 'steamedValueYes') : getVal(t, 'steamedValueNo')}
               </td>
             </tr>
@@ -583,8 +583,8 @@ function SelectionSummary({ selection, lang }) {
           {/* 10. FSC */}
           {selection.fsc !== undefined && selection.category !== 'brichete' && (
             <tr>
-              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #edf2f7' }}>{getVal(t, 'fsc')}</td>
-              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #edf2f7' }}>
+              <td style={{ color: 'var(--color-text-muted)', fontWeight: 500, padding: '0.35rem 0.5rem 0.35rem 0', borderBottom: '1px solid #cbd5e1' }}>{getVal(t, 'fsc')}</td>
+              <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)', padding: '0.35rem 0 0.35rem 0.5rem', borderBottom: '1px solid #cbd5e1' }}>
                 {selection.fsc ? 'FSC® 100%' : (lang === 'nl' ? 'Geen FSC' : (lang === 'ro' ? 'Fără FSC' : (lang === 'de' ? 'Kein FSC' : 'No FSC')))}
               </td>
             </tr>
@@ -598,7 +598,7 @@ function SelectionSummary({ selection, lang }) {
         </div>
       )}
       {SHOW_PRICING && selection.price !== undefined && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', borderTop: '1px solid #edf2f7', paddingTop: '4px', marginTop: '4px', fontSize: '0.82rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', borderTop: '1px solid #cbd5e1', paddingTop: '4px', marginTop: '4px', fontSize: '0.82rem' }}>
           <span style={{ color: 'var(--color-text-muted)', fontWeight: 500, marginRight: '0.5rem' }}>{getVal(t, 'price')}: </span>
           <span style={{ fontWeight: 700, color: 'var(--color-primary-dark)' }}>
             € {formatEuro(selection.price)}
@@ -2315,7 +2315,7 @@ export default function Configurator() {
             <div style={{ padding: '1.75rem', fontSize: '0.9rem', color: 'var(--color-text-dark)', lineHeight: 1.6, maxHeight: '70vh', overflowY: 'auto' }}>
               {activeTooltipModal === 'grade' ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', borderBottom: '1px solid #edf2f7', paddingBottom: '1.25rem' }}>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', borderBottom: '1px solid #cbd5e1', paddingBottom: '1.25rem' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(231, 177, 36, 0.1)', border: '1.5px solid var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary-dark)', fontWeight: 800, flexShrink: 0 }}>
                       <span style={{ margin: 'auto' }}>A</span>
                     </div>
@@ -2332,7 +2332,7 @@ export default function Configurator() {
                       </p>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', borderBottom: '1px solid #edf2f7', paddingBottom: '1.25rem' }}>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', borderBottom: '1px solid #cbd5e1', paddingBottom: '1.25rem' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(74, 85, 104, 0.1)', border: '1.5px solid #4a5568', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a5568', fontWeight: 800, flexShrink: 0 }}>
                       <span style={{ margin: 'auto' }}>B</span>
                     </div>
@@ -2369,7 +2369,7 @@ export default function Configurator() {
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', borderBottom: '1px solid #edf2f7', paddingBottom: '1.25rem' }}>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', borderBottom: '1px solid #cbd5e1', paddingBottom: '1.25rem' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: 'rgba(231, 177, 36, 0.1)', border: '1.5px solid var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary-dark)', fontSize: '1.2rem', flexShrink: 0 }}>
                       <i className="fa-solid fa-temperature-high"></i>
                     </div>
@@ -2512,7 +2512,7 @@ function ConfigProfileDrawing({ category, subCategory }) {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: '#f8fafc',
-      border: '1px solid #edf2f7',
+      border: '1px solid #cbd5e1',
       borderRadius: '6px',
       padding: '0.5rem',
       boxSizing: 'border-box'
