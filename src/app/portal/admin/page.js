@@ -1218,45 +1218,7 @@ export default function AdminPortal() {
                 ))}
               </div>
 
-              <button
-                onClick={handleSyncDatabase}
-                disabled={loadingData}
-                style={{
-                  fontSize: '0.85rem',
-                  fontWeight: 700,
-                  color: 'var(--color-primary-dark)',
-                  padding: '0.5rem 1rem',
-                  border: '1px solid var(--color-primary-dark)',
-                  borderRadius: '6px',
-                  backgroundColor: 'transparent',
-                  cursor: loadingData ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.4rem'
-                }}
-              >
-                <i className="fa-solid fa-arrows-rotate"></i> {t.syncDbBtn[consoleLang]}
-              </button>
 
-              <button
-                onClick={handleExportDatabase}
-                disabled={loadingData}
-                style={{
-                  fontSize: '0.85rem',
-                  fontWeight: 700,
-                  color: 'var(--color-forest-dark)',
-                  padding: '0.5rem 1rem',
-                  border: '1px solid var(--color-forest-dark)',
-                  borderRadius: '6px',
-                  backgroundColor: 'transparent',
-                  cursor: loadingData ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.4rem'
-                }}
-              >
-                <i className="fa-solid fa-download"></i> {t.exportDbBtn[consoleLang]}
-              </button>
 
               <Link href="/" target="_blank" style={{
                 fontSize: '0.85rem',
@@ -2320,6 +2282,71 @@ export default function AdminPortal() {
               )}
             </div>
           )}
+          {/* Advanced Database Settings Section */}
+          <div style={{
+            marginTop: '4rem',
+            backgroundColor: '#fffdfa',
+            border: '1px solid #ffeeba',
+            borderRadius: '12px',
+            padding: '1.5rem',
+            boxShadow: '0 4px 15px rgba(222, 160, 0, 0.03)',
+            fontFamily: 'Inter, sans-serif'
+          }}>
+            <h3 style={{ margin: '0 0 1rem', fontSize: '1.15rem', fontWeight: 800, color: '#856404', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <i className="fa-solid fa-triangle-exclamation"></i>
+              {consoleLang === 'ro' ? 'Setări Avansate Bază de Date' : consoleLang === 'nl' ? 'Geavanceerde Database Instellingen' : 'Advanced Database Settings'}
+            </h3>
+            <p style={{ margin: '0 0 1.5rem', fontSize: '0.88rem', color: '#856404', lineHeight: '1.5' }}>
+              {consoleLang === 'ro' 
+                ? 'ATENȚIE: Aceste funcții sincronizează direct fișierele locale din codebase cu baza de date de producție. Asigurați-vă că datele sunt corecte înainte de a efectua aceste operațiuni, deoarece pot suprascrie modificările active.' 
+                : consoleLang === 'nl' 
+                ? 'LET OP: Deze functies synchroniseren de lokale bestanden uit de codebase rechtstreeks met de live database. Zorg ervoor dat u weet welke versie actueel is voordat u synchroniseert, omdat dit actieve wijzigingen kan overschrijven.' 
+                : 'WARNING: These features directly synchronize local codebase files with the live production database. Make sure you know which version is up-to-date before running these operations, as they can overwrite active changes.'}
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+              <button
+                onClick={handleSyncDatabase}
+                disabled={loadingData}
+                style={{
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  color: '#856404',
+                  padding: '0.6rem 1.2rem',
+                  border: '1px solid #ffeeba',
+                  borderRadius: '6px',
+                  backgroundColor: '#fff3cd',
+                  cursor: loadingData ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  transition: 'background-color 0.2s'
+                }}
+              >
+                <i className="fa-solid fa-arrows-rotate"></i> {t.syncDbBtn[consoleLang]}
+              </button>
+
+              <button
+                onClick={handleExportDatabase}
+                disabled={loadingData}
+                style={{
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  color: '#ffffff',
+                  padding: '0.6rem 1.2rem',
+                  border: '1px solid var(--color-forest-dark)',
+                  borderRadius: '6px',
+                  backgroundColor: 'var(--color-forest-dark)',
+                  cursor: loadingData ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem'
+                }}
+              >
+                <i className="fa-solid fa-download"></i> {t.exportDbBtn[consoleLang]}
+              </button>
+            </div>
+          </div>
+
           {/* Console Footer with Version */}
           <div style={{
             marginTop: '3rem',
