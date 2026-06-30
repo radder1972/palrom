@@ -20,9 +20,7 @@ const t = {
   selectorTitle: { nl: 'B2B Offerte Configurator', en: 'B2B Quote Configurator', de: 'B2B-Angebotskonfigurator', ro: 'Configurator de Oferte B2B' },
   selectorSubtitle: { nl: 'Kies de gewenste interface om de configurator te testen en uw aanvraag samen te stellen.', en: 'Choose the desired interface to test the configurator and compile your request.', de: 'Wählen Sie die gewünschte Schnittstelle, um den Konfigurator zu testen und Ihre Anfrage zu erstellen.', ro: 'Alegeți interfața dorită pentru a testa configuratorul și a compila solicitarea dvs.' },
   
-  v1Title: { nl: 'V1: Klassieke Accordeon', en: 'V1: Classic Accordion', de: 'V1: Klassisches Akkordeon', ro: 'V1: Acordeon clasic' },
-  v1Desc: { nl: 'De vertrouwde, compacte interface. Alle configuratiestappen worden direct onder elkaar in een inklapbaar menu getoond. Ideaal voor snelle invoer.', en: 'The familiar, compact interface. All configuration steps are displayed directly below each other in a collapsible menu. Ideal for quick entry.', de: 'Die vertraute, kompakte Benutzeroberfläche. Alle Konfigurationsschritte werden direkt untereinander in einem faltbaren Menü angezeigt. Ideal für die schnelle Eingabe.', ro: 'Interfața familiară, compactă. Toți pașii de configurare sunt afișați direct unul sub celălalt într-un meniu pliabil. Ideal pentru introducere rapidă.' },
-  v1Badge: { nl: 'Klassiek', en: 'Classic', de: 'Klassisch', ro: 'Clasic' },
+
   
   v2Title: { nl: 'V2: Multi-step Wizard', en: 'V2: Multi-step Wizard', de: 'V2: Multi-Step-Assistent', ro: 'V2: Asistent pas cu pas' },
   v2Desc: { nl: 'De nieuwe, intuïtieve interface. Leidt u stap-voor-stap door de configuratie met visuele hulpmiddelen, heldere slides en live previews.', en: 'The new, intuitive interface. Guides you step-by-step through the configuration with visual aids, clear slides, and live previews.', de: 'Die neue, intuitive Benutzeroberfläche. Führt Sie Schritt für Schritt mit visueller Auswahl, klaren Folien und Live-Vorschau durch die Konfiguration.', ro: 'Interfața nouă, intuitivă. Vă ghidează pas cu pas prin configurare cu opțiuni vizuale, diapozitive clare și previzualizări live.' },
@@ -297,20 +295,7 @@ export default function ConfiguratorSelector() {
         <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
           
           <div className="selector-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}>
-            {/* Card V1: Classic */}
-            <Link href="/configurator/v1" className="selector-card" onClick={() => { sendGAEvent({ event: 'configurator_start', value: 'v1' }); trackTelemetryEvent('configurator_start', { category: 'v1' }); }}>
-              <span className="card-badge badge-classic">{getTranslation('v1Badge')}</span>
-              <div className="card-content">
-                <div className="card-icon-wrapper">
-                  <i className="fa-solid fa-list-ul"></i>
-                </div>
-                <h3>{getTranslation('v1Title')}</h3>
-                <p>{getTranslation('v1Desc')}</p>
-              </div>
-              <span className="btn btn-secondary btn-block" style={{ width: '100%', textAlign: 'center', display: 'block' }}>
-                {getTranslation('testButton')} <i className="fa-solid fa-arrow-right icon-right"></i>
-              </span>
-            </Link>
+
 
             {/* Card V2: Stepper Wizard */}
             <Link href="/configurator/v2" className="selector-card" onClick={() => { sendGAEvent({ event: 'configurator_start', value: 'v2' }); trackTelemetryEvent('configurator_start', { category: 'v2' }); }}>
