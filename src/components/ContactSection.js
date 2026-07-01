@@ -668,13 +668,22 @@ Cu stimă,`
                   <h3>{member.name}</h3>
                   <div className="team-role">{member.role[lang] || member.role.nl}</div>
                   <span className="team-languages">{member.languages[lang] || member.languages.nl}</span>
-                  <a
-                    href={`mailto:${member.email}`}
-                    className="team-email-btn"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <i className="fa-solid fa-envelope"></i> {member.email}
-                  </a>
+                  <div className="team-card-contacts" style={{ width: '100%', marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                    <a
+                      href={`mailto:${member.email}`}
+                      className="team-email-btn"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <i className="fa-solid fa-envelope"></i> {member.email}
+                    </a>
+                    <a
+                      href={`tel:${member.phone}`}
+                      className="team-phone-btn"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <i className="fa-solid fa-phone"></i> {member.phone}
+                    </a>
+                  </div>
                 </div>
               ))}
             </div>
@@ -900,11 +909,11 @@ Cu stimă,`
               </a>
               <a href={`tel:${activeModalMember.phone}`} className="team-contact-btn phone">
                 <i className="fa-solid fa-phone"></i>{' '}
-                {getTranslation('callOfficeBtn')}
+                {getTranslation('callOfficeBtn')}: {activeModalMember.phone}
               </a>
               <a href={`mailto:${activeModalMember.email}`} className="team-contact-btn email">
                 <i className="fa-solid fa-envelope"></i>{' '}
-                {getTranslation('emailBtn')}
+                {activeModalMember.email}
               </a>
             </div>
           </div>
