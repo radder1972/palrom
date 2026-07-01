@@ -244,6 +244,12 @@ const translations = {
     de: 'Benötigen Sie eine **FSC® 100%**-Zertifizierung für diese Bestellung?',
     ro: 'Aveți nevoie de certificare **FSC® 100%** pentru această comandă?'
   },
+  askRadius: {
+    nl: 'Wenst u afgeronde kanten? Zo ja, kies de radius (R3 of R6). Indien de kanten recht moeten zijn, kies dan R0.',
+    en: 'Do you require rounded edges? If so, select the radius (R3 or R6). For straight edges, select R0.',
+    de: 'Wünschen Sie abgerundete Kanten? Wenn ja, wählen Sie den Radius (R3 oder R6). Für gerade Kanten wählen Sie R0.',
+    ro: 'Doriți margini rotunjite? Dacă da, selectați raza (R3 sau R6). Pentru margini drepte, selectați R0.'
+  },
   everythingComplete: {
     nl: 'Uitstekend, ik heb alle benodigde specificaties compleet! Klopt het onderstaande live voorbeeld en de specificatietabel? Klik op de knop om de configuratie toe te voegen aan uw offerteaanvraag.',
     en: 'Excellent, I have gathered all required specifications! Does the live preview and specifications table below look correct? Click the button to add the configuration to your quote request.',
@@ -632,7 +638,7 @@ export default function OpenChatConfigurator() {
     if (cat === 'brichete') {
       return ['category', 'quantity'].every(k => fields[k]);
     }
-    if (cat === 'planed' && subCategoryPlaned === 'planed-radius') {
+    if (cat === 'planed') {
       return ['category', 'dimensions', 'grade', 'drying', 'fsc', 'quantity', 'radius'].every(k => fields[k]);
     }
     return ['category', 'dimensions', 'grade', 'drying', 'fsc', 'quantity'].every(k => fields[k]);
@@ -897,10 +903,15 @@ export default function OpenChatConfigurator() {
     }
 
     // Detect Radius (general)
-    if (/(?:r3|radius 3|3mm|3 mm)/i.test(cleanText)) {
+    if (/(?:r3|radius 3|3\s*mm)/i.test(cleanText)) {
       updates.radius = 'R3';
-    } else if (/(?:r6|radius 6|6mm|6 mm)/i.test(cleanText)) {
+      if (targetCat === 'planed' || activeCat === 'planed') updates.subCategoryPlaned = 'planed-radius';
+    } else if (/(?:r6|radius 6|6\s*mm)/i.test(cleanText)) {
       updates.radius = 'R6';
+      if (targetCat === 'planed' || activeCat === 'planed') updates.subCategoryPlaned = 'planed-radius';
+    } else if (/(?:r0|radius 0|0\s*mm|geen\s*radius|recht|zonder\s*radius|geen\b|flat|sharp|rechthoek|rect|plat|vierkant|sq|s4s)/i.test(cleanText)) {
+      updates.radius = 'R0';
+      if (targetCat === 'planed' || activeCat === 'planed') updates.subCategoryPlaned = 'planed-rect';
     }
 
     // 3. Dimensions parsing
@@ -1401,7 +1412,7 @@ export default function OpenChatConfigurator() {
             replyText += getTranslation('askCategory');
           } else if (!updatedFields.dimensions) {
             replyText += getTranslation('askDimensions');
-          } else if (activeCat === 'planed' && (clamped.subCategoryPlaned || subCategoryPlaned) === 'planed-radius' && !updatedFields.radius) {
+          } else if (activeCat === 'planed' && !updatedFields.radius) {
             replyText += getTranslation('askRadius');
           } else if (!updatedFields.grade && !isBriquettes) {
             replyText += getTranslation('askGrade');
@@ -1631,7 +1642,7 @@ export default function OpenChatConfigurator() {
             else if (!updatedFields.grade && !isBriquettes) replyText += getTranslation('askGrade');
             else if (!updatedFields.drying && !isBriquettes) replyText += getTranslation('askDrying');
             else if (!updatedFields.fsc && !isBriquettes) replyText += getTranslation('askFsc');
-            else if (activeCat === 'planed' && (clamped.subCategoryPlaned || subCategoryPlaned) === 'planed-radius' && !updatedFields.radius) replyText += getTranslation('askRadius');
+            else if (activeCat === 'planed' && !updatedFields.radius) replyText += getTranslation('askRadius');
             else if (!updatedFields.quantity) replyText += getTranslation('askQuantity');
             else replyText += getTranslation('everythingComplete');
           }
@@ -1793,7 +1804,7 @@ export default function OpenChatConfigurator() {
       finalFields.drying = true;
       finalFields.fsc = true;
       finalFields.steamed = true;
-      if (category === 'planed' && currentSubcat === 'planed-radius') {
+      if (category === 'planed') {
         finalFields.radius = true;
       }
     }
@@ -1851,7 +1862,7 @@ export default function OpenChatConfigurator() {
       discountPercent: details.discountPercent,
       finish: categoryData[category].finish[lang] || categoryData[category].finish.nl,
       subCategory: currentSubcat,
-      radius: (category === 'planed' && currentSubcat === 'planed-radius') ? radius : undefined,
+      radius: category === 'planed' ? radius : undefined,
     };
 
     addToCart(cartItem);
@@ -2786,7 +2797,7 @@ export default function OpenChatConfigurator() {
                       </tr>
 
                       {/* Radius */}
-                      {category === 'planed' && subCategoryPlaned === 'planed-radius' && radius && (
+                      {category === 'planed' && radius && (
                         <tr>
                           <td style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>Radius</td>
                           <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--color-text-dark)' }}>{radius}</td>
