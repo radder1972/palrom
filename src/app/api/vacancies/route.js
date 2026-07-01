@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { createClient } from '@supabase/supabase-js';
+import { sql } from '@vercel/postgres';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
@@ -19,18 +19,7 @@ function verifyAuth(request) {
   return allowed.includes(passcode);
 }
 
-// Load Supabase environment variables if present
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-let supabase = null;
-if (supabaseUrl && supabaseKey) {
-  try {
-    supabase = createClient(supabaseUrl, supabaseKey);
-  } catch (err) {
-    console.error('Failed to initialize Supabase client:', err);
-  }
-}
+const hasPostgres = !!process.env.POSTGRES_URL || !!process.env.POSTGRES_URL_NON_POOLING;
 
 const dbPath = path.join(process.cwd(), 'vacancies.json');
 
@@ -57,19 +46,18 @@ function writeVacancies(data) {
 }
 
 export async function GET() {
-  if (supabase) {
+  if (hasPostgres || process.env.VERCEL) {
     try {
-      const { data, error } = await supabase
-        .from('vacancies')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (!error && data) {
+      const { rows: data } = await sql`
+        SELECT * FROM vacancies
+        ORDER BY created_at DESC;
+      `;
+
+      if (data) {
         return NextResponse.json({ success: true, vacancies: data });
       }
-      console.error('Supabase fetch vacancies error:', error);
     } catch (err) {
-      console.error('Failed to fetch vacancies from Supabase:', err);
+      console.error('Failed to fetch vacancies from Vercel Postgres:', err);
     }
   }
 
@@ -86,7 +74,7 @@ export async function POST(request) {
     const body = await request.json();
     const { action, vacancy } = body;
 
-    if (supabase) {
+    if (hasPostgres || process.env.VERCEL) {
       try {
         if (action === 'save') {
           if (!vacancy || !vacancy.title) {
@@ -101,14 +89,28 @@ export async function POST(request) {
             vacancy.id = `${titleSlug}-${Date.now().toString().slice(-4)}`;
           }
 
-          const { error } = await supabase
-            .from('vacancies')
-            .upsert([vacancy]);
-
-          if (error) {
-            console.error('Supabase vacancies save error:', error);
-            throw error;
-          }
+          await sql`
+            INSERT INTO vacancies (
+              id, title, department, location, type, description, requirements, salary
+            ) VALUES (
+              ${vacancy.id},
+              ${JSON.stringify(vacancy.title)},
+              ${JSON.stringify(vacancy.department)},
+              ${vacancy.location || 'Brad, RO'},
+              ${JSON.stringify(vacancy.type)},
+              ${JSON.stringify(vacancy.description)},
+              ${JSON.stringify(vacancy.requirements)},
+              ${JSON.stringify(vacancy.salary)}
+            )
+            ON CONFLICT (id) DO UPDATE SET
+              title = EXCLUDED.title,
+              department = EXCLUDED.department,
+              location = EXCLUDED.location,
+              type = EXCLUDED.type,
+              description = EXCLUDED.description,
+              requirements = EXCLUDED.requirements,
+              salary = EXCLUDED.salary;
+          `;
           return NextResponse.json({ success: true, vacancy });
 
         } else if (action === 'delete') {
@@ -117,26 +119,13 @@ export async function POST(request) {
             return NextResponse.json({ success: false, error: 'Missing vacancy ID' }, { status: 400 });
           }
 
-          const { error } = await supabase
-            .from('vacancies')
-            .delete()
-            .eq('id', id);
-
-          if (error) {
-            console.error('Supabase vacancies delete error:', error);
-            throw error;
-          }
+          await sql`DELETE FROM vacancies WHERE id = ${id}`;
           return NextResponse.json({ success: true, message: 'Vacancy deleted successfully' });
         } else if (action === 'export_local') {
-          const { data, error } = await supabase
-            .from('vacancies')
-            .select('*')
-            .order('created_at', { ascending: false });
-
-          if (error) {
-            console.error('Supabase fetch vacancies for export error:', error);
-            throw error;
-          }
+          const { rows: data } = await sql`
+            SELECT * FROM vacancies
+            ORDER BY created_at DESC;
+          `;
 
           if (data) {
             if (writeVacancies(data)) {
@@ -157,24 +146,40 @@ export async function POST(request) {
         } else if (action === 'sync_local') {
           const localVacancies = readVacancies();
           if (localVacancies.length > 0) {
-            const { error } = await supabase
-              .from('vacancies')
-              .upsert(localVacancies);
-
-            if (error) {
-              console.error('Supabase vacancies sync error:', error);
-              throw error;
+            for (const vac of localVacancies) {
+              await sql`
+                INSERT INTO vacancies (
+                  id, title, department, location, type, description, requirements, salary
+                ) VALUES (
+                  ${vac.id},
+                  ${JSON.stringify(vac.title)},
+                  ${JSON.stringify(vac.department)},
+                  ${vac.location || 'Brad, RO'},
+                  ${JSON.stringify(vac.type)},
+                  ${JSON.stringify(vac.description)},
+                  ${JSON.stringify(vac.requirements)},
+                  ${JSON.stringify(vac.salary)}
+                )
+                ON CONFLICT (id) DO UPDATE SET
+                  title = EXCLUDED.title,
+                  department = EXCLUDED.department,
+                  location = EXCLUDED.location,
+                  type = EXCLUDED.type,
+                  description = EXCLUDED.description,
+                  requirements = EXCLUDED.requirements,
+                  salary = EXCLUDED.salary;
+              `;
             }
             return NextResponse.json({ success: true, message: 'Vacancies synced successfully' });
           }
           return NextResponse.json({ success: false, error: 'No local vacancies found to sync' }, { status: 400 });
         }
       } catch (dbErr) {
-        console.error('Supabase vacancies write error:', dbErr);
+        console.error('Vercel Postgres vacancies write error:', dbErr);
         if (process.env.VERCEL) {
           return NextResponse.json({ 
             success: false, 
-            error: `Database error: ${dbErr.message || 'Supabase error'}. Please verify that the 'vacancies' table exists in Supabase by running the SQL in schema.sql.` 
+            error: `Database error: ${dbErr.message || 'Vercel Postgres error'}. Please verify that the 'vacancies' table exists in Vercel Postgres by running the SQL in schema.sql.` 
           }, { status: 500 });
         }
         console.log('Falling back to local file database...');
