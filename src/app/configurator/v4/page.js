@@ -2539,12 +2539,13 @@ export default function OpenChatConfigurator() {
                         gap: '0.4rem'
                       }}
                     >
-                      <span>👍</span> {lang === 'nl' ? 'Ja, start met blanks' : (lang === 'ro' ? 'Da, începe cu blanks' : (lang === 'de' ? 'Ja, beginne mit Blanks' : 'Yes, start with blanks'))}
+                      <i className="fa-solid fa-cube" style={{ color: 'var(--color-primary)' }}></i> {lang === 'nl' ? 'Ja, start met blanks' : (lang === 'ro' ? 'Da, începe cu blanks' : (lang === 'de' ? 'Ja, beginne mit Blanks' : 'Yes, start with blanks'))}
                     </button>
                     {[
                       {
                         id: 'latten',
-                        emoji: '📏',
+                        icon: 'fa-solid fa-ruler-horizontal',
+                        iconColor: 'var(--color-primary-dark)',
                         nl: 'Kies latten',
                         en: 'Choose slats',
                         de: 'Wähle Leisten',
@@ -2558,7 +2559,8 @@ export default function OpenChatConfigurator() {
                       },
                       {
                         id: 'stokken',
-                        emoji: '🥖',
+                        icon: 'fa-solid fa-circle-dot',
+                        iconColor: 'var(--color-primary-dark)',
                         nl: 'Kies stokken',
                         en: 'Choose rods',
                         de: 'Wähle Rundstäbe',
@@ -2572,7 +2574,8 @@ export default function OpenChatConfigurator() {
                       },
                       {
                         id: 'profielen',
-                        emoji: '🪵',
+                        icon: 'fa-solid fa-shapes',
+                        iconColor: 'var(--color-primary-dark)',
                         nl: 'Kies profielen',
                         en: 'Choose profiles',
                         de: 'Wähle Profile',
@@ -2586,7 +2589,8 @@ export default function OpenChatConfigurator() {
                       },
                       {
                         id: 'specials',
-                        emoji: '🧩',
+                        icon: 'fa-solid fa-puzzle-piece',
+                        iconColor: 'var(--color-primary-dark)',
                         nl: 'Kies bestekken',
                         en: 'Choose specials',
                         de: 'Wähle Zuschnitte',
@@ -2600,7 +2604,8 @@ export default function OpenChatConfigurator() {
                       },
                       {
                         id: 'brichete',
-                        emoji: '🔥',
+                        icon: 'fa-solid fa-fire',
+                        iconColor: '#f97316',
                         nl: 'Kies briketten',
                         en: 'Choose briquettes',
                         de: 'Wähle Briketts',
@@ -2636,7 +2641,7 @@ export default function OpenChatConfigurator() {
                           gap: '0.4rem'
                         }}
                       >
-                        <span>{prod.emoji}</span> {prod[lang] || prod.nl}
+                        <i className={prod.icon} style={{ color: prod.iconColor }}></i> {prod[lang] || prod.nl}
                       </button>
                     ))}
                   </div>
