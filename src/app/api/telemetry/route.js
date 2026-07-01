@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { createClient } from '@supabase/supabase-js';
+import { sql } from '@vercel/postgres';
 
 const VALID_PASSCODES = ['palromadmin2026', 'admin2026'];
 
@@ -15,18 +15,7 @@ function verifyAuth(request) {
   return allowed.includes(passcode);
 }
 
-// Initialize Supabase if present
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-let supabase = null;
-if (supabaseUrl && supabaseKey) {
-  try {
-    supabase = createClient(supabaseUrl, supabaseKey);
-  } catch (err) {
-    console.error('Failed to initialize Supabase client:', err);
-  }
-}
+const hasPostgres = !!process.env.POSTGRES_URL || !!process.env.POSTGRES_URL_NON_POOLING;
 
 const AUDIT_FILE = path.join(process.cwd(), 'telemetry_audit.json');
 
@@ -73,126 +62,73 @@ export async function POST(request) {
 
     const timestamp = new Date().toISOString();
 
-    if (supabase) {
+    if (hasPostgres || process.env.VERCEL) {
       // --------------------------------------------------
-      // SUPABASE DB WRITES
+      // VERCEL POSTGRES DB WRITES
       // --------------------------------------------------
       if (type === 'page_view') {
-        const { error } = await supabase.from('page_views').insert({
-          session_id: sessionId,
-          page_path: payload.path || '/',
-          language: payload.lang || 'nl',
-          referrer: payload.referrer || null,
-          is_mobile: !!payload.isMobile,
-          created_at: timestamp
-        });
-        if (error) throw error;
+        await sql`
+          INSERT INTO page_views (
+            session_id, page_path, language, referrer, is_mobile, created_at
+          ) VALUES (
+            ${sessionId}, ${payload.path || '/'}, ${payload.lang || 'nl'}, ${payload.referrer || null}, ${!!payload.isMobile}, ${timestamp}
+          );
+        `;
       } 
       
       else if (type === 'configurator_event') {
-        const { error } = await supabase.from('configurator_events').insert({
-          session_id: sessionId,
-          event_type: payload.eventType,
-          category: payload.category || null,
-          sub_category: payload.subCategory || null,
-          dimensions: payload.dimensions || null,
-          grade: payload.grade || null,
-          drying: payload.drying || null,
-          fsc: payload.fsc !== undefined ? !!payload.fsc : null,
-          quantity: payload.quantity ? Number(payload.quantity) : null,
-          language: payload.lang || 'nl',
-          created_at: timestamp
-        });
-        if (error) throw error;
+        await sql`
+          INSERT INTO configurator_events (
+            session_id, event_type, category, sub_category, dimensions, grade, drying, fsc, quantity, language, created_at
+          ) VALUES (
+            ${sessionId}, ${payload.eventType}, ${payload.category || null}, ${payload.subCategory || null}, 
+            ${payload.dimensions ? JSON.stringify(payload.dimensions) : null}, ${payload.grade || null}, 
+            ${payload.drying || null}, ${payload.fsc !== undefined ? !!payload.fsc : null}, 
+            ${payload.quantity ? Number(payload.quantity) : null}, ${payload.lang || 'nl'}, ${timestamp}
+          );
+        `;
       } 
       
       else if (type === 'chatbot_message') {
-        const { data: existing } = await supabase
-          .from('chatbot_conversations')
-          .select('*')
-          .eq('session_id', sessionId)
-          .maybeSingle();
-
-        if (existing) {
-          await supabase
-            .from('chatbot_conversations')
-            .update({ message_count: existing.message_count + 1 })
-            .eq('session_id', sessionId);
-        } else {
-          await supabase
-            .from('chatbot_conversations')
-            .insert({
-              session_id: sessionId,
-              message_count: 1,
-              language: payload.lang || 'nl',
-              created_at: timestamp
-            });
-        }
+        await sql`
+          INSERT INTO chatbot_conversations (
+            session_id, message_count, language, created_at
+          ) VALUES (
+            ${sessionId}, 1, ${payload.lang || 'nl'}, ${timestamp}
+          )
+          ON CONFLICT (session_id) DO UPDATE SET
+            message_count = chatbot_conversations.message_count + 1;
+        `;
       } 
       
       else if (type === 'chatbot_config_complete') {
-        const { data: existing } = await supabase
-          .from('chatbot_conversations')
-          .select('*')
-          .eq('session_id', sessionId)
-          .maybeSingle();
-
-        if (existing) {
-          await supabase
-            .from('chatbot_conversations')
-            .update({ completed_configuration: true })
-            .eq('session_id', sessionId);
-        } else {
-          await supabase
-            .from('chatbot_conversations')
-            .insert({
-              session_id: sessionId,
-              completed_configuration: true,
-              language: payload.lang || 'nl',
-              created_at: timestamp
-            });
-        }
+        await sql`
+          INSERT INTO chatbot_conversations (
+            session_id, completed_configuration, language, created_at
+          ) VALUES (
+            ${sessionId}, true, ${payload.lang || 'nl'}, ${timestamp}
+          )
+          ON CONFLICT (session_id) DO UPDATE SET
+            completed_configuration = true;
+        `;
       } 
       
       else if (type === 'chatbot_fallback') {
-        const { data: existing } = await supabase
-          .from('chatbot_conversations')
-          .select('*')
-          .eq('session_id', sessionId)
-          .maybeSingle();
-
         const fallbackMsg = payload.message || null;
-        let messages = [];
-        if (existing) {
-          if (existing.fallback_messages) {
-            messages = Array.isArray(existing.fallback_messages)
-              ? existing.fallback_messages
-              : [];
-          }
-          if (fallbackMsg) messages.push(fallbackMsg);
-
-          await supabase
-            .from('chatbot_conversations')
-            .update({ 
-              had_fallback: true,
-              fallback_messages: messages
-            })
-            .eq('session_id', sessionId);
-        } else {
-          if (fallbackMsg) messages.push(fallbackMsg);
-          await supabase
-            .from('chatbot_conversations')
-            .insert({
-              session_id: sessionId,
-              had_fallback: true,
-              fallback_messages: messages,
-              language: payload.lang || 'nl',
-              created_at: timestamp
-            });
-        }
+        const fallbackArray = fallbackMsg ? [fallbackMsg] : [];
+        await sql`
+          INSERT INTO chatbot_conversations (
+            session_id, had_fallback, fallback_messages, language, created_at
+          ) VALUES (
+            ${sessionId}, true, ${JSON.stringify(fallbackArray)}, ${payload.lang || 'nl'}, ${timestamp}
+          )
+          ON CONFLICT (session_id) DO UPDATE SET
+            had_fallback = true,
+            fallback_messages = COALESCE(chatbot_conversations.fallback_messages, '[]'::jsonb) || ${JSON.stringify(fallbackArray)}::jsonb;
+        `;
       }
 
-      return NextResponse.json({ success: true, db: 'supabase' });
+      return NextResponse.json({ success: true, db: 'vercel-postgres' });
 
     } else {
       // --------------------------------------------------
@@ -277,21 +213,21 @@ export async function GET(request) {
     let chatbotConversations = [];
     let quoteInquiries = [];
 
-    if (supabase) {
-      // Fetch raw logs from database to aggregate in JavaScript
-      const { data: pv, error: pvErr } = await supabase.from('page_views').select('*');
-      const { data: ce, error: ceErr } = await supabase.from('configurator_events').select('*');
-      const { data: cc, error: ccErr } = await supabase.from('chatbot_conversations').select('*');
-      const { data: qi, error: qiErr } = await supabase.from('quote_inquiries').select('*');
+    if (hasPostgres || process.env.VERCEL) {
+      try {
+        const { rows: pv } = await sql`SELECT * FROM page_views`;
+        const { rows: ce } = await sql`SELECT * FROM configurator_events`;
+        const { rows: cc } = await sql`SELECT * FROM chatbot_conversations`;
+        const { rows: qi } = await sql`SELECT * FROM quote_inquiries`;
 
-      if (pvErr || ceErr || ccErr || qiErr) {
-        throw new Error(pvErr?.message || ceErr?.message || ccErr?.message || qiErr?.message);
+        pageViews = pv || [];
+        configuratorEvents = ce || [];
+        chatbotConversations = cc || [];
+        quoteInquiries = qi || [];
+      } catch (dbErr) {
+        console.error('Vercel Postgres fetch telemetry error:', dbErr);
+        throw dbErr;
       }
-
-      pageViews = pv || [];
-      configuratorEvents = ce || [];
-      chatbotConversations = cc || [];
-      quoteInquiries = qi || [];
     } else {
       // Fetch from local JSON fallbacks
       const local = readLocalTelemetry();
