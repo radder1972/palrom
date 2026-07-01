@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { sql } from '@vercel/postgres';
 import fs from 'fs';
 import path from 'path';
 
@@ -15,18 +15,7 @@ function verifyAuth(request) {
   return allowed.includes(passcode);
 }
 
-// Initialize Supabase if present
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-let supabase = null;
-if (supabaseUrl && supabaseKey) {
-  try {
-    supabase = createClient(supabaseUrl, supabaseKey);
-  } catch (err) {
-    console.error('Failed to initialize Supabase client:', err);
-  }
-}
+const hasPostgres = !!process.env.POSTGRES_URL || !!process.env.POSTGRES_URL_NON_POOLING;
 
 const LOCAL_FILE = path.join(process.cwd(), 'inquiries.json');
 
@@ -57,16 +46,17 @@ export async function GET(request) {
 
     let inquiries = [];
 
-    if (supabase) {
-      const { data, error } = await supabase
-        .from('quote_inquiries')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        throw error;
+    if (hasPostgres || process.env.VERCEL) {
+      try {
+        const { rows } = await sql`
+          SELECT * FROM quote_inquiries
+          ORDER BY created_at DESC;
+        `;
+        inquiries = rows || [];
+      } catch (dbErr) {
+        console.error('Vercel Postgres query error fetching inquiries:', dbErr);
+        throw dbErr;
       }
-      inquiries = data || [];
     } else {
       inquiries = readLocalInquiries();
       inquiries.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
@@ -96,16 +86,16 @@ export async function PATCH(request) {
 
     let updatedInDb = false;
 
-    if (supabase) {
-      const { error } = await supabase
-        .from('quote_inquiries')
-        .update({ status })
-        .eq('id', id);
-
-      if (error) {
-        console.error('Supabase update status error:', error);
-      } else {
+    if (hasPostgres || process.env.VERCEL) {
+      try {
+        await sql`
+          UPDATE quote_inquiries
+          SET status = ${status}
+          WHERE id = ${id};
+        `;
         updatedInDb = true;
+      } catch (dbErr) {
+        console.error('Vercel Postgres update status error:', dbErr);
       }
     }
 
