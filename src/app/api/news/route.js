@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { createClient } from '@supabase/supabase-js';
+import { sql } from '@vercel/postgres';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
@@ -19,18 +19,7 @@ function verifyAuth(request) {
   return allowed.includes(passcode);
 }
 
-// Load Supabase environment variables if present
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-let supabase = null;
-if (supabaseUrl && supabaseKey) {
-  try {
-    supabase = createClient(supabaseUrl, supabaseKey);
-  } catch (err) {
-    console.error('Failed to initialize Supabase client:', err);
-  }
-}
+const hasPostgres = !!process.env.POSTGRES_URL || !!process.env.POSTGRES_URL_NON_POOLING;
 
 // Mapping helpers to match Supabase snake_case columns
 function mapNewsToDb(newsItem) {
@@ -155,19 +144,16 @@ function sortNewsItems(items) {
 }
 
 export async function GET() {
-  if (supabase) {
+  if (hasPostgres || process.env.VERCEL) {
     try {
-      const { data, error } = await supabase
-        .from('news')
-        .select('*');
+      const { rows: data } = await sql`SELECT * FROM news`;
 
-      if (!error && data) {
+      if (data) {
         const mappedNews = data.map(mapNewsFromDb);
         return NextResponse.json({ success: true, news: sortNewsItems(mappedNews) });
       }
-      console.error('Supabase fetch news error:', error);
     } catch (err) {
-      console.error('Failed to fetch news from Supabase:', err);
+      console.error('Failed to fetch news from Vercel Postgres:', err);
     }
   }
 
@@ -184,7 +170,7 @@ export async function POST(request) {
     const body = await request.json();
     const { action, newsItem } = body;
 
-    if (supabase) {
+    if (hasPostgres || process.env.VERCEL) {
       try {
         if (action === 'save') {
           if (!newsItem || !newsItem.title) {
@@ -200,14 +186,32 @@ export async function POST(request) {
           }
 
           const dbRecord = mapNewsToDb(newsItem);
-          const { error } = await supabase
-            .from('news')
-            .upsert([dbRecord]);
-
-          if (error) {
-            console.error('Supabase news save error:', error);
-            throw error;
-          }
+          await sql`
+            INSERT INTO news (
+              id, tag, date, author, title, content, link_url, link_text, image, is_romania_only
+            ) VALUES (
+              ${dbRecord.id},
+              ${JSON.stringify(dbRecord.tag)},
+              ${JSON.stringify(dbRecord.date)},
+              ${dbRecord.author},
+              ${JSON.stringify(dbRecord.title)},
+              ${JSON.stringify(dbRecord.content)},
+              ${dbRecord.link_url},
+              ${JSON.stringify(dbRecord.link_text)},
+              ${dbRecord.image},
+              ${dbRecord.is_romania_only}
+            )
+            ON CONFLICT (id) DO UPDATE SET
+              tag = EXCLUDED.tag,
+              date = EXCLUDED.date,
+              author = EXCLUDED.author,
+              title = EXCLUDED.title,
+              content = EXCLUDED.content,
+              link_url = EXCLUDED.link_url,
+              link_text = EXCLUDED.link_text,
+              image = EXCLUDED.image,
+              is_romania_only = EXCLUDED.is_romania_only;
+          `;
           return NextResponse.json({ success: true, newsItem });
 
         } else if (action === 'delete') {
@@ -216,45 +220,50 @@ export async function POST(request) {
             return NextResponse.json({ success: false, error: 'Missing article ID' }, { status: 400 });
           }
 
-          const { error } = await supabase
-            .from('news')
-            .delete()
-            .eq('id', id);
-
-          if (error) {
-            console.error('Supabase news delete error:', error);
-            throw error;
-          }
+          await sql`DELETE FROM news WHERE id = ${id}`;
           return NextResponse.json({ success: true, message: 'News article deleted successfully' });
         } else if (action === 'sync_local') {
           const localNews = readNews();
           if (localNews.length > 0) {
-            const dbRecords = localNews.map(mapNewsToDb);
-            const { error } = await supabase
-              .from('news')
-              .upsert(dbRecords);
-
-            if (error) {
-              console.error('Supabase news sync error:', error);
-              throw error;
+            for (const item of localNews) {
+              const dbRecord = mapNewsToDb(item);
+              await sql`
+                INSERT INTO news (
+                  id, tag, date, author, title, content, link_url, link_text, image, is_romania_only
+                ) VALUES (
+                  ${dbRecord.id},
+                  ${JSON.stringify(dbRecord.tag)},
+                  ${JSON.stringify(dbRecord.date)},
+                  ${dbRecord.author},
+                  ${JSON.stringify(dbRecord.title)},
+                  ${JSON.stringify(dbRecord.content)},
+                  ${dbRecord.link_url},
+                  ${JSON.stringify(dbRecord.link_text)},
+                  ${dbRecord.image},
+                  ${dbRecord.is_romania_only}
+                )
+                ON CONFLICT (id) DO UPDATE SET
+                  tag = EXCLUDED.tag,
+                  date = EXCLUDED.date,
+                  author = EXCLUDED.author,
+                  title = EXCLUDED.title,
+                  content = EXCLUDED.content,
+                  link_url = EXCLUDED.link_url,
+                  link_text = EXCLUDED.link_text,
+                  image = EXCLUDED.image,
+                  is_romania_only = EXCLUDED.is_romania_only;
+              `;
             }
             return NextResponse.json({ success: true, message: 'News synced successfully' });
           }
           return NextResponse.json({ success: false, error: 'No local news items found to sync' }, { status: 400 });
         } else if (action === 'export_local') {
-          const { data, error } = await supabase
-            .from('news')
-            .select('*');
-
-          if (error) {
-            console.error('Supabase fetch news for export error:', error);
-            throw error;
-          }
+          const { rows: data } = await sql`SELECT * FROM news`;
 
           if (data) {
             const mappedNews = data.map(mapNewsFromDb);
             const sorted = sortNewsItems(mappedNews);
-             if (writeNews(sorted)) {
+            if (writeNews(sorted)) {
               try {
                 const scriptPath = path.join(process.cwd(), 'scripts', 'upload.sh');
                 const { stdout } = await execPromise(`bash "${scriptPath}"`);
@@ -271,11 +280,11 @@ export async function POST(request) {
           return NextResponse.json({ success: false, error: 'No news articles found in database to export' }, { status: 400 });
         }
       } catch (dbErr) {
-        console.error('Supabase news write error:', dbErr);
+        console.error('Vercel Postgres news write error:', dbErr);
         if (process.env.VERCEL) {
           return NextResponse.json({ 
             success: false, 
-            error: `Database error: ${dbErr.message || 'Supabase error'}. Please verify that the 'news' table exists in Supabase by running the SQL in schema.sql.` 
+            error: `Database error: ${dbErr.message || 'Vercel Postgres error'}. Please verify that the 'news' table exists in Vercel Postgres by running the SQL in schema.sql.` 
           }, { status: 500 });
         }
         console.log('Falling back to local file database...');
