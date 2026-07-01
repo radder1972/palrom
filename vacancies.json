@@ -1,46 +1,5 @@
 [
   {
-    "id": "director-1853",
-    "created_at": "2026-06-30T20:35:02.267219+00:00",
-    "title": {
-      "de": "Geschäftsführer",
-      "en": "Director",
-      "nl": "Directeur",
-      "ro": "Regizor"
-    },
-    "department": {
-      "de": "Produktion",
-      "en": "Production",
-      "nl": "Productie",
-      "ro": "Producție"
-    },
-    "location": "Brad, RO",
-    "type": {
-      "de": "Vollzeit",
-      "en": "Full-time",
-      "nl": "Fulltime",
-      "ro": "Cu normă întreagă"
-    },
-    "description": {
-      "de": "",
-      "en": "",
-      "nl": "",
-      "ro": ""
-    },
-    "requirements": {
-      "de": [],
-      "en": [],
-      "nl": [],
-      "ro": []
-    },
-    "salary": {
-      "de": "Konkurrenzfähiges Gehalt",
-      "en": "Competitive salary",
-      "nl": "Concurrerend salaris",
-      "ro": "Salariu competitiv"
-    }
-  },
-  {
     "id": "sawmill",
     "created_at": "2026-06-30T12:48:14.020102+00:00",
     "title": {
@@ -99,47 +58,6 @@
       "en": "Competitive Pay + Overtime",
       "nl": "Concurrerend salaris + Overuren",
       "ro": "Salariu Competitiv + Ore Suplimentare"
-    }
-  },
-  {
-    "id": "sawmill-9201",
-    "created_at": "2026-06-23T14:24:09.651815+00:00",
-    "title": {
-      "de": "Sägewerk",
-      "en": "Sawmill",
-      "nl": "Zagerij",
-      "ro": "Fasonator cherestea"
-    },
-    "department": {
-      "de": "Produktion",
-      "en": "Production",
-      "nl": "Productie",
-      "ro": "Producție"
-    },
-    "location": "Brad, RO",
-    "type": {
-      "de": "Vollzeit",
-      "en": "Full-time",
-      "nl": "Fulltime",
-      "ro": "Cu normă întreagă"
-    },
-    "description": {
-      "de": "",
-      "en": "",
-      "nl": "",
-      "ro": ""
-    },
-    "requirements": {
-      "de": [],
-      "en": [],
-      "nl": [],
-      "ro": []
-    },
-    "salary": {
-      "de": "Konkurrenzfähiges Gehalt",
-      "en": "Competitive salary",
-      "nl": "Concurrerend salaris",
-      "ro": "Salariu competitiv"
     }
   },
   {
