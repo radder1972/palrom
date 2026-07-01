@@ -475,7 +475,7 @@ export default function CartSidebar() {
 
       let alertMsg = '';
       if (lang === 'nl') {
-        alertMsg = `Bedankt, ${name}! Uw offerteaanvraag voor de volgende product(en) is succesvol ontvangen door ons hoofdkantoor in Brad:\n\n${itemsList}\n\nWe zullen gedetailleerde specificaties en prijsopgaven voorbereiden en u binnen 24 uur e-mailen op ${email}.`;
+        alertMsg = `Bedankt, ${name}! Uw offerteaanvraag voor de volgende product(en) is succesvol ontvangen door ons kantoor in Brad:\n\n${itemsList}\n\nWe zullen gedetailleerde specificaties en prijsopgaven voorbereiden en u binnen 24 uur e-mailen op ${email}.`;
       } else if (lang === 'de') {
         alertMsg = `Vielen Dank, ${name}! Ihre Angebotsanfrage für die folgenden Produkte ist erfolgreich in unserer Zentrale in Brad eingegangen:\n\n${itemsList}\n\nWir werden detaillierte Spezifikationen und Preisschätzungen vorbereiten und Ihnen innerhalb von 24 Stunden eine E-Mail an ${email} senden.`;
       } else if (lang === 'ro') {
