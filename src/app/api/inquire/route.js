@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { sql } from '@vercel/postgres';
 import fs from 'fs';
 import path from 'path';
 import PDFDocument from 'pdfkit';
@@ -117,18 +117,7 @@ export function generatePdfBuffer(clientName, clientEmail, clientPhone, clientNo
   });
 }
 
-// Load Supabase environment variables if present
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-let supabase = null;
-if (supabaseUrl && supabaseKey) {
-  try {
-    supabase = createClient(supabaseUrl, supabaseKey);
-  } catch (err) {
-    console.error('Failed to initialize Supabase client:', err);
-  }
-}
+const hasPostgres = !!process.env.POSTGRES_URL || !!process.env.POSTGRES_URL_NON_POOLING;
 
 const localizeSpecKey = (key, lang = 'nl') => {
   const dict = {
@@ -227,17 +216,31 @@ export async function POST(request) {
 
     let savedToDatabase = false;
 
-    if (supabase) {
-      const { data, error } = await supabase
-        .from('quote_inquiries')
-        .insert([inquiryRecord])
-        .select();
-
-      if (error) {
-        console.error('Supabase insertion error:', error);
-      } else {
-        console.log('Saved inquiry to Supabase database:', data);
+    if (hasPostgres || process.env.VERCEL) {
+      try {
+        const { rows } = await sql`
+          INSERT INTO quote_inquiries (
+            client_name,
+            client_email,
+            client_phone,
+            client_notes,
+            items,
+            total_price,
+            status
+          ) VALUES (
+            ${inquiryRecord.client_name},
+            ${inquiryRecord.client_email},
+            ${inquiryRecord.client_phone},
+            ${inquiryRecord.client_notes},
+            ${JSON.stringify(inquiryRecord.items)},
+            ${inquiryRecord.total_price},
+            ${inquiryRecord.status}
+          ) RETURNING *;
+        `;
+        console.log('Saved inquiry to Vercel Postgres database:', rows[0]);
         savedToDatabase = true;
+      } catch (dbErr) {
+        console.error('Vercel Postgres insertion error:', dbErr);
       }
     }
 
